@@ -1,0 +1,603 @@
+import React, { useState, useEffect } from 'react';
+import { MatchEvent, Quarter, Team, GoalType, CardType } from '../../types';
+import { getPlayersByTeam } from '../../data/players';
+import { ChevronLeft, ChevronRight, ChevronDown, Trash2, X } from 'lucide-react';
+
+interface BottomDockProps {
+  currentQuarter: Quarter;
+  onQuarterChange: (q: Quarter) => void;
+  team1: Team | null;
+  team2: Team | null;
+  isExtraTimeActive: boolean;
+  onAddEvent: (eventData: Omit<MatchEvent, 'id' | 'createdAt'>) => void;
+  onUpdateEvent: (event: MatchEvent) => void;
+  onDeleteEvent: (eventId: string) => void;
+  editingEvent: MatchEvent | null;
+  onCancelEdit: () => void;
+}
+
+export const BottomDock: React.FC<BottomDockProps> = ({
+  currentQuarter,
+  onQuarterChange,
+  team1,
+  team2,
+  isExtraTimeActive,
+  onAddEvent,
+  onUpdateEvent,
+  onDeleteEvent,
+  editingEvent,
+  onCancelEdit,
+}) => {
+  const [mode, setMode] = useState<'goal' | 'card'>('goal');
+
+  // Form states
+  const [minute, setMinute] = useState<number>(1);
+  const [selectedTeamId, setSelectedTeamId] = useState<string>(team1?.id || '');
+  const [scorerId, setScorerId] = useState<string>('');
+  const [assisterId, setAssisterId] = useState<string>('');
+  const [isPenalty, setIsPenalty] = useState<boolean>(false);
+  const [isOwnGoal, setIsOwnGoal] = useState<boolean>(false);
+
+  const [cardType, setCardType] = useState<CardType>('yellow');
+  const [cardPlayerId, setCardPlayerId] = useState<string>('');
+
+  // Default team setup
+  useEffect(() => {
+    if (!selectedTeamId && team1) {
+      setSelectedTeamId(team1.id);
+    }
+  }, [team1, selectedTeamId]);
+
+  // Sync when entering/leaving edit mode
+  useEffect(() => {
+    if (editingEvent) {
+      setMode(editingEvent.type);
+      setMinute(editingEvent.minute);
+      setSelectedTeamId(editingEvent.teamId);
+
+      if (editingEvent.type === 'goal') {
+        setScorerId(editingEvent.playerId);
+        setAssisterId(editingEvent.assisterId || '');
+        setIsPenalty(editingEvent.goalType === 'penalty');
+        setIsOwnGoal(editingEvent.goalType === 'own_goal');
+      } else {
+        setCardType(editingEvent.cardType || 'yellow');
+        setCardPlayerId(editingEvent.playerId);
+      }
+    } else {
+      // Reset defaults
+      setScorerId('');
+      setAssisterId('');
+      setIsPenalty(false);
+      setIsOwnGoal(false);
+      setCardPlayerId('');
+    }
+  }, [editingEvent]);
+
+  // Opposing team for Own Goal logic
+  const opposingTeamId = selectedTeamId === team1?.id ? team2?.id : team1?.id;
+
+  // Determine player lists
+  // For Own Goal: scorer belongs to conceding team (opposingTeamId)
+  const scorerTeamId = isOwnGoal ? opposingTeamId || selectedTeamId : selectedTeamId;
+  const scorerPlayers = scorerTeamId ? getPlayersByTeam(scorerTeamId) : [];
+
+  // Assisters must belong to the credited team (selectedTeamId)
+  const assisterPlayers = selectedTeamId ? getPlayersByTeam(selectedTeamId) : [];
+
+  // Card players belong to selected team
+  const cardPlayers = selectedTeamId ? getPlayersByTeam(selectedTeamId) : [];
+
+  // Minute Steppers
+  const handleMinuteStep = (delta: number) => {
+    setMinute((prev) => Math.max(1, Math.min(prev + delta, 90)));
+  };
+
+  // Team Toggle
+  const toggleTeam = () => {
+    if (team1 && team2) {
+      setSelectedTeamId((prev) => (prev === team1.id ? team2.id : team1.id));
+      setScorerId('');
+      setAssisterId('');
+      setCardPlayerId('');
+    }
+  };
+
+  // Card Type Toggle
+  const toggleCardType = () => {
+    setCardType((prev) => (prev === 'yellow' ? 'red' : 'yellow'));
+  };
+
+  // Submissions
+  const handleSaveGoal = () => {
+    if (!scorerId) return;
+
+    let goalType: GoalType = 'regular';
+    if (isPenalty) goalType = 'penalty';
+    if (isOwnGoal) goalType = 'own_goal';
+
+    if (editingEvent) {
+      onUpdateEvent({
+        ...editingEvent,
+        quarter: currentQuarter,
+        minute,
+        teamId: selectedTeamId,
+        playerId: scorerId,
+        assisterId: isOwnGoal ? null : assisterId || null,
+        goalType,
+        concedingTeamId: isOwnGoal ? opposingTeamId : undefined,
+      });
+      onCancelEdit();
+    } else {
+      onAddEvent({
+        matchId: '', // set by parent
+        quarter: currentQuarter,
+        minute,
+        type: 'goal',
+        teamId: selectedTeamId,
+        playerId: scorerId,
+        assisterId: isOwnGoal ? null : assisterId || null,
+        goalType,
+        concedingTeamId: isOwnGoal ? opposingTeamId : undefined,
+      });
+      setScorerId('');
+      setAssisterId('');
+      setIsPenalty(false);
+      setIsOwnGoal(false);
+    }
+  };
+
+  const handleSaveCard = () => {
+    if (!cardPlayerId) return;
+
+    if (editingEvent) {
+      onUpdateEvent({
+        ...editingEvent,
+        quarter: currentQuarter,
+        minute,
+        teamId: selectedTeamId,
+        playerId: cardPlayerId,
+        cardType,
+      });
+      onCancelEdit();
+    } else {
+      onAddEvent({
+        matchId: '',
+        quarter: currentQuarter,
+        minute,
+        type: 'card',
+        teamId: selectedTeamId,
+        playerId: cardPlayerId,
+        cardType,
+      });
+      setCardPlayerId('');
+    }
+  };
+
+  const selectedTeam = selectedTeamId === team1?.id ? team1 : team2;
+
+  const quartersList: Quarter[] = ['q1', 'q2', 'q3', 'q4'];
+  if (isExtraTimeActive) {
+    quartersList.push('et');
+  }
+
+  return (
+    <div className="fixed bottom-0 left-0 right-0 z-40 bg-[#12151c] border-t border-slate-800 rounded-t-3xl shadow-2xl p-4 max-w-md mx-auto">
+      {/* Top Bar: Quarter Switcher & Mode Icons */}
+      <div className="flex items-center justify-between pb-3 border-b border-slate-800/80 mb-3">
+        {/* Quarter Pills */}
+        <div className="flex items-center gap-1.5 bg-[#1a1f2c] p-1 rounded-full border border-slate-800">
+          {quartersList.map((q) => {
+            const isActive = currentQuarter === q;
+            const label = q === 'et' ? 'ET' : q.toUpperCase();
+            return (
+              <button
+                key={q}
+                type="button"
+                onClick={() => onQuarterChange(q)}
+                className={`px-3.5 py-1 text-xs font-black tracking-wider rounded-full transition-all ${
+                  isActive
+                    ? 'bg-white text-black shadow-sm'
+                    : 'text-slate-400 hover:text-white'
+                }`}
+              >
+                {label}
+              </button>
+            );
+          })}
+        </div>
+
+        {/* Mode Toggles: Soccer Ball & Cards */}
+        <div className="flex items-center gap-1 bg-[#1a1f2c] p-1 rounded-full border border-slate-800">
+          {/* Goal Mode */}
+          <button
+            type="button"
+            onClick={() => setMode('goal')}
+            className={`p-1.5 rounded-full transition-all ${
+              mode === 'goal'
+                ? 'bg-slate-700 text-white shadow-sm'
+                : 'text-slate-400 hover:text-white'
+            }`}
+            title="Goal Mode"
+          >
+            {/* SVG Soccer Ball */}
+            <svg
+              className="w-4 h-4 fill-current"
+              viewBox="0 0 24 24"
+            >
+              <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 3.1c1.8.29 3.4 1.15 4.63 2.41l-2.09 2.09c-.58-.33-1.23-.55-1.92-.62L13 5.1zm-2 0v3.88c-.69.07-1.34.29-1.92.62L6.99 7.51C8.22 6.25 9.82 5.39 11.62 5.1zM5.1 12.38c.07-.69.29-1.34.62-1.92l2.09 2.09c-.33.58-.55 1.23-.62 1.92L5.1 13.62zm1.89 4.11l2.09-2.09c.58.33 1.23.55 1.92.62v3.88c-1.8-.29-3.4-1.15-4.63-2.41zm9.92 2.41v-3.88c.69-.07 1.34-.29 1.92-.62l2.09 2.09c-1.23 1.26-2.83 2.12-4.63 2.41zm2.37-4.41c-.07-.69-.29-1.34-.62-1.92l2.09-2.09c.33.58.55 1.23.62 1.92l-2.09 2.09z" />
+            </svg>
+          </button>
+
+          {/* Card Mode */}
+          <button
+            type="button"
+            onClick={() => setMode('card')}
+            className={`p-1.5 rounded-full transition-all ${
+              mode === 'card'
+                ? 'bg-slate-700 text-white shadow-sm'
+                : 'text-slate-400 hover:text-white'
+            }`}
+            title="Card Mode"
+          >
+            {/* SVG Overlapping Cards */}
+            <div className="relative w-4 h-4 flex items-center justify-center">
+              <span className="absolute -top-0.5 -left-0.5 w-2.5 h-3.5 bg-amber-400 rounded-[2px]" />
+              <span className="absolute top-0.5 left-1 w-2.5 h-3.5 bg-rose-600 rounded-[2px]" />
+            </div>
+          </button>
+        </div>
+      </div>
+
+      {/* Editing Banner */}
+      {editingEvent && (
+        <div className="flex items-center justify-between bg-blue-950/60 border border-blue-800/80 rounded-xl px-3 py-1.5 mb-2.5 text-xs text-blue-200">
+          <span>Editing {editingEvent.type.toUpperCase()} ({editingEvent.minute}')</span>
+          <button
+            onClick={onCancelEdit}
+            className="flex items-center gap-1 text-slate-400 hover:text-white text-[11px]"
+          >
+            <X size={14} />
+            <span>Cancel</span>
+          </button>
+        </div>
+      )}
+
+      {/* Mode Body */}
+      {mode === 'goal' ? (
+        <div className="flex flex-col gap-2.5">
+          {/* Row 1: Minute & Goal For */}
+          <div className="grid grid-cols-2 gap-3">
+            {/* Minute Stepper */}
+            <div className="flex flex-col">
+              <span className="text-[10px] font-bold tracking-wider text-slate-400 uppercase mb-1">
+                MINUTE
+              </span>
+              <div className="flex items-center justify-between bg-[#191e2b] border border-slate-700/60 rounded-xl px-2 py-1.5">
+                <button
+                  type="button"
+                  onClick={() => handleMinuteStep(-1)}
+                  className="p-1 text-slate-400 hover:text-white"
+                >
+                  <ChevronLeft size={16} />
+                </button>
+                <span className="font-extrabold text-sm text-white">{minute}'</span>
+                <button
+                  type="button"
+                  onClick={() => handleMinuteStep(1)}
+                  className="p-1 text-slate-400 hover:text-white"
+                >
+                  <ChevronRight size={16} />
+                </button>
+              </div>
+            </div>
+
+            {/* Goal For Stepper */}
+            <div className="flex flex-col">
+              <span className="text-[10px] font-bold tracking-wider text-slate-400 uppercase mb-1">
+                GOAL FOR
+              </span>
+              <div
+                onClick={toggleTeam}
+                className="flex items-center justify-between bg-[#191e2b] border border-slate-700/60 rounded-xl px-2 py-1.5 cursor-pointer hover:border-slate-600 transition-colors"
+              >
+                <ChevronLeft size={16} className="text-slate-400" />
+                <div className="flex items-center gap-1.5 truncate">
+                  <div className="w-4 h-4 rounded bg-slate-900 flex items-center justify-center">
+                    {selectedTeam && (
+                      <img
+                        src={selectedTeam.logoUrl}
+                        alt={selectedTeam.name}
+                        className="w-full h-full object-contain"
+                      />
+                    )}
+                  </div>
+                  <span className="font-extrabold text-xs text-white uppercase truncate">
+                    {selectedTeam?.name}
+                  </span>
+                </div>
+                <ChevronRight size={16} className="text-slate-400" />
+              </div>
+            </div>
+          </div>
+
+          {/* Row 2: Scorer Dropdown */}
+          <div className="flex flex-col">
+            <span className="text-[10px] font-bold tracking-wider text-slate-400 uppercase mb-1">
+              SCORER {isOwnGoal && '(FROM CONCEDING TEAM)'}
+            </span>
+            <div className="relative">
+              <select
+                value={scorerId}
+                onChange={(e) => setScorerId(e.target.value)}
+                className="w-full appearance-none bg-[#191e2b] border border-slate-700/60 rounded-xl px-3 py-2 text-xs font-bold text-white focus:outline-none focus:border-blue-500"
+              >
+                <option value="">Select Scorer...</option>
+                {scorerPlayers.map((p) => (
+                  <option key={p.id} value={p.id}>
+                    {p.fullName}
+                  </option>
+                ))}
+              </select>
+              <ChevronDown
+                size={16}
+                className="absolute right-3 top-2.5 text-slate-400 pointer-events-none"
+              />
+            </div>
+          </div>
+
+          {/* Row 3: Assister Dropdown */}
+          {!isOwnGoal && (
+            <div className="flex flex-col">
+              <span className="text-[10px] font-bold tracking-wider text-slate-400 uppercase mb-1">
+                ASSISTER (OPTIONAL)
+              </span>
+              <div className="relative">
+                <select
+                  value={assisterId}
+                  onChange={(e) => setAssisterId(e.target.value)}
+                  className="w-full appearance-none bg-[#191e2b] border border-slate-700/60 rounded-xl px-3 py-2 text-xs font-bold text-white focus:outline-none focus:border-blue-500"
+                >
+                  <option value="">None (Unassisted)</option>
+                  {assisterPlayers.map((p) => (
+                    <option key={p.id} value={p.id}>
+                      {p.fullName}
+                    </option>
+                  ))}
+                </select>
+                <ChevronDown
+                  size={16}
+                  className="absolute right-3 top-2.5 text-slate-400 pointer-events-none"
+                />
+              </div>
+            </div>
+          )}
+
+          {/* Row 4: Toggles (PENALTY & OWN GOAL) & Add Goal Button */}
+          <div className="flex items-center justify-between pt-1">
+            <div className="flex items-center gap-4">
+              {/* Penalty Toggle */}
+              <label className="flex items-center gap-2 cursor-pointer select-none">
+                <input
+                  type="checkbox"
+                  checked={isPenalty}
+                  disabled={isOwnGoal}
+                  onChange={(e) => {
+                    setIsPenalty(e.target.checked);
+                    if (e.target.checked) setIsOwnGoal(false);
+                  }}
+                  className="sr-only"
+                />
+                <div
+                  className={`w-8 h-4 rounded-full transition-colors relative ${
+                    isPenalty ? 'bg-blue-600' : 'bg-slate-700'
+                  }`}
+                >
+                  <div
+                    className={`w-3.5 h-3.5 rounded-full bg-white transition-transform absolute top-[1px] ${
+                      isPenalty ? 'left-4' : 'left-0.5'
+                    }`}
+                  />
+                </div>
+                <span className="text-[10px] font-extrabold tracking-wider text-slate-300 uppercase">
+                  PENALTY
+                </span>
+              </label>
+
+              {/* Own Goal Toggle */}
+              <label className="flex items-center gap-2 cursor-pointer select-none">
+                <input
+                  type="checkbox"
+                  checked={isOwnGoal}
+                  disabled={isPenalty}
+                  onChange={(e) => {
+                    setIsOwnGoal(e.target.checked);
+                    if (e.target.checked) {
+                      setIsPenalty(false);
+                      setAssisterId('');
+                    }
+                    setScorerId('');
+                  }}
+                  className="sr-only"
+                />
+                <div
+                  className={`w-8 h-4 rounded-full transition-colors relative ${
+                    isOwnGoal ? 'bg-amber-600' : 'bg-slate-700'
+                  }`}
+                >
+                  <div
+                    className={`w-3.5 h-3.5 rounded-full bg-white transition-transform absolute top-[1px] ${
+                      isOwnGoal ? 'left-4' : 'left-0.5'
+                    }`}
+                  />
+                </div>
+                <span className="text-[10px] font-extrabold tracking-wider text-slate-300 uppercase">
+                  OWN GOAL
+                </span>
+              </label>
+            </div>
+
+            {/* Action Buttons */}
+            <div className="flex items-center gap-2">
+              {editingEvent && (
+                <button
+                  type="button"
+                  onClick={() => onDeleteEvent(editingEvent.id)}
+                  className="p-2.5 rounded-full bg-rose-900/60 hover:bg-rose-800 text-rose-300 transition-colors"
+                  title="Delete Event"
+                >
+                  <Trash2 size={16} />
+                </button>
+              )}
+              <button
+                type="button"
+                onClick={handleSaveGoal}
+                disabled={!scorerId}
+                className={`px-5 py-2.5 rounded-full font-black text-xs tracking-wider uppercase transition-all shadow-md active:scale-95 ${
+                  scorerId
+                    ? 'bg-white text-black hover:bg-slate-200'
+                    : 'bg-slate-800 text-slate-500 cursor-not-allowed'
+                }`}
+              >
+                {editingEvent ? 'SAVE CHANGES' : '+ ADD GOAL'}
+              </button>
+            </div>
+          </div>
+        </div>
+      ) : (
+        /* Card Mode */
+        <div className="flex flex-col gap-2.5">
+          {/* Row 1: Minute & Card For */}
+          <div className="grid grid-cols-2 gap-3">
+            {/* Minute */}
+            <div className="flex flex-col">
+              <span className="text-[10px] font-bold tracking-wider text-slate-400 uppercase mb-1">
+                MINUTE
+              </span>
+              <div className="flex items-center justify-between bg-[#191e2b] border border-slate-700/60 rounded-xl px-2 py-1.5">
+                <button
+                  type="button"
+                  onClick={() => handleMinuteStep(-1)}
+                  className="p-1 text-slate-400 hover:text-white"
+                >
+                  <ChevronLeft size={16} />
+                </button>
+                <span className="font-extrabold text-sm text-white">{minute}'</span>
+                <button
+                  type="button"
+                  onClick={() => handleMinuteStep(1)}
+                  className="p-1 text-slate-400 hover:text-white"
+                >
+                  <ChevronRight size={16} />
+                </button>
+              </div>
+            </div>
+
+            {/* Card For */}
+            <div className="flex flex-col">
+              <span className="text-[10px] font-bold tracking-wider text-slate-400 uppercase mb-1">
+                CARD FOR
+              </span>
+              <div
+                onClick={toggleTeam}
+                className="flex items-center justify-between bg-[#191e2b] border border-slate-700/60 rounded-xl px-2 py-1.5 cursor-pointer hover:border-slate-600 transition-colors"
+              >
+                <ChevronLeft size={16} className="text-slate-400" />
+                <div className="flex items-center gap-1.5 truncate">
+                  <div className="w-4 h-4 rounded bg-slate-900 flex items-center justify-center">
+                    {selectedTeam && (
+                      <img
+                        src={selectedTeam.logoUrl}
+                        alt={selectedTeam.name}
+                        className="w-full h-full object-contain"
+                      />
+                    )}
+                  </div>
+                  <span className="font-extrabold text-xs text-white uppercase truncate">
+                    {selectedTeam?.name}
+                  </span>
+                </div>
+                <ChevronRight size={16} className="text-slate-400" />
+              </div>
+            </div>
+          </div>
+
+          {/* Row 2: Card Type Stepper */}
+          <div className="flex flex-col">
+            <span className="text-[10px] font-bold tracking-wider text-slate-400 uppercase mb-1">
+              CARD TYPE
+            </span>
+            <div
+              onClick={toggleCardType}
+              className="flex items-center justify-between bg-[#191e2b] border border-slate-700/60 rounded-xl px-3 py-2 cursor-pointer hover:border-slate-600 transition-colors"
+            >
+              <ChevronLeft size={16} className="text-slate-400" />
+              <div className="flex items-center gap-2">
+                <span
+                  className={`w-3.5 h-4.5 rounded-sm inline-block shadow-sm ${
+                    cardType === 'yellow' ? 'bg-amber-400' : 'bg-rose-600'
+                  }`}
+                />
+                <span className="font-extrabold text-xs text-white uppercase">
+                  {cardType.toUpperCase()}
+                </span>
+              </div>
+              <ChevronRight size={16} className="text-slate-400" />
+            </div>
+          </div>
+
+          {/* Row 3: Card To Dropdown */}
+          <div className="flex flex-col">
+            <span className="text-[10px] font-bold tracking-wider text-slate-400 uppercase mb-1">
+              CARD TO
+            </span>
+            <div className="relative">
+              <select
+                value={cardPlayerId}
+                onChange={(e) => setCardPlayerId(e.target.value)}
+                className="w-full appearance-none bg-[#191e2b] border border-slate-700/60 rounded-xl px-3 py-2 text-xs font-bold text-white focus:outline-none focus:border-blue-500"
+              >
+                <option value="">Select Player...</option>
+                {cardPlayers.map((p) => (
+                  <option key={p.id} value={p.id}>
+                    {p.fullName}
+                  </option>
+                ))}
+              </select>
+              <ChevronDown
+                size={16}
+                className="absolute right-3 top-2.5 text-slate-400 pointer-events-none"
+              />
+            </div>
+          </div>
+
+          {/* Row 4: Submit Card Button */}
+          <div className="flex items-center justify-end gap-2 pt-1">
+            {editingEvent && (
+              <button
+                type="button"
+                onClick={() => onDeleteEvent(editingEvent.id)}
+                className="p-2.5 rounded-full bg-rose-900/60 hover:bg-rose-800 text-rose-300 transition-colors"
+                title="Delete Event"
+              >
+                <Trash2 size={16} />
+              </button>
+            )}
+            <button
+              type="button"
+              onClick={handleSaveCard}
+              disabled={!cardPlayerId}
+              className={`px-5 py-2.5 rounded-full font-black text-xs tracking-wider uppercase transition-all shadow-md active:scale-95 ${
+                cardPlayerId
+                  ? 'bg-white text-black hover:bg-slate-200'
+                  : 'bg-slate-800 text-slate-500 cursor-not-allowed'
+              }`}
+            >
+              {editingEvent ? 'SAVE CHANGES' : '+ RECORD CARD'}
+            </button>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+};
