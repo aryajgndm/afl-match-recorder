@@ -86,7 +86,7 @@ export const PasscodeModal: React.FC<PasscodeModalProps> = ({
         </button>
 
         {/* Header subtitle */}
-        <p className="text-xs font-bold tracking-widest text-slate-400 uppercase mt-2">
+        <p className="font-display text-xs font-black tracking-widest text-slate-300 uppercase mt-2">
           {title || `GAME ${fixture.gameNumber} • ${fixture.seriesId.toUpperCase()}`}
         </p>
 
@@ -103,7 +103,7 @@ export const PasscodeModal: React.FC<PasscodeModalProps> = ({
               <div className="w-8 h-8 rounded-full bg-slate-800" />
             )}
           </div>
-          <span className="text-lg font-black text-slate-300">V</span>
+          <span className="font-display text-lg font-black text-slate-300">V</span>
           <div className="w-16 h-16 rounded-2xl bg-slate-900/80 p-2 flex items-center justify-center border border-slate-800">
             {team2 ? (
               <img
@@ -134,7 +134,7 @@ export const PasscodeModal: React.FC<PasscodeModalProps> = ({
                 value={digit}
                 onChange={(e) => handleChange(idx, e.target.value)}
                 onKeyDown={(e) => handleKeyDown(idx, e)}
-                className="w-11 h-14 text-center text-2xl font-bold bg-[#1c2230] border border-slate-700/80 rounded-xl text-white focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 transition-all"
+                className="w-11 h-14 text-center text-2xl font-display font-black bg-[#1c2230] border border-slate-700/80 rounded-xl text-white focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 transition-all"
               />
             ))}
           </div>

@@ -1,12 +1,30 @@
+@import url('https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,200..800&family=MuseoModerno:ital,wght@0,100..900;1,100..900&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 @layer base {
-  body {
-    @apply bg-[#0c0f14] text-slate-100 font-sans antialiased;
+  html, body {
+    font-family: 'Bricolage Grotesque', system-ui, sans-serif;
+    @apply bg-[#0c0f14] text-slate-100 antialiased;
     -webkit-tap-highlight-color: transparent;
   }
+
+  button, input, select, textarea, optgroup, option {
+    font-family: 'Bricolage Grotesque', system-ui, sans-serif;
+  }
+}
+
+/* MuseoModerno applied to headings, scoreboards, branding, and display typography */
+.font-display,
+h1, h2, h3, h4,
+.score-font {
+  font-family: 'MuseoModerno', cursive, sans-serif !important;
+}
+
+.font-sans {
+  font-family: 'Bricolage Grotesque', system-ui, sans-serif !important;
 }
 
 /* Custom scrollbars */

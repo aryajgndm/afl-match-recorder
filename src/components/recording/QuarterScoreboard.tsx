@@ -22,7 +22,7 @@ export const QuarterScoreboard: React.FC<QuarterScoreboardProps> = ({
   return (
     <div className="flex flex-col items-center justify-center pt-2 pb-3 px-4">
       {/* Large Title */}
-      <h2 className="text-xl font-black tracking-tight text-white mb-2 uppercase">
+      <h2 className="font-display text-xl font-black tracking-tight text-white mb-2 uppercase">
         {quarterTitle}
       </h2>
 
@@ -39,13 +39,13 @@ export const QuarterScoreboard: React.FC<QuarterScoreboardProps> = ({
               />
             )}
           </div>
-          <span className="font-extrabold text-xs tracking-wider text-slate-200 uppercase truncate">
+          <span className="font-display font-extrabold text-xs tracking-wider text-slate-200 uppercase truncate">
             {team1?.name}
           </span>
         </div>
 
         {/* Scores */}
-        <div className="flex items-center gap-3 px-3 font-black text-base text-white">
+        <div className="flex items-center gap-3 px-3 font-display font-black text-lg text-white">
           <span className="w-5 text-center">{team1QuarterScore}</span>
           <span className="text-slate-600 font-normal">:</span>
           <span className="w-5 text-center">{team2QuarterScore}</span>
@@ -53,7 +53,7 @@ export const QuarterScoreboard: React.FC<QuarterScoreboardProps> = ({
 
         {/* Team 2 */}
         <div className="flex items-center gap-2 flex-1 justify-end">
-          <span className="font-extrabold text-xs tracking-wider text-slate-200 uppercase truncate text-right">
+          <span className="font-display font-extrabold text-xs tracking-wider text-slate-200 uppercase truncate text-right">
             {team2?.name}
           </span>
           <div className="w-6 h-6 rounded-md bg-slate-900 p-0.5 flex items-center justify-center border border-slate-800">

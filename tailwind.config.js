@@ -6,6 +6,10 @@ export default {
   ],
   theme: {
     extend: {
+      fontFamily: {
+        sans: ['"Bricolage Grotesque"', 'system-ui', 'sans-serif'],
+        display: ['"MuseoModerno"', 'system-ui', 'sans-serif'],
+      },
       colors: {
         background: '#0d1117',
         card: '#161b22',

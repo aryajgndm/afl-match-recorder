@@ -27,14 +27,14 @@ export const ResultsTable: React.FC<ResultsTableProps> = ({ score, team1, team2 
           <div className="w-5 h-5 rounded bg-slate-900 p-0.5 flex items-center justify-center border border-slate-800">
             {team1 && <img src={team1.logoUrl} alt="" className="w-full h-full object-contain" />}
           </div>
-          <span className="text-xs font-black text-white">{team1?.shortName}</span>
+          <span className="font-display text-xs font-black text-white">{team1?.shortName}</span>
         </div>
-        <span className="text-center text-slate-300">{score.team1QuarterScores.q1}</span>
-        <span className="text-center text-slate-300">{score.team1QuarterScores.q2}</span>
-        <span className="text-center text-slate-300">{score.team1QuarterScores.q3}</span>
-        <span className="text-center text-slate-300">{score.team1QuarterScores.q4}</span>
-        <span className="text-center text-slate-400">{score.isExtraTime ? score.team1QuarterScores.et : '/'}</span>
-        <span className="text-center font-black text-emerald-400 text-sm">{score.team1Total}</span>
+        <span className="text-center font-display text-slate-300">{score.team1QuarterScores.q1}</span>
+        <span className="text-center font-display text-slate-300">{score.team1QuarterScores.q2}</span>
+        <span className="text-center font-display text-slate-300">{score.team1QuarterScores.q3}</span>
+        <span className="text-center font-display text-slate-300">{score.team1QuarterScores.q4}</span>
+        <span className="text-center font-display text-slate-400">{score.isExtraTime ? score.team1QuarterScores.et : '/'}</span>
+        <span className="text-center font-display font-black text-emerald-400 text-sm">{score.team1Total}</span>
       </div>
 
       {/* Team 2 Row */}
@@ -43,20 +43,20 @@ export const ResultsTable: React.FC<ResultsTableProps> = ({ score, team1, team2 
           <div className="w-5 h-5 rounded bg-slate-900 p-0.5 flex items-center justify-center border border-slate-800">
             {team2 && <img src={team2.logoUrl} alt="" className="w-full h-full object-contain" />}
           </div>
-          <span className="text-xs font-black text-white">{team2?.shortName}</span>
+          <span className="font-display text-xs font-black text-white">{team2?.shortName}</span>
         </div>
-        <span className="text-center text-slate-300">{score.team2QuarterScores.q1}</span>
-        <span className="text-center text-slate-300">{score.team2QuarterScores.q2}</span>
-        <span className="text-center text-slate-300">{score.team2QuarterScores.q3}</span>
-        <span className="text-center text-slate-300">{score.team2QuarterScores.q4}</span>
-        <span className="text-center text-slate-400">{score.isExtraTime ? score.team2QuarterScores.et : '/'}</span>
-        <span className="text-center font-black text-emerald-400 text-sm">{score.team2Total}</span>
+        <span className="text-center font-display text-slate-300">{score.team2QuarterScores.q1}</span>
+        <span className="text-center font-display text-slate-300">{score.team2QuarterScores.q2}</span>
+        <span className="text-center font-display text-slate-300">{score.team2QuarterScores.q3}</span>
+        <span className="text-center font-display text-slate-300">{score.team2QuarterScores.q4}</span>
+        <span className="text-center font-display text-slate-400">{score.isExtraTime ? score.team2QuarterScores.et : '/'}</span>
+        <span className="text-center font-display font-black text-emerald-400 text-sm">{score.team2Total}</span>
       </div>
 
       {/* Winner Tag */}
       {score.winDescription && (
         <div className="mt-3 pt-2 border-t border-slate-800/80 text-center">
-          <span className="text-xs font-bold text-emerald-400 tracking-wide">
+          <span className="font-display text-xs font-bold text-emerald-400 tracking-wide">
             {score.winDescription}
           </span>
         </div>

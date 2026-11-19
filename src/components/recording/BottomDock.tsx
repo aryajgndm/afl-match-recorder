@@ -57,9 +57,13 @@ export const BottomDock: React.FC<BottomDockProps> = ({
 
       if (editingEvent.type === 'goal') {
         setScorerId(editingEvent.playerId);
-        setAssisterId(editingEvent.assisterId || '');
         setIsPenalty(editingEvent.goalType === 'penalty');
         setIsOwnGoal(editingEvent.goalType === 'own_goal');
+        if (editingEvent.goalType === 'penalty' || editingEvent.goalType === 'own_goal') {
+          setAssisterId('');
+        } else {
+          setAssisterId(editingEvent.assisterId || '');
+        }
       } else {
         setCardType(editingEvent.cardType || 'yellow');
         setCardPlayerId(editingEvent.playerId);
@@ -88,10 +92,19 @@ export const BottomDock: React.FC<BottomDockProps> = ({
   // Card players belong to selected team
   const cardPlayers = selectedTeamId ? getPlayersByTeam(selectedTeamId) : [];
 
-  // Minute Steppers
+  // Minute Steppers - limited to 12 minutes for Quarters 1-4
+  const maxMinute = currentQuarter === 'et' ? 30 : 12;
+
   const handleMinuteStep = (delta: number) => {
-    setMinute((prev) => Math.max(1, Math.min(prev + delta, 90)));
+    setMinute((prev) => Math.max(1, Math.min(prev + delta, maxMinute)));
   };
+
+  useEffect(() => {
+    const max = currentQuarter === 'et' ? 30 : 12;
+    if (minute > max) {
+      setMinute(max);
+    }
+  }, [currentQuarter, minute]);
 
   // Team Toggle
   const toggleTeam = () => {
@@ -116,14 +129,17 @@ export const BottomDock: React.FC<BottomDockProps> = ({
     if (isPenalty) goalType = 'penalty';
     if (isOwnGoal) goalType = 'own_goal';
 
+    const finalAssisterId = isOwnGoal || isPenalty ? null : assisterId || null;
+    const effectiveMinute = Math.min(Math.max(1, minute), maxMinute);
+
     if (editingEvent) {
       onUpdateEvent({
         ...editingEvent,
         quarter: currentQuarter,
-        minute,
+        minute: effectiveMinute,
         teamId: selectedTeamId,
         playerId: scorerId,
-        assisterId: isOwnGoal ? null : assisterId || null,
+        assisterId: finalAssisterId,
         goalType,
         concedingTeamId: isOwnGoal ? opposingTeamId : undefined,
       });
@@ -132,11 +148,11 @@ export const BottomDock: React.FC<BottomDockProps> = ({
       onAddEvent({
         matchId: '', // set by parent
         quarter: currentQuarter,
-        minute,
+        minute: effectiveMinute,
         type: 'goal',
         teamId: selectedTeamId,
         playerId: scorerId,
-        assisterId: isOwnGoal ? null : assisterId || null,
+        assisterId: finalAssisterId,
         goalType,
         concedingTeamId: isOwnGoal ? opposingTeamId : undefined,
       });
@@ -150,11 +166,13 @@ export const BottomDock: React.FC<BottomDockProps> = ({
   const handleSaveCard = () => {
     if (!cardPlayerId) return;
 
+    const effectiveMinute = Math.min(Math.max(1, minute), maxMinute);
+
     if (editingEvent) {
       onUpdateEvent({
         ...editingEvent,
         quarter: currentQuarter,
-        minute,
+        minute: effectiveMinute,
         teamId: selectedTeamId,
         playerId: cardPlayerId,
         cardType,
@@ -164,7 +182,7 @@ export const BottomDock: React.FC<BottomDockProps> = ({
       onAddEvent({
         matchId: '',
         quarter: currentQuarter,
-        minute,
+        minute: effectiveMinute,
         type: 'card',
         teamId: selectedTeamId,
         playerId: cardPlayerId,
@@ -271,21 +289,25 @@ export const BottomDock: React.FC<BottomDockProps> = ({
             {/* Minute Stepper */}
             <div className="flex flex-col">
               <span className="text-[10px] font-bold tracking-wider text-slate-400 uppercase mb-1">
-                MINUTE
+                MINUTE {currentQuarter !== 'et' ? '(1-12\')' : '(ET)'}
               </span>
               <div className="flex items-center justify-between bg-[#191e2b] border border-slate-700/60 rounded-xl px-2 py-1.5">
                 <button
                   type="button"
                   onClick={() => handleMinuteStep(-1)}
-                  className="p-1 text-slate-400 hover:text-white"
+                  disabled={minute <= 1}
+                  className={`p-1 transition-colors ${minute <= 1 ? 'text-slate-600 cursor-not-allowed' : 'text-slate-400 hover:text-white'}`}
+                  title="Decrease minute"
                 >
                   <ChevronLeft size={16} />
                 </button>
-                <span className="font-extrabold text-sm text-white">{minute}'</span>
+                <span className="font-display font-black text-sm text-white">{minute}'</span>
                 <button
                   type="button"
                   onClick={() => handleMinuteStep(1)}
-                  className="p-1 text-slate-400 hover:text-white"
+                  disabled={minute >= maxMinute}
+                  className={`p-1 transition-colors ${minute >= maxMinute ? 'text-slate-600 cursor-not-allowed' : 'text-slate-400 hover:text-white'}`}
+                  title="Increase minute"
                 >
                   <ChevronRight size={16} />
                 </button>
@@ -347,7 +369,7 @@ export const BottomDock: React.FC<BottomDockProps> = ({
           </div>
 
           {/* Row 3: Assister Dropdown */}
-          {!isOwnGoal && (
+          {!isOwnGoal && !isPenalty && (
             <div className="flex flex-col">
               <span className="text-[10px] font-bold tracking-wider text-slate-400 uppercase mb-1">
                 ASSISTER (OPTIONAL)
@@ -384,7 +406,10 @@ export const BottomDock: React.FC<BottomDockProps> = ({
                   disabled={isOwnGoal}
                   onChange={(e) => {
                     setIsPenalty(e.target.checked);
-                    if (e.target.checked) setIsOwnGoal(false);
+                    if (e.target.checked) {
+                      setIsOwnGoal(false);
+                      setAssisterId('');
+                    }
                   }}
                   className="sr-only"
                 />
@@ -472,21 +497,25 @@ export const BottomDock: React.FC<BottomDockProps> = ({
             {/* Minute */}
             <div className="flex flex-col">
               <span className="text-[10px] font-bold tracking-wider text-slate-400 uppercase mb-1">
-                MINUTE
+                MINUTE {currentQuarter !== 'et' ? '(1-12\')' : '(ET)'}
               </span>
               <div className="flex items-center justify-between bg-[#191e2b] border border-slate-700/60 rounded-xl px-2 py-1.5">
                 <button
                   type="button"
                   onClick={() => handleMinuteStep(-1)}
-                  className="p-1 text-slate-400 hover:text-white"
+                  disabled={minute <= 1}
+                  className={`p-1 transition-colors ${minute <= 1 ? 'text-slate-600 cursor-not-allowed' : 'text-slate-400 hover:text-white'}`}
+                  title="Decrease minute"
                 >
                   <ChevronLeft size={16} />
                 </button>
-                <span className="font-extrabold text-sm text-white">{minute}'</span>
+                <span className="font-display font-black text-sm text-white">{minute}'</span>
                 <button
                   type="button"
                   onClick={() => handleMinuteStep(1)}
-                  className="p-1 text-slate-400 hover:text-white"
+                  disabled={minute >= maxMinute}
+                  className={`p-1 transition-colors ${minute >= maxMinute ? 'text-slate-600 cursor-not-allowed' : 'text-slate-400 hover:text-white'}`}
+                  title="Increase minute"
                 >
                   <ChevronRight size={16} />
                 </button>

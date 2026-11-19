@@ -137,7 +137,7 @@ export const SubmitModal: React.FC<SubmitModalProps> = ({
                 value={digit}
                 onChange={(e) => handleChange(idx, e.target.value)}
                 onKeyDown={(e) => handleKeyDown(idx, e)}
-                className="w-11 h-14 text-center text-2xl font-bold bg-[#1c2230] border border-slate-700/80 rounded-xl text-white focus:outline-none focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 transition-all"
+                className="w-11 h-14 text-center text-2xl font-display font-black bg-[#1c2230] border border-slate-700/80 rounded-xl text-white focus:outline-none focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 transition-all"
               />
             ))}
           </div>

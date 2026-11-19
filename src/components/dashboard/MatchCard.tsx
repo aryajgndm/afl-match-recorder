@@ -22,7 +22,7 @@ export const MatchCard: React.FC<MatchCardProps> = ({ fixture, onSelect }) => {
     <div className="w-full bg-[#141720] border border-slate-800/80 rounded-3xl p-5 shadow-lg transition-all hover:border-slate-700">
       {/* Top row: Match Identification and Date */}
       <div className="flex items-center justify-between text-xs font-semibold text-slate-400 mb-4 tracking-wider uppercase">
-        <span>
+        <span className="font-display font-black text-slate-300">
           GAME {fixture.gameNumber} • {seriesNameFormatted}
         </span>
         <span className="text-slate-400 normal-case">{fixture.date}</span>
@@ -32,7 +32,7 @@ export const MatchCard: React.FC<MatchCardProps> = ({ fixture, onSelect }) => {
       <div className="flex items-center justify-between my-4 px-2">
         {/* Team 1 */}
         <div className="flex items-center gap-3 flex-1 justify-end pr-2">
-          <span className="font-extrabold text-sm tracking-wide text-white uppercase text-right">
+          <span className="font-display font-black text-sm tracking-wide text-white uppercase text-right">
             {team1?.name || (fixture.seriesId === 'sf1' ? 'Falcons' : 'TBD')}
           </span>
           <div className="w-12 h-12 rounded-xl bg-slate-900/90 p-1.5 flex items-center justify-center border border-slate-800/60 shadow-inner">
@@ -50,7 +50,7 @@ export const MatchCard: React.FC<MatchCardProps> = ({ fixture, onSelect }) => {
 
         {/* Center V */}
         <div className="px-3">
-          <span className="text-sm font-black text-slate-300">V</span>
+          <span className="font-display text-sm font-black text-slate-300">V</span>
         </div>
 
         {/* Team 2 */}
@@ -66,7 +66,7 @@ export const MatchCard: React.FC<MatchCardProps> = ({ fixture, onSelect }) => {
               <span className="text-xs text-slate-500 font-bold">?</span>
             )}
           </div>
-          <span className="font-extrabold text-sm tracking-wide text-white uppercase text-left">
+          <span className="font-display font-black text-sm tracking-wide text-white uppercase text-left">
             {team2?.name || (fixture.seriesId === 'sf1' ? 'Winner PO1' : fixture.seriesId === 'sf2' ? 'Winner PO2' : 'TBD')}
           </span>
         </div>

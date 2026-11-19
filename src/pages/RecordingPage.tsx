@@ -5,6 +5,7 @@ import { calculateMatchScore, checkExtraTimeTwoGoalLead } from '../lib/scoring';
 import { resolveNewCard } from '../lib/disciplinary';
 import { TEAMS } from '../data/teams';
 import { MatchHeader } from '../components/recording/MatchHeader';
+import { TotalScoreboard } from '../components/recording/TotalScoreboard';
 import { QuarterScoreboard } from '../components/recording/QuarterScoreboard';
 import { EventTimeline } from '../components/recording/EventTimeline';
 import { BottomDock } from '../components/recording/BottomDock';
@@ -158,9 +159,6 @@ export const RecordingPage: React.FC<RecordingPageProps> = ({
       {/* Top Header */}
       <MatchHeader
         fixture={fixture}
-        team1={team1}
-        team2={team2}
-        score={score}
         canSubmit={canSubmit}
         onSubmitClick={() => {
           setSubmitError(null);
@@ -170,13 +168,16 @@ export const RecordingPage: React.FC<RecordingPageProps> = ({
       />
 
       {/* Main Recording Workspace */}
-      <main className="flex-1 w-full max-w-md mx-auto px-4 pt-2">
+      <main className="flex-1 w-full max-w-md mx-auto px-4 pt-1">
         {/* Extra time banner if two goal lead achieved */}
         {isExtraTimeActive && etLead.clinched && (
           <div className="bg-amber-950/70 border border-amber-600/70 rounded-2xl p-2.5 mb-2 text-center text-xs font-bold text-amber-200 animate-pulse">
             ★ Two-goal extra time lead reached! Match is ready for final submission.
           </div>
         )}
+
+        {/* Total Match Scoreboard (Moved from cramped navbar) */}
+        <TotalScoreboard team1={team1} team2={team2} score={score} />
 
         {/* Quarter indicator & Quarter Scoreboard */}
         <QuarterScoreboard

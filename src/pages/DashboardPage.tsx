@@ -79,11 +79,11 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({
       <header className="sticky top-0 z-30 bg-[#0e1117]/95 backdrop-blur-md border-b border-slate-800/80 px-4 py-4">
         <div className="max-w-md mx-auto flex items-center justify-between">
           <div className="flex items-center gap-2.5">
-            <div className="w-8 h-8 rounded-xl bg-blue-600/20 border border-blue-500/30 flex items-center justify-center text-blue-400 font-black text-sm">
+            <div className="w-8 h-8 rounded-xl bg-blue-600/20 border border-blue-500/30 flex items-center justify-center text-blue-400 font-display font-black text-sm">
               AFL
             </div>
             <div>
-              <h1 className="text-sm font-black tracking-wider uppercase text-white leading-none">
+              <h1 className="font-display text-sm font-black tracking-wider uppercase text-white leading-none">
                 Match Recorder
               </h1>
               <p className="text-[10px] text-slate-400 font-medium">Official Postseason Scoresheet</p>
@@ -117,9 +117,9 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({
                   <span className="text-emerald-400 font-black">CLINCHED</span>
                 )}
               </div>
-              <div className="flex items-center justify-between font-extrabold text-white">
+              <div className="flex items-center justify-between font-display font-black text-white">
                 <span className="truncate pr-1">PAN {seriesMap.po1.team1Wins}</span>
-                <span className="text-slate-500 text-[10px]">-</span>
+                <span className="text-slate-500 text-[10px] font-sans">-</span>
                 <span className="truncate pl-1">{seriesMap.po1.team2Wins} BUL</span>
               </div>
             </div>
@@ -132,9 +132,9 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({
                   <span className="text-emerald-400 font-black">CLINCHED</span>
                 )}
               </div>
-              <div className="flex items-center justify-between font-extrabold text-white">
+              <div className="flex items-center justify-between font-display font-black text-white">
                 <span className="truncate pr-1">GRI {seriesMap.po2.team1Wins}</span>
-                <span className="text-slate-500 text-[10px]">-</span>
+                <span className="text-slate-500 text-[10px] font-sans">-</span>
                 <span className="truncate pl-1">{seriesMap.po2.team2Wins} STA</span>
               </div>
             </div>
