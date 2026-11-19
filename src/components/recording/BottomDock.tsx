@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { MatchEvent, Quarter, Team, GoalType, CardType } from '../../types';
+import { MatchEvent, Quarter, Team, CardType } from '../../types';
 import { getPlayersByTeam } from '../../data/players';
 import { ChevronLeft, ChevronRight, ChevronDown, Trash2, X } from 'lucide-react';
 
@@ -101,42 +101,37 @@ export const BottomDock: React.FC<BottomDockProps> = ({
     }
   }, [currentQuarter, minute]);
 
-  // Team Toggle
   const toggleTeam = () => {
     if (team1 && team2) {
-      setSelectedTeamId((prev) => (prev === team1.id ? team2.id : team1.id));
+      const nextId = selectedTeamId === team1.id ? team2.id : team1.id;
+      setSelectedTeamId(nextId);
       setScorerId('');
       setAssisterId('');
       setCardPlayerId('');
     }
   };
 
-  // Card Type Toggle
-  const toggleCardType = () => {
-    setCardType((prev) => (prev === 'yellow' ? 'red' : 'yellow'));
-  };
-
-  // Submissions
   const handleSaveGoal = () => {
     if (!scorerId) return;
 
-    let goalType: GoalType = 'regular';
+    const effectiveMinute = Math.min(minute, maxMinute);
+
+    let goalType: 'regular' | 'penalty' | 'own_goal' = 'regular';
     if (isPenalty) goalType = 'penalty';
     if (isOwnGoal) goalType = 'own_goal';
 
-    const finalAssisterId = isOwnGoal || isPenalty ? null : assisterId || null;
-    const effectiveMinute = Math.min(Math.max(1, minute), maxMinute);
+    const creditedTeamId = selectedTeamId;
+    const finalAssisterId = isPenalty || isOwnGoal ? undefined : assisterId || undefined;
 
     if (editingEvent) {
       onUpdateEvent({
         ...editingEvent,
         quarter: currentQuarter,
         minute: effectiveMinute,
-        teamId: selectedTeamId,
+        teamId: creditedTeamId,
         playerId: scorerId,
         assisterId: finalAssisterId,
         goalType,
-        concedingTeamId: isOwnGoal ? opposingTeamId : undefined,
       });
       onCancelEdit();
     } else {
@@ -145,12 +140,12 @@ export const BottomDock: React.FC<BottomDockProps> = ({
         quarter: currentQuarter,
         minute: effectiveMinute,
         type: 'goal',
-        teamId: selectedTeamId,
+        teamId: creditedTeamId,
         playerId: scorerId,
         assisterId: finalAssisterId,
         goalType,
-        concedingTeamId: isOwnGoal ? opposingTeamId : undefined,
       });
+      // Reset inputs for next entry
       setScorerId('');
       setAssisterId('');
       setIsPenalty(false);
@@ -161,7 +156,7 @@ export const BottomDock: React.FC<BottomDockProps> = ({
   const handleSaveCard = () => {
     if (!cardPlayerId) return;
 
-    const effectiveMinute = Math.min(Math.max(1, minute), maxMinute);
+    const effectiveMinute = Math.min(minute, maxMinute);
 
     if (editingEvent) {
       onUpdateEvent({
@@ -198,7 +193,7 @@ export const BottomDock: React.FC<BottomDockProps> = ({
     <div className="fixed bottom-0 left-0 right-0 z-40 bg-[#12151c] border-t border-slate-800 rounded-t-3xl shadow-2xl p-4 max-w-md mx-auto font-sans font-normal">
       {/* Top Bar: Quarter Switcher & Mode Icons */}
       <div className="flex items-center justify-between pb-3 border-b border-slate-800/80 mb-3">
-        {/* Quarter Pills */}
+        {/* Quarter Pills (Bold text as requested) */}
         <div className="flex items-center gap-1.5 bg-[#1a1f2c] p-1 rounded-full border border-slate-800">
           {quartersList.map((q) => {
             const isActive = currentQuarter === q;
@@ -208,7 +203,7 @@ export const BottomDock: React.FC<BottomDockProps> = ({
                 key={q}
                 type="button"
                 onClick={() => onQuarterChange(q)}
-                className={`px-3.5 py-1 text-xs font-normal tracking-wider rounded-full transition-all uppercase ${
+                className={`px-3.5 py-1 text-xs font-bold tracking-wider rounded-full transition-all uppercase ${
                   isActive
                     ? 'bg-white text-black shadow-sm'
                     : 'text-slate-400 hover:text-white'
@@ -220,15 +215,15 @@ export const BottomDock: React.FC<BottomDockProps> = ({
           })}
         </div>
 
-        {/* Mode Toggles: Soccer Ball & Cards */}
+        {/* Mode Toggles: Soccer Ball & Cards (Centered card icon in top right corner) */}
         <div className="flex items-center gap-1 bg-[#1a1f2c] p-1 rounded-full border border-slate-800">
           {/* Goal Mode: Classical Soccer / Football Ball */}
           <button
             type="button"
             onClick={() => setMode('goal')}
-            className={`p-2 rounded-full transition-all ${
+            className={`w-8 h-8 flex items-center justify-center rounded-full transition-all ${
               mode === 'goal'
-                ? 'bg-slate-700 text-white shadow-sm'
+                ? 'bg-white text-black shadow-sm'
                 : 'text-slate-400 hover:text-white'
             }`}
             title="GOAL MODE"
@@ -237,7 +232,6 @@ export const BottomDock: React.FC<BottomDockProps> = ({
               className="w-4 h-4 fill-current"
               viewBox="0 0 24 24"
             >
-              {/* Outer circle with seamless pentagonal panels */}
               <circle cx="12" cy="12" r="9.5" fill="none" stroke="currentColor" strokeWidth="1.6" />
               <polygon points="12,7.2 15.6,9.8 14.2,14.2 9.8,14.2 8.4,9.8" />
               <line x1="12" y1="2.5" x2="12" y2="7.2" stroke="currentColor" strokeWidth="1.5" />
@@ -248,21 +242,23 @@ export const BottomDock: React.FC<BottomDockProps> = ({
             </svg>
           </button>
 
-          {/* Card Mode */}
+          {/* Card Mode: Perfectly centered card icon */}
           <button
             type="button"
             onClick={() => setMode('card')}
-            className={`p-2 rounded-full transition-all ${
+            className={`w-8 h-8 flex items-center justify-center rounded-full transition-all ${
               mode === 'card'
-                ? 'bg-slate-700 text-white shadow-sm'
+                ? 'bg-white text-black shadow-sm'
                 : 'text-slate-400 hover:text-white'
             }`}
             title="CARD MODE"
           >
-            <div className="relative w-4 h-4 flex items-center justify-center">
-              <span className="absolute -top-0.5 -left-0.5 w-2.5 h-3.5 bg-amber-400 rounded-[2px]" />
-              <span className="absolute top-0.5 left-1 w-2.5 h-3.5 bg-rose-600 rounded-[2px]" />
-            </div>
+            <svg
+              className="w-4 h-4 fill-current"
+              viewBox="0 0 24 24"
+            >
+              <rect x="7" y="3.5" width="10" height="17" rx="2" fill="currentColor" />
+            </svg>
           </button>
         </div>
       </div>
@@ -273,7 +269,7 @@ export const BottomDock: React.FC<BottomDockProps> = ({
           <span>EDITING {editingEvent.type.toUpperCase()} ({editingEvent.minute}')</span>
           <button
             onClick={onCancelEdit}
-            className="flex items-center gap-1 text-slate-400 hover:text-white text-[11px] uppercase"
+            className="flex items-center gap-1 text-slate-400 hover:text-white text-[11px] font-bold uppercase"
           >
             <X size={14} />
             <span>CANCEL</span>
@@ -462,13 +458,13 @@ export const BottomDock: React.FC<BottomDockProps> = ({
               </label>
             </div>
 
-            {/* Action Buttons */}
+            {/* Action Buttons: Bold text on button as requested */}
             <div className="flex items-center gap-2">
               {editingEvent && (
                 <button
                   type="button"
                   onClick={() => onDeleteEvent(editingEvent.id)}
-                  className="p-2.5 rounded-full bg-rose-900/60 hover:bg-rose-800 text-rose-300 transition-colors uppercase"
+                  className="p-2.5 rounded-full bg-rose-900/60 hover:bg-rose-800 text-rose-300 transition-colors uppercase font-bold"
                   title="DELETE EVENT"
                 >
                   <Trash2 size={16} />
@@ -478,7 +474,7 @@ export const BottomDock: React.FC<BottomDockProps> = ({
                 type="button"
                 onClick={handleSaveGoal}
                 disabled={!scorerId}
-                className={`px-5 py-2.5 rounded-full font-normal text-xs tracking-wider uppercase transition-all shadow-md active:scale-95 ${
+                className={`px-5 py-2.5 rounded-full font-bold text-xs tracking-wider uppercase transition-all shadow-md active:scale-95 ${
                   scorerId
                     ? 'bg-white text-black hover:bg-slate-200'
                     : 'bg-slate-800 text-slate-500 cursor-not-allowed'
@@ -551,13 +547,13 @@ export const BottomDock: React.FC<BottomDockProps> = ({
             </div>
           </div>
 
-          {/* Row 2: Card Type Stepper */}
+          {/* Row 2: Card Type */}
           <div className="flex flex-col">
             <span className="text-[10px] font-normal tracking-wider text-slate-400 uppercase mb-1">
               CARD TYPE
             </span>
             <div
-              onClick={toggleCardType}
+              onClick={() => setCardType(cardType === 'yellow' ? 'red' : 'yellow')}
               className="flex items-center justify-between bg-[#191e2b] border border-slate-700/60 rounded-xl px-3 py-2 cursor-pointer hover:border-slate-600 transition-colors"
             >
               <ChevronLeft size={16} className="text-slate-400" />
@@ -567,15 +563,15 @@ export const BottomDock: React.FC<BottomDockProps> = ({
                     cardType === 'yellow' ? 'bg-amber-400' : 'bg-rose-600'
                   }`}
                 />
-                <span className="font-sans font-normal text-xs text-white uppercase">
-                  {cardType.toUpperCase()}
+                <span className="font-sans font-normal text-xs text-white uppercase tracking-wider">
+                  {cardType === 'yellow' ? 'YELLOW' : 'RED'}
                 </span>
               </div>
               <ChevronRight size={16} className="text-slate-400" />
             </div>
           </div>
 
-          {/* Row 3: Card To Dropdown */}
+          {/* Row 3: Card To */}
           <div className="flex flex-col">
             <span className="text-[10px] font-normal tracking-wider text-slate-400 uppercase mb-1">
               CARD TO
@@ -600,13 +596,13 @@ export const BottomDock: React.FC<BottomDockProps> = ({
             </div>
           </div>
 
-          {/* Row 4: Submit Card Button */}
+          {/* Row 4: Submit Card Button (Bold text on button as requested) */}
           <div className="flex items-center justify-end gap-2 pt-1">
             {editingEvent && (
               <button
                 type="button"
                 onClick={() => onDeleteEvent(editingEvent.id)}
-                className="p-2.5 rounded-full bg-rose-900/60 hover:bg-rose-800 text-rose-300 transition-colors uppercase"
+                className="p-2.5 rounded-full bg-rose-900/60 hover:bg-rose-800 text-rose-300 transition-colors uppercase font-bold"
                 title="DELETE EVENT"
               >
                 <Trash2 size={16} />
@@ -616,7 +612,7 @@ export const BottomDock: React.FC<BottomDockProps> = ({
               type="button"
               onClick={handleSaveCard}
               disabled={!cardPlayerId}
-              className={`px-5 py-2.5 rounded-full font-normal text-xs tracking-wider uppercase transition-all shadow-md active:scale-95 ${
+              className={`px-5 py-2.5 rounded-full font-bold text-xs tracking-wider uppercase transition-all shadow-md active:scale-95 ${
                 cardPlayerId
                   ? 'bg-white text-black hover:bg-slate-200'
                   : 'bg-slate-800 text-slate-500 cursor-not-allowed'

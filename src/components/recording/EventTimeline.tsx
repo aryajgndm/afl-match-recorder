@@ -44,15 +44,11 @@ export const EventTimeline: React.FC<EventTimelineProps> = ({
         const player = getPlayerById(ev.playerId);
         const assister = ev.assisterId ? getPlayerById(ev.assisterId) : null;
 
-        // Label formulation
         const playerName = player?.name || ev.playerId;
-        const assisterText = assister ? ` (${assister.name})` : '';
 
         let suffix = '';
-        if (ev.goalType === 'penalty') suffix = ' (P)';
-        if (ev.goalType === 'own_goal') suffix = ' (OG)';
-
-        const goalLabel = `${ev.minute}' ${playerName.toUpperCase()}${assisterText.toUpperCase()}${suffix}`;
+        if (ev.goalType === 'penalty') suffix = '(P)';
+        if (ev.goalType === 'own_goal') suffix = '(OG)';
 
         if (isCard) {
           const isYellow = ev.cardType === 'yellow';
@@ -73,19 +69,38 @@ export const EventTimeline: React.FC<EventTimelineProps> = ({
                   isYellow ? 'bg-amber-400' : 'bg-rose-600'
                 }`}
               />
-              <span className="text-xs font-extrabold tracking-wide text-slate-900 uppercase">
-                {ev.minute}' {playerName.toUpperCase()}{' '}
-                {ev.isSecondYellowRed && '(2ND YELLOW)'}
+              <span className="text-xs tracking-wide text-slate-900 uppercase">
+                {/* Minute must be bold, player's name must be medium, bracketed text must be regular weight */}
+                <span className="font-bold">{ev.minute}'</span>{' '}
+                <span className="font-medium">{playerName.toUpperCase()}</span>
+                {ev.isSecondYellowRed && (
+                  <span className="font-normal text-slate-600"> (2ND YELLOW)</span>
+                )}
               </span>
             </div>
           );
         }
 
+        // Goal Event
+        const renderGoalContent = () => (
+          <span className="text-xs tracking-wide text-slate-900 uppercase">
+            {/* Minute must be bold, scorer's name must be medium, bracketed text must be regular weight */}
+            <span className="font-bold">{ev.minute}'</span>{' '}
+            <span className="font-medium">{playerName.toUpperCase()}</span>
+            {assister && (
+              <span className="font-normal text-slate-600"> ({assister.name.toUpperCase()})</span>
+            )}
+            {suffix && (
+              <span className="font-normal text-slate-600"> {suffix}</span>
+            )}
+          </span>
+        );
+
         return (
           <div
             key={ev.id}
             onClick={() => !readOnly && onSelectEvent?.(ev)}
-            className={`w-full py-2.5 px-4 flex items-center justify-between text-xs font-extrabold tracking-wide select-none transition-all cursor-pointer ${
+            className={`w-full py-2.5 px-4 flex items-center justify-between text-xs select-none transition-all cursor-pointer ${
               index % 2 === 0 ? 'bg-white' : 'bg-[#f2f4f7]'
             } ${
               isSelected
@@ -95,20 +110,12 @@ export const EventTimeline: React.FC<EventTimelineProps> = ({
           >
             {/* Team 1 event column */}
             <div className="flex-1 flex justify-start">
-              {isTeam1 && (
-                <span className="text-slate-900 uppercase">
-                  {goalLabel}
-                </span>
-              )}
+              {isTeam1 && renderGoalContent()}
             </div>
 
             {/* Team 2 event column */}
             <div className="flex-1 flex justify-end text-right">
-              {!isTeam1 && (
-                <span className="text-slate-900 uppercase">
-                  {goalLabel}
-                </span>
-              )}
+              {!isTeam1 && renderGoalContent()}
             </div>
           </div>
         );

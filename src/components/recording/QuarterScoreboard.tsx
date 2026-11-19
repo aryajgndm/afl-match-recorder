@@ -31,17 +31,17 @@ export const QuarterScoreboard: React.FC<QuarterScoreboardProps> = ({
       {/* Quarter Title & Submit Button Header */}
       {isReadOnly || !onSubmitClick ? (
         <div className="flex items-center justify-center py-1">
-          <h2 className="font-display text-2xl font-black tracking-tight text-slate-900 uppercase">
+          <h2 className="font-display text-3xl sm:text-4xl font-black tracking-tight text-slate-900 uppercase">
             {quarterTitle}
           </h2>
         </div>
       ) : (
         <div className="flex items-center justify-between px-1">
-          <h2 className="font-display text-2xl font-black tracking-tight text-slate-900 uppercase">
+          <h2 className="font-display text-3xl sm:text-4xl font-black tracking-tight text-slate-900 uppercase">
             {quarterTitle}
           </h2>
 
-          {/* Submit Pill Button: Light gray when disabled, #BE2041 when active */}
+          {/* Submit Pill Button: Light gray when disabled, #BE2041 when active (bold text) */}
           {canSubmit ? (
             <button
               type="button"

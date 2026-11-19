@@ -1,4 +1,42 @@
-@import url('https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,200..800&family=MuseoModerno:ital,wght@0,100..900;1,100..900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,200..800&family=MuseoModerno:ital,wght@0,100..900;1,100..900&family=Parkinsans:wght@300..800&display=swap');
+
+/* Replace every 'G' and 'g' in MuseoModerno with Parkinsans using unicode-range */
+@font-face {
+  font-family: 'ParkinsansG';
+  src: url('/fonts/Parkinsans-Bold.ttf') format('truetype');
+  font-weight: 600 900;
+  font-style: normal;
+  font-display: swap;
+  unicode-range: U+0047, U+0067; /* 'G' and 'g' */
+}
+
+@font-face {
+  font-family: 'ParkinsansG';
+  src: url('/fonts/Parkinsans-Regular.ttf') format('truetype');
+  font-weight: 100 599;
+  font-style: normal;
+  font-display: swap;
+  unicode-range: U+0047, U+0067; /* 'G', 'g' */
+}
+
+/* Fallback override directly into 'MuseoModerno' font-family name */
+@font-face {
+  font-family: 'MuseoModerno';
+  src: url('/fonts/Parkinsans-Bold.ttf') format('truetype');
+  font-weight: 600 900;
+  font-style: normal;
+  font-display: swap;
+  unicode-range: U+0047, U+0067;
+}
+
+@font-face {
+  font-family: 'MuseoModerno';
+  src: url('/fonts/Parkinsans-Regular.ttf') format('truetype');
+  font-weight: 100 599;
+  font-style: normal;
+  font-display: swap;
+  unicode-range: U+0047, U+0067;
+}
 
 @tailwind base;
 @tailwind components;
@@ -14,13 +52,18 @@
   button, input, select, textarea, optgroup, option {
     font-family: 'Bricolage Grotesque', system-ui, sans-serif;
   }
+
+  /* All button text must be bold by default as requested */
+  button {
+    font-weight: 700;
+  }
 }
 
-/* MuseoModerno applied to headings, scoreboards, branding, and display typography */
+/* MuseoModerno applied to headings, scoreboards, branding, and display typography with Parkinsans for every G */
 .font-display,
 h1, h2, h3, h4,
 .score-font {
-  font-family: 'MuseoModerno', cursive, sans-serif !important;
+  font-family: 'ParkinsansG', 'MuseoModerno', cursive, sans-serif !important;
 }
 
 .font-sans {
