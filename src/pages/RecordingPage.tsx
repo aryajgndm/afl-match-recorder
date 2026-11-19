@@ -137,14 +137,14 @@ export const RecordingPage: React.FC<RecordingPageProps> = ({
       setIsSubmitModalOpen(false);
       onNavigateToResults(fixture.id);
     } else {
-      setSubmitError(res.error || 'Incorrect passcode. Try again.');
+      setSubmitError(res.error || 'INCORRECT PASSCODE. TRY AGAIN.');
     }
   };
 
   if (!fixture) {
     return (
-      <div className="min-h-screen bg-[#0c0f14] flex items-center justify-center text-slate-400">
-        Loading match details...
+      <div className="min-h-screen bg-white flex items-center justify-center text-slate-500 uppercase font-bold text-xs">
+        LOADING MATCH DETAILS...
       </div>
     );
   }
@@ -155,40 +155,40 @@ export const RecordingPage: React.FC<RecordingPageProps> = ({
   const team2QuarterScore = score.team2QuarterScores[currentQuarter] || 0;
 
   return (
-    <div className="min-h-screen bg-[#0c0f14] text-slate-100 flex flex-col justify-between pb-64">
+    <div className="min-h-screen bg-white text-slate-900 flex flex-col justify-between pb-64">
       {/* Top Header */}
       <MatchHeader
         fixture={fixture}
-        canSubmit={canSubmit}
-        onSubmitClick={() => {
-          setSubmitError(null);
-          setIsSubmitModalOpen(true);
-        }}
         onBackClick={onNavigateBack}
       />
 
       {/* Main Recording Workspace */}
-      <main className="flex-1 w-full max-w-md mx-auto px-4 pt-1">
+      <main className="flex-1 w-full max-w-md mx-auto px-4">
         {/* Extra time banner if two goal lead achieved */}
         {isExtraTimeActive && etLead.clinched && (
-          <div className="bg-amber-950/70 border border-amber-600/70 rounded-2xl p-2.5 mb-2 text-center text-xs font-bold text-amber-200 animate-pulse">
-            ★ Two-goal extra time lead reached! Match is ready for final submission.
+          <div className="bg-amber-100 border border-amber-400 rounded-2xl p-2.5 mb-2 text-center text-xs font-bold text-amber-900 uppercase animate-pulse">
+            ★ TWO-GOAL EXTRA TIME LEAD REACHED! MATCH IS READY FOR FINAL SUBMISSION.
           </div>
         )}
 
-        {/* Total Match Scoreboard (Moved from cramped navbar) */}
+        {/* Total Match Scoreboard centered directly on top of quarter title */}
         <TotalScoreboard team1={team1} team2={team2} score={score} />
 
-        {/* Quarter indicator & Quarter Scoreboard */}
+        {/* Quarter indicator, Quarter Scoreboard bar, and Submit button */}
         <QuarterScoreboard
           quarter={currentQuarter}
           team1={team1}
           team2={team2}
           team1QuarterScore={team1QuarterScore}
           team2QuarterScore={team2QuarterScore}
+          canSubmit={canSubmit}
+          onSubmitClick={() => {
+            setSubmitError(null);
+            setIsSubmitModalOpen(true);
+          }}
         />
 
-        {/* Events Timeline */}
+        {/* Events Timeline with zebra striping */}
         <div className="mt-2">
           <EventTimeline
             events={quarterEvents}

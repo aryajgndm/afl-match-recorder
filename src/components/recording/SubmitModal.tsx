@@ -69,103 +69,117 @@ export const SubmitModal: React.FC<SubmitModalProps> = ({
     : 'FINALS';
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm animate-fadeIn">
-      <div className="relative w-full max-w-sm bg-[#161a23] border border-slate-800 rounded-3xl p-6 shadow-2xl flex flex-col items-center text-center">
-        {/* Header line */}
-        <p className="text-xs font-bold tracking-widest text-slate-400 uppercase">
-          GAME {fixture.gameNumber} • {seriesNameFormatted}
-        </p>
-        <p className="text-xs font-medium text-slate-400 mt-1 mb-5">{fixture.date}</p>
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/75 backdrop-blur-sm animate-fadeIn">
+      <div className="relative w-full max-w-sm bg-white border border-slate-200 rounded-3xl p-6 shadow-2xl flex flex-col items-center text-center">
+        {/* Top Header Line */}
+        <div className="w-full flex items-center justify-between text-xs font-bold text-slate-500 uppercase tracking-wider mb-4">
+          <span>GAME {fixture.gameNumber} • {seriesNameFormatted}</span>
+          <span className="font-medium text-slate-500 normal-case">{fixture.date}</span>
+        </div>
 
-        {/* Box score preview table */}
-        <div className="w-full bg-[#1b202c] border border-slate-700/60 rounded-2xl p-3 mb-6">
+        {/* Box score preview table matching mockup */}
+        <div className="w-full bg-white border border-slate-300 rounded-xl overflow-hidden shadow-sm mb-5">
           {/* Table Header */}
-          <div className="grid grid-cols-7 text-[10px] font-black tracking-wider text-slate-400 pb-2 border-b border-slate-700/50">
-            <span className="col-span-1 text-left pl-1">TEAM</span>
-            <span className="text-center">Q1</span>
-            <span className="text-center">Q2</span>
-            <span className="text-center">Q3</span>
-            <span className="text-center">Q4</span>
-            <span className="text-center">ET</span>
-            <span className="text-center font-bold text-white">FT</span>
+          <div className="grid grid-cols-7 text-[10px] font-black tracking-wider text-slate-600 bg-slate-50 py-2 border-b border-slate-300">
+            <span className="col-span-2 text-left pl-3 uppercase">TEAM</span>
+            <span className="text-center uppercase">Q1</span>
+            <span className="text-center uppercase">Q2</span>
+            <span className="text-center uppercase">Q3</span>
+            <span className="text-center uppercase">Q4</span>
+            <span className="text-center uppercase">ET</span>
+            <span className="text-center font-black text-slate-900 uppercase">FT</span>
           </div>
 
           {/* Team 1 Row */}
-          <div className="grid grid-cols-7 text-xs font-bold items-center py-2 border-b border-slate-800/60">
-            <div className="col-span-1 flex items-center gap-1.5 pl-1">
-              <div className="w-6 h-6 flex items-center justify-center flex-shrink-0 filter drop-shadow-sm">
-                {team1 && <img src={team1.logoUrl} alt="" className="w-full h-full object-contain" />}
+          <div className="grid grid-cols-7 text-xs font-bold items-center py-2 border-b border-slate-200">
+            <div className="col-span-2 flex items-center gap-1.5 pl-2">
+              <div className="bg-black text-white px-2 py-0.5 rounded flex items-center gap-1">
+                <div className="w-4 h-4 flex items-center justify-center flex-shrink-0">
+                  {team1 && <img src={team1.logoUrl} alt="" className="w-full h-full object-contain" />}
+                </div>
+                <span className="font-display text-[10px] font-black">{team1?.shortName}</span>
               </div>
-              <span className="font-display text-[11px] font-black text-white">{team1?.shortName}</span>
             </div>
-            <span className="text-center font-display text-slate-300">{score.team1QuarterScores.q1}</span>
-            <span className="text-center font-display text-slate-300">{score.team1QuarterScores.q2}</span>
-            <span className="text-center font-display text-slate-300">{score.team1QuarterScores.q3}</span>
-            <span className="text-center font-display text-slate-300">{score.team1QuarterScores.q4}</span>
+            <span className="text-center font-display text-slate-700">{score.team1QuarterScores.q1}</span>
+            <span className="text-center font-display text-slate-700">{score.team1QuarterScores.q2}</span>
+            <span className="text-center font-display text-slate-700">{score.team1QuarterScores.q3}</span>
+            <span className="text-center font-display text-slate-700">{score.team1QuarterScores.q4}</span>
             <span className="text-center font-display text-slate-400">{score.isExtraTime ? score.team1QuarterScores.et : '/'}</span>
-            <span className="text-center font-display font-black text-white text-sm">{score.team1Total}</span>
+            <span className="text-center font-display font-black text-slate-900 text-sm">{score.team1Total}</span>
           </div>
 
           {/* Team 2 Row */}
-          <div className="grid grid-cols-7 text-xs font-bold items-center pt-2">
-            <div className="col-span-1 flex items-center gap-1.5 pl-1">
-              <div className="w-6 h-6 flex items-center justify-center flex-shrink-0 filter drop-shadow-sm">
-                {team2 && <img src={team2.logoUrl} alt="" className="w-full h-full object-contain" />}
+          <div className="grid grid-cols-7 text-xs font-bold items-center py-2">
+            <div className="col-span-2 flex items-center gap-1.5 pl-2">
+              <div className="bg-black text-white px-2 py-0.5 rounded flex items-center gap-1">
+                <div className="w-4 h-4 flex items-center justify-center flex-shrink-0">
+                  {team2 && <img src={team2.logoUrl} alt="" className="w-full h-full object-contain" />}
+                </div>
+                <span className="font-display text-[10px] font-black">{team2?.shortName}</span>
               </div>
-              <span className="font-display text-[11px] font-black text-white">{team2?.shortName}</span>
             </div>
-            <span className="text-center font-display text-slate-300">{score.team2QuarterScores.q1}</span>
-            <span className="text-center font-display text-slate-300">{score.team2QuarterScores.q2}</span>
-            <span className="text-center font-display text-slate-300">{score.team2QuarterScores.q3}</span>
-            <span className="text-center font-display text-slate-300">{score.team2QuarterScores.q4}</span>
+            <span className="text-center font-display text-slate-700">{score.team2QuarterScores.q1}</span>
+            <span className="text-center font-display text-slate-700">{score.team2QuarterScores.q2}</span>
+            <span className="text-center font-display text-slate-700">{score.team2QuarterScores.q3}</span>
+            <span className="text-center font-display text-slate-700">{score.team2QuarterScores.q4}</span>
             <span className="text-center font-display text-slate-400">{score.isExtraTime ? score.team2QuarterScores.et : '/'}</span>
-            <span className="text-center font-display font-black text-white text-sm">{score.team2Total}</span>
+            <span className="text-center font-display font-black text-slate-900 text-sm">{score.team2Total}</span>
           </div>
         </div>
 
         {/* 6 Digit Passcode Input */}
         <form onSubmit={handleSubmit} className="w-full flex flex-col items-center">
-          <div className="flex justify-center gap-2 mb-6">
+          <div className="flex items-center justify-center gap-2 mb-5">
             {digits.map((digit, idx) => (
               <input
                 key={idx}
                 ref={(el) => (inputRefs.current[idx] = el)}
-                type="text"
+                type="password"
                 inputMode="numeric"
-                pattern="[0-9]*"
                 maxLength={1}
                 value={digit}
                 onChange={(e) => handleChange(idx, e.target.value)}
                 onKeyDown={(e) => handleKeyDown(idx, e)}
-                className="w-11 h-14 text-center text-2xl font-display font-black bg-[#1c2230] border border-slate-700/80 rounded-xl text-white focus:outline-none focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 transition-all"
+                className="w-11 h-12 text-center text-xl font-display font-black bg-white border-2 border-slate-300 focus:border-[#BE2041] rounded-xl text-slate-900 focus:outline-none transition-colors shadow-sm"
               />
             ))}
           </div>
 
-          {/* Two Buttons: SUBMIT & CANCEL */}
-          <div className="w-full grid grid-cols-2 gap-3 mb-2">
+          {/* Action Buttons: Submit (Green) & Cancel (Red) */}
+          <div className="flex items-center justify-center gap-3 w-full">
             <button
               type="submit"
-              className="py-3.5 bg-emerald-600 hover:bg-emerald-500 active:scale-95 transition-all text-white rounded-full font-bold text-xs tracking-wider flex items-center justify-center gap-1.5 shadow-lg shadow-emerald-950/40 uppercase"
+              disabled={digits.join('').length !== 6}
+              className={`flex-1 py-3 rounded-full font-bold text-xs tracking-wider flex items-center justify-center gap-1.5 transition-all shadow-md uppercase ${
+                digits.join('').length === 6
+                  ? 'bg-emerald-600 hover:bg-emerald-500 text-white shadow-emerald-600/30 active:scale-95'
+                  : 'bg-slate-200 text-slate-400 cursor-not-allowed'
+              }`}
             >
               <Check size={16} className="stroke-[3]" />
               <span>SUBMIT</span>
             </button>
+
             <button
               type="button"
               onClick={onClose}
-              className="py-3.5 bg-rose-600 hover:bg-rose-500 active:scale-95 transition-all text-white rounded-full font-bold text-xs tracking-wider flex items-center justify-center gap-1.5 shadow-lg shadow-rose-950/40 uppercase"
+              className="flex-1 py-3 bg-rose-600 hover:bg-rose-500 text-white rounded-full font-bold text-xs tracking-wider flex items-center justify-center gap-1.5 transition-all shadow-md active:scale-95 uppercase"
             >
               <X size={16} className="stroke-[3]" />
               <span>CANCEL</span>
             </button>
           </div>
 
-          {/* Subtitle / Error */}
-          {error ? (
-            <p className="text-xs font-semibold text-rose-500 mt-2 animate-pulse">{error}</p>
-          ) : (
-            <p className="text-xs text-slate-400 mt-2">Enter the passcode to submit.</p>
+          {/* Subtitle helper */}
+          <p className="text-[11px] font-medium text-slate-400 uppercase mt-3 tracking-wide">
+            ENTER THE PASSCODE TO SUBMIT.
+          </p>
+
+          {/* Error message */}
+          {error && (
+            <p className="text-xs font-semibold text-rose-600 mt-2 uppercase tracking-wide animate-shake">
+              {error}
+            </p>
           )}
         </form>
       </div>

@@ -33,7 +33,7 @@ export const MatchCard: React.FC<MatchCardProps> = ({ fixture, onSelect }) => {
         {/* Team 1 */}
         <div className="flex items-center gap-3 flex-1 justify-end pr-2">
           <span className="font-display font-black text-sm tracking-wide text-white uppercase text-right">
-            {team1?.name || (fixture.seriesId === 'sf1' ? 'Falcons' : 'TBD')}
+            {team1?.name || (fixture.seriesId === 'sf1' ? 'FALCONS' : 'TBD')}
           </span>
           <div className="w-14 h-14 sm:w-16 sm:h-16 flex items-center justify-center flex-shrink-0">
             {team1 ? (
@@ -67,7 +67,7 @@ export const MatchCard: React.FC<MatchCardProps> = ({ fixture, onSelect }) => {
             )}
           </div>
           <span className="font-display font-black text-sm tracking-wide text-white uppercase text-left">
-            {team2?.name || (fixture.seriesId === 'sf1' ? 'Winner PO1' : fixture.seriesId === 'sf2' ? 'Winner PO2' : 'TBD')}
+            {team2?.name || (fixture.seriesId === 'sf1' ? 'WINNER PO1' : fixture.seriesId === 'sf2' ? 'WINNER PO2' : 'TBD')}
           </span>
         </div>
       </div>

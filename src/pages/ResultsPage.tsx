@@ -28,13 +28,15 @@ export const ResultsPage: React.FC<ResultsPageProps> = ({ matchId, onNavigateBac
 
   if (!fixture || !fixture.result) {
     return (
-      <div className="min-h-screen bg-[#0c0f14] flex flex-col items-center justify-center p-4 text-center">
-        <p className="text-sm text-slate-400 mb-4">No finalized results available for this match yet.</p>
+      <div className="min-h-screen bg-white flex flex-col items-center justify-center p-4 text-center">
+        <p className="text-xs font-bold text-slate-500 uppercase mb-4 tracking-wider">
+          NO FINALIZED RESULTS AVAILABLE FOR THIS MATCH YET.
+        </p>
         <button
           onClick={onNavigateBack}
-          className="px-4 py-2 bg-slate-800 text-white rounded-full text-xs font-bold"
+          className="px-5 py-2.5 bg-slate-900 text-white rounded-full text-xs font-bold uppercase tracking-wider shadow-md hover:bg-slate-800 transition-colors"
         >
-          Return to Dashboard
+          RETURN TO DASHBOARD
         </button>
       </div>
     );
@@ -64,25 +66,24 @@ export const ResultsPage: React.FC<ResultsPageProps> = ({ matchId, onNavigateBac
   };
 
   return (
-    <div className="min-h-screen bg-[#0c0f14] text-slate-100 flex flex-col justify-between pb-24">
+    <div className="min-h-screen bg-[#fbfbfb] text-slate-900 flex flex-col justify-between pb-28">
       {/* Top Header */}
-      <header className="sticky top-0 z-40 bg-[#0e1117]/95 backdrop-blur-md border-b border-slate-800/80 px-4 py-3">
+      <header className="sticky top-0 z-40 bg-white/95 backdrop-blur-md border-b border-slate-200 px-4 py-3 shadow-xs">
         <div className="max-w-md mx-auto flex items-center justify-between">
           <div className="flex items-center gap-2">
             <button
               onClick={onNavigateBack}
-              className="p-1.5 -ml-1.5 text-slate-400 hover:text-white rounded-lg hover:bg-slate-800 transition-colors"
+              className="p-1 -ml-1 text-slate-500 hover:text-black rounded-lg transition-colors"
+              title="BACK TO DASHBOARD"
             >
-              <ChevronLeft size={22} />
+              <ChevronLeft size={24} />
             </button>
-            <div className="flex flex-col">
-              <span className="text-xs font-black tracking-wider text-slate-300 uppercase">
-                GAME {fixture.gameNumber} • {seriesNameFormatted}
-              </span>
-            </div>
+            <span className="text-xs font-black tracking-wider text-slate-700 uppercase">
+              GAME {fixture.gameNumber} • {seriesNameFormatted}
+            </span>
           </div>
 
-          <div className="text-xs font-medium text-slate-400">
+          <div className="text-xs font-medium text-slate-500 normal-case">
             {fixture.date}
           </div>
         </div>
@@ -94,17 +95,18 @@ export const ResultsPage: React.FC<ResultsPageProps> = ({ matchId, onNavigateBac
         <ResultsTable score={score} team1={team1} team2={team2} />
 
         {/* Quarter indicator & Quarter Scoreboard */}
-        <div className="mt-4">
+        <div className="mt-2">
           <QuarterScoreboard
             quarter={currentQuarter}
             team1={team1}
             team2={team2}
             team1QuarterScore={team1QuarterScore}
             team2QuarterScore={team2QuarterScore}
+            isReadOnly={true}
           />
         </div>
 
-        {/* Quarter Events List */}
+        {/* Quarter Events List with zebra striping */}
         <div className="mt-2">
           <EventTimeline
             events={quarterEvents}
@@ -128,7 +130,7 @@ export const ResultsPage: React.FC<ResultsPageProps> = ({ matchId, onNavigateBac
                   key={q}
                   type="button"
                   onClick={() => setCurrentQuarter(q)}
-                  className={`px-3.5 py-1.5 text-xs font-black tracking-wider rounded-full transition-all ${
+                  className={`px-3.5 py-1.5 text-xs font-black tracking-wider rounded-full transition-all uppercase ${
                     isActive
                       ? 'bg-white text-black shadow-sm'
                       : 'text-slate-400 hover:text-white'

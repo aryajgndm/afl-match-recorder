@@ -9,54 +9,47 @@ interface TotalScoreboardProps {
 
 export const TotalScoreboard: React.FC<TotalScoreboardProps> = ({ team1, team2, score }) => {
   return (
-    <div className="w-full max-w-sm mx-auto my-3 bg-[#131722] border border-slate-800/80 rounded-3xl p-4 shadow-xl">
-      <div className="text-[10px] font-black tracking-widest text-slate-400 uppercase text-center mb-2">
-        MATCH SCORE • TOTAL
+    <div className="w-full flex items-center justify-center gap-3 py-2 select-none">
+      {/* Team 1: 3-Letter Abbr + Logo */}
+      <div className="flex items-center gap-2">
+        <span className="font-display font-black text-base tracking-wider text-slate-900 uppercase">
+          {team1?.shortName || 'T1'}
+        </span>
+        <div className="w-9 h-9 flex items-center justify-center flex-shrink-0 filter drop-shadow-sm">
+          {team1 && (
+            <img
+              src={team1.logoUrl}
+              alt={team1.name}
+              className="w-full h-full object-contain"
+            />
+          )}
+        </div>
       </div>
 
-      <div className="flex items-center justify-between px-2">
-        {/* Team 1 */}
-        <div className="flex items-center gap-2.5 flex-1 justify-end pr-2">
-          <span className="font-display font-black text-sm tracking-wide text-white uppercase text-right truncate">
-            {team1?.name}
-          </span>
-          <div className="w-12 h-12 sm:w-14 sm:h-14 flex items-center justify-center flex-shrink-0 filter drop-shadow-md">
-            {team1 && (
-              <img
-                src={team1.logoUrl}
-                alt={team1.name}
-                className="w-full h-full object-contain"
-              />
-            )}
-          </div>
+      {/* Score Digits in Clean Rounded Cards */}
+      <div className="flex items-center gap-1.5">
+        <div className="w-10 h-10 flex items-center justify-center bg-white border border-slate-300 rounded-xl shadow-sm font-display font-black text-2xl text-slate-900">
+          {score.team1Total}
         </div>
+        <div className="w-10 h-10 flex items-center justify-center bg-white border border-slate-300 rounded-xl shadow-sm font-display font-black text-2xl text-slate-900">
+          {score.team2Total}
+        </div>
+      </div>
 
-        {/* Big Center Score in MuseoModerno */}
-        <div className="flex items-center gap-2 px-3 py-1 bg-[#1a202e] rounded-2xl border border-slate-700/60 shadow-inner flex-shrink-0">
-          <span className="font-display font-black text-2xl sm:text-3xl text-white tracking-wider w-7 text-center">
-            {score.team1Total}
-          </span>
-          <span className="text-slate-500 font-bold text-base select-none">:</span>
-          <span className="font-display font-black text-2xl sm:text-3xl text-white tracking-wider w-7 text-center">
-            {score.team2Total}
-          </span>
+      {/* Team 2: Logo + 3-Letter Abbr */}
+      <div className="flex items-center gap-2">
+        <div className="w-9 h-9 flex items-center justify-center flex-shrink-0 filter drop-shadow-sm">
+          {team2 && (
+            <img
+              src={team2.logoUrl}
+              alt={team2.name}
+              className="w-full h-full object-contain"
+            />
+          )}
         </div>
-
-        {/* Team 2 */}
-        <div className="flex items-center gap-2.5 flex-1 justify-start pl-2">
-          <div className="w-12 h-12 sm:w-14 sm:h-14 flex items-center justify-center flex-shrink-0 filter drop-shadow-md">
-            {team2 && (
-              <img
-                src={team2.logoUrl}
-                alt={team2.name}
-                className="w-full h-full object-contain"
-              />
-            )}
-          </div>
-          <span className="font-display font-black text-sm tracking-wide text-white uppercase text-left truncate">
-            {team2?.name}
-          </span>
-        </div>
+        <span className="font-display font-black text-base tracking-wider text-slate-900 uppercase">
+          {team2?.shortName || 'T2'}
+        </span>
       </div>
     </div>
   );

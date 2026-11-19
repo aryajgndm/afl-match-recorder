@@ -66,7 +66,7 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({
       setIsPasscodeModalOpen(false);
       onNavigateToRecording(selectedFixture.id);
     } else {
-      setPasscodeError(result.error || 'Incorrect passcode. Try again.');
+      setPasscodeError(result.error || 'INCORRECT PASSCODE. TRY AGAIN.');
     }
   };
 
@@ -84,9 +84,9 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({
             </div>
             <div>
               <h1 className="font-display text-sm font-black tracking-wider uppercase text-white leading-none">
-                Match Recorder
+                MATCH RECORDER
               </h1>
-              <p className="text-[10px] text-slate-400 font-medium">Official Postseason Scoresheet</p>
+              <p className="text-[10px] text-slate-400 font-medium uppercase tracking-wider">OFFICIAL POSTSEASON SCORESHEET</p>
             </div>
           </div>
 
@@ -105,14 +105,14 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({
         <div className="bg-[#141720] border border-slate-800 rounded-3xl p-4 mb-5 shadow-lg">
           <div className="flex items-center gap-2 text-xs font-black tracking-wider text-slate-300 uppercase mb-3">
             <Trophy size={14} className="text-amber-400" />
-            <span>Series Standings (Best-of-5)</span>
+            <span>SERIES STANDINGS (BEST-OF-5)</span>
           </div>
 
           <div className="grid grid-cols-2 gap-2 text-xs">
             {/* PO1 */}
             <div className="bg-[#1a1f2c] rounded-2xl p-2.5 border border-slate-800/80 flex flex-col justify-between">
               <div className="flex items-center justify-between text-[10px] font-bold text-slate-400 uppercase mb-1">
-                <span>Playoff 1</span>
+                <span>PLAYOFF 1</span>
                 {seriesMap.po1.isClinched && (
                   <span className="text-emerald-400 font-black">CLINCHED</span>
                 )}
@@ -127,7 +127,7 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({
             {/* PO2 */}
             <div className="bg-[#1a1f2c] rounded-2xl p-2.5 border border-slate-800/80 flex flex-col justify-between">
               <div className="flex items-center justify-between text-[10px] font-bold text-slate-400 uppercase mb-1">
-                <span>Playoff 2</span>
+                <span>PLAYOFF 2</span>
                 {seriesMap.po2.isClinched && (
                   <span className="text-emerald-400 font-black">CLINCHED</span>
                 )}
@@ -176,15 +176,15 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({
         <div className="mt-12 text-center">
           <button
             onClick={() => {
-              if (confirm('Reset match records back to default starting state?')) {
+              if (confirm('RESET MATCH RECORDS BACK TO DEFAULT STARTING STATE?')) {
                 matchStorage.resetToDefault();
                 refreshData();
               }
             }}
-            className="inline-flex items-center gap-1.5 text-[11px] font-semibold text-slate-500 hover:text-slate-300 transition-colors py-2 px-3 rounded-lg border border-slate-800/60 hover:border-slate-700"
+            className="inline-flex items-center gap-1.5 text-[11px] font-semibold text-slate-500 hover:text-slate-300 transition-colors py-2 px-3 rounded-lg border border-slate-800/60 hover:border-slate-700 uppercase"
           >
             <RefreshCw size={12} />
-            <span>Reset Demo State</span>
+            <span>RESET DEMO STATE</span>
           </button>
         </div>
       </main>
@@ -199,7 +199,7 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({
           error={passcodeError}
           buttonColor="blue"
           buttonText="START RECORDING"
-          subtitle="Enter the passcode to continue."
+          subtitle="ENTER THE PASSCODE TO CONTINUE."
         />
       )}
     </div>

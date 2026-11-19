@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Fixture } from '../../types';
 import { TEAMS } from '../../data/teams';
-import { ArrowRight, X } from 'lucide-react';
+import { ArrowRight, Check, X } from 'lucide-react';
 
 interface PasscodeModalProps {
   fixture: Fixture;
@@ -23,7 +23,7 @@ export const PasscodeModal: React.FC<PasscodeModalProps> = ({
   error,
   title,
   buttonText = 'START RECORDING',
-  subtitle = 'Enter the passcode to continue.',
+  subtitle = 'ENTER THE PASSCODE TO CONTINUE.',
   buttonColor = 'blue',
 }) => {
   const [digits, setDigits] = useState<string[]>(['', '', '', '', '', '']);
@@ -74,89 +74,119 @@ export const PasscodeModal: React.FC<PasscodeModalProps> = ({
     onSubmit(code);
   };
 
+  const seriesNameFormatted = fixture.seriesId.startsWith('po')
+    ? `PLAYOFF ${fixture.seriesId.replace('po', '')}`
+    : fixture.seriesId.startsWith('sf')
+    ? `SEMI-FINAL ${fixture.seriesId.replace('sf', '')}`
+    : 'FINALS';
+
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm animate-fadeIn">
-      <div className="relative w-full max-w-sm bg-[#161a23] border border-slate-800 rounded-3xl p-6 shadow-2xl flex flex-col items-center text-center">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/75 backdrop-blur-sm animate-fadeIn">
+      <div className="relative w-full max-w-sm bg-white border border-slate-200 rounded-3xl p-6 shadow-2xl flex flex-col items-center text-center">
         <button
           onClick={onClose}
-          className="absolute top-4 right-4 p-2 text-slate-400 hover:text-white rounded-full hover:bg-slate-800 transition-colors"
-          aria-label="Close"
+          className="absolute top-4 right-4 p-2 text-slate-400 hover:text-slate-800 rounded-full hover:bg-slate-100 transition-colors"
+          aria-label="CLOSE"
         >
           <X size={20} />
         </button>
 
-        {/* Header subtitle */}
-        <p className="font-display text-xs font-black tracking-widest text-slate-300 uppercase mt-2">
-          {title || `GAME ${fixture.gameNumber} • ${fixture.seriesId.toUpperCase()}`}
+        {/* Header Title */}
+        <p className="font-display text-xs font-bold tracking-widest text-slate-500 uppercase mt-1">
+          {title || `GAME ${fixture.gameNumber} • ${seriesNameFormatted}`}
         </p>
 
         {/* Team logos vs */}
-        <div className="flex items-center justify-center gap-6 my-6">
-          <div className="w-20 h-20 sm:w-24 sm:h-24 flex items-center justify-center flex-shrink-0">
+        <div className="flex items-center justify-center gap-5 my-5">
+          <div className="w-16 h-16 sm:w-20 sm:h-20 flex items-center justify-center flex-shrink-0 filter drop-shadow-md">
             {team1 ? (
               <img
                 src={team1.logoUrl}
                 alt={team1.name}
-                className="w-full h-full object-contain filter drop-shadow-lg"
+                className="w-full h-full object-contain"
               />
             ) : (
-              <div className="w-12 h-12 rounded-full bg-slate-800" />
+              <span className="text-sm text-slate-400 font-bold">?</span>
             )}
           </div>
-          <span className="font-display text-lg font-black text-slate-300">V</span>
-          <div className="w-20 h-20 sm:w-24 sm:h-24 flex items-center justify-center flex-shrink-0">
+
+          <span className="font-display text-lg font-black text-slate-800 select-none">
+            V
+          </span>
+
+          <div className="w-16 h-16 sm:w-20 sm:h-20 flex items-center justify-center flex-shrink-0 filter drop-shadow-md">
             {team2 ? (
               <img
                 src={team2.logoUrl}
                 alt={team2.name}
-                className="w-full h-full object-contain filter drop-shadow-lg"
+                className="w-full h-full object-contain"
               />
             ) : (
-              <div className="w-12 h-12 rounded-full bg-slate-800" />
+              <span className="text-sm text-slate-400 font-bold">?</span>
             )}
           </div>
         </div>
 
-        {/* Date */}
-        <p className="text-xs font-medium text-slate-400 mb-6">{fixture.date}</p>
+        {/* Match Date (normal case as per requirement) */}
+        <p className="text-xs font-medium text-slate-500 mb-5">{fixture.date}</p>
 
-        {/* 6 Digit Inputs */}
+        {/* 6 Digit Passcode Input */}
         <form onSubmit={handleSubmit} className="w-full flex flex-col items-center">
-          <div className="flex justify-center gap-2 mb-6">
+          <div className="flex items-center justify-center gap-2 mb-6">
             {digits.map((digit, idx) => (
               <input
                 key={idx}
                 ref={(el) => (inputRefs.current[idx] = el)}
-                type="text"
+                type="password"
                 inputMode="numeric"
-                pattern="[0-9]*"
                 maxLength={1}
                 value={digit}
                 onChange={(e) => handleChange(idx, e.target.value)}
                 onKeyDown={(e) => handleKeyDown(idx, e)}
-                className="w-11 h-14 text-center text-2xl font-display font-black bg-[#1c2230] border border-slate-700/80 rounded-xl text-white focus:outline-none focus:border-[#BE2041] focus:ring-2 focus:ring-[#BE2041]/20 transition-all"
+                className="w-11 h-12 text-center text-xl font-display font-black bg-white border-2 border-slate-300 focus:border-[#BE2041] rounded-xl text-slate-900 focus:outline-none transition-colors shadow-sm"
               />
             ))}
           </div>
 
-          {/* Action Button */}
-          <button
-            type="submit"
-            className={`w-full py-4 rounded-full font-bold text-sm tracking-wide text-white flex items-center justify-center gap-2 shadow-lg transition-transform active:scale-95 ${
-              buttonColor === 'green'
-                ? 'bg-emerald-600 hover:bg-emerald-500 shadow-emerald-900/30'
-                : 'bg-[#BE2041] hover:bg-[#a81938] shadow-[#BE2041]/30'
-            }`}
-          >
-            <span>{buttonText}</span>
-            <ArrowRight size={18} />
-          </button>
-
-          {/* Subtitle / error */}
-          {error ? (
-            <p className="text-xs font-semibold text-rose-500 mt-3 animate-pulse">{error}</p>
+          {/* Primary Action Button */}
+          {buttonColor === 'green' ? (
+            <button
+              type="submit"
+              disabled={digits.join('').length !== 6}
+              className={`w-full py-3.5 rounded-full font-bold text-xs tracking-wider flex items-center justify-center gap-2 transition-all shadow-md uppercase ${
+                digits.join('').length === 6
+                  ? 'bg-emerald-600 hover:bg-emerald-500 text-white shadow-emerald-600/30 active:scale-[0.98]'
+                  : 'bg-slate-200 text-slate-400 cursor-not-allowed'
+              }`}
+            >
+              <Check size={16} className="stroke-[3]" />
+              <span>{buttonText}</span>
+            </button>
           ) : (
-            <p className="text-xs text-slate-400 mt-3">{subtitle}</p>
+            <button
+              type="submit"
+              disabled={digits.join('').length !== 6}
+              className={`w-full py-3.5 rounded-full font-bold text-xs tracking-wider flex items-center justify-center gap-2 transition-all shadow-md uppercase ${
+                digits.join('').length === 6
+                  ? 'bg-[#BE2041] hover:bg-[#a81938] text-white shadow-[#BE2041]/30 active:scale-[0.98]'
+                  : 'bg-slate-200 text-slate-400 cursor-not-allowed'
+              }`}
+            >
+              <span>{buttonText}</span>
+              <ArrowRight size={16} className="stroke-[3]" />
+            </button>
+          )}
+
+          {/* Helper Subtitle */}
+          <p className="text-[11px] font-medium text-slate-400 uppercase mt-3 tracking-wide">
+            {subtitle}
+          </p>
+
+          {/* Error Message */}
+          {error && (
+            <p className="text-xs font-semibold text-rose-600 mt-2 uppercase tracking-wide animate-shake">
+              {error}
+            </p>
           )}
         </form>
       </div>
