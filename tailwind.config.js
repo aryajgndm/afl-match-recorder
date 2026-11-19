@@ -8,7 +8,7 @@ export default {
     extend: {
       fontFamily: {
         sans: ['"Bricolage Grotesque"', 'sans-serif'],
-        display: ['ParkinsansG', '"MuseoModerno"', 'cursive', 'sans-serif'],
+        display: ['"MuseoModernoApp"', '"ParkinsansG"', '"MuseoModerno"', 'cursive', 'sans-serif'],
       },
       colors: {
         background: '#0d1117',

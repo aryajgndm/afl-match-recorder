@@ -1,27 +1,59 @@
 @import url('https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,200..800&family=MuseoModerno:ital,wght@0,100..900;1,100..900&family=Parkinsans:wght@300..800&display=swap');
 
-/* Replace every 'G' and 'g' in MuseoModerno with Parkinsans using unicode-range */
+/* ========================================================
+   1. Genuine MuseoModerno Local Font Faces (Base glyphs)
+   ======================================================== */
 @font-face {
-  font-family: 'ParkinsansG';
+  font-family: 'MuseoModernoApp';
+  src: url('/fonts/MuseoModerno-Regular.ttf') format('truetype');
+  font-weight: 100 500;
+  font-style: normal;
+  font-display: swap;
+  unicode-range: U+0000-0046, U+0048-0066, U+0068-10FFFF; /* Everything EXCEPT 'G' and 'g' */
+}
+
+@font-face {
+  font-family: 'MuseoModernoApp';
+  src: url('/fonts/MuseoModerno-Bold.ttf') format('truetype');
+  font-weight: 600 700;
+  font-style: normal;
+  font-display: swap;
+  unicode-range: U+0000-0046, U+0048-0066, U+0068-10FFFF; /* Everything EXCEPT 'G' and 'g' */
+}
+
+@font-face {
+  font-family: 'MuseoModernoApp';
+  src: url('/fonts/MuseoModerno-Black.ttf') format('truetype');
+  font-weight: 800 900;
+  font-style: normal;
+  font-display: swap;
+  unicode-range: U+0000-0046, U+0048-0066, U+0068-10FFFF; /* Everything EXCEPT 'G' and 'g' */
+}
+
+/* ========================================================
+   2. Parkinsans specifically and ONLY for 'G' and 'g'
+   ======================================================== */
+@font-face {
+  font-family: 'MuseoModernoApp';
+  src: url('/fonts/Parkinsans-Regular.ttf') format('truetype');
+  font-weight: 100 500;
+  font-style: normal;
+  font-display: swap;
+  unicode-range: U+0047, U+0067; /* ONLY 'G' and 'g' */
+}
+
+@font-face {
+  font-family: 'MuseoModernoApp';
   src: url('/fonts/Parkinsans-Bold.ttf') format('truetype');
   font-weight: 600 900;
   font-style: normal;
   font-display: swap;
-  unicode-range: U+0047, U+0067; /* 'G' and 'g' */
+  unicode-range: U+0047, U+0067; /* ONLY 'G' and 'g' */
 }
 
+/* Also alias 'ParkinsansG' for direct reference */
 @font-face {
   font-family: 'ParkinsansG';
-  src: url('/fonts/Parkinsans-Regular.ttf') format('truetype');
-  font-weight: 100 599;
-  font-style: normal;
-  font-display: swap;
-  unicode-range: U+0047, U+0067; /* 'G', 'g' */
-}
-
-/* Fallback override directly into 'MuseoModerno' font-family name */
-@font-face {
-  font-family: 'MuseoModerno';
   src: url('/fonts/Parkinsans-Bold.ttf') format('truetype');
   font-weight: 600 900;
   font-style: normal;
@@ -30,7 +62,7 @@
 }
 
 @font-face {
-  font-family: 'MuseoModerno';
+  font-family: 'ParkinsansG';
   src: url('/fonts/Parkinsans-Regular.ttf') format('truetype');
   font-weight: 100 599;
   font-style: normal;
@@ -53,17 +85,17 @@
     font-family: 'Bricolage Grotesque', system-ui, sans-serif;
   }
 
-  /* All button text must be bold by default as requested */
+  /* All button text must be bold by default */
   button {
     font-weight: 700;
   }
 }
 
-/* MuseoModerno applied to headings, scoreboards, branding, and display typography with Parkinsans for every G */
+/* MuseoModerno applied to headings, scoreboards, branding, and display typography with Parkinsans ONLY for 'G' */
 .font-display,
 h1, h2, h3, h4,
 .score-font {
-  font-family: 'ParkinsansG', 'MuseoModerno', cursive, sans-serif !important;
+  font-family: 'MuseoModernoApp', 'ParkinsansG', 'MuseoModerno', cursive, sans-serif !important;
 }
 
 .font-sans {
