@@ -269,7 +269,7 @@ export const BottomDock: React.FC<BottomDockProps> = ({
 
       {/* Editing Banner */}
       {editingEvent && (
-        <div className="flex items-center justify-between bg-blue-950/60 border border-blue-800/80 rounded-xl px-3 py-1.5 mb-2.5 text-xs text-blue-200">
+        <div className="flex items-center justify-between bg-[#BE2041]/15 border border-[#BE2041]/40 rounded-xl px-3 py-1.5 mb-2.5 text-xs text-[#fca5a5]">
           <span>Editing {editingEvent.type.toUpperCase()} ({editingEvent.minute}')</span>
           <button
             onClick={onCancelEdit}
@@ -324,8 +324,8 @@ export const BottomDock: React.FC<BottomDockProps> = ({
                 className="flex items-center justify-between bg-[#191e2b] border border-slate-700/60 rounded-xl px-2 py-1.5 cursor-pointer hover:border-slate-600 transition-colors"
               >
                 <ChevronLeft size={16} className="text-slate-400" />
-                <div className="flex items-center gap-1.5 truncate">
-                  <div className="w-4 h-4 rounded bg-slate-900 flex items-center justify-center">
+                <div className="flex items-center gap-2 truncate">
+                  <div className="w-6 h-6 flex items-center justify-center filter drop-shadow-sm flex-shrink-0">
                     {selectedTeam && (
                       <img
                         src={selectedTeam.logoUrl}
@@ -415,7 +415,7 @@ export const BottomDock: React.FC<BottomDockProps> = ({
                 />
                 <div
                   className={`w-8 h-4 rounded-full transition-colors relative ${
-                    isPenalty ? 'bg-blue-600' : 'bg-slate-700'
+                    isPenalty ? 'bg-[#BE2041]' : 'bg-slate-700'
                   }`}
                 >
                   <div
@@ -532,8 +532,8 @@ export const BottomDock: React.FC<BottomDockProps> = ({
                 className="flex items-center justify-between bg-[#191e2b] border border-slate-700/60 rounded-xl px-2 py-1.5 cursor-pointer hover:border-slate-600 transition-colors"
               >
                 <ChevronLeft size={16} className="text-slate-400" />
-                <div className="flex items-center gap-1.5 truncate">
-                  <div className="w-4 h-4 rounded bg-slate-900 flex items-center justify-center">
+                <div className="flex items-center gap-2 truncate">
+                  <div className="w-6 h-6 flex items-center justify-center filter drop-shadow-sm flex-shrink-0">
                     {selectedTeam && (
                       <img
                         src={selectedTeam.logoUrl}

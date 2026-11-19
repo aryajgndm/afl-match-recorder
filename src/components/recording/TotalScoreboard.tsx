@@ -20,7 +20,7 @@ export const TotalScoreboard: React.FC<TotalScoreboardProps> = ({ team1, team2, 
           <span className="font-display font-black text-sm tracking-wide text-white uppercase text-right truncate">
             {team1?.name}
           </span>
-          <div className="w-10 h-10 rounded-xl bg-slate-900/90 p-1 flex items-center justify-center border border-slate-800/80 shadow-inner flex-shrink-0">
+          <div className="w-12 h-12 sm:w-14 sm:h-14 flex items-center justify-center flex-shrink-0 filter drop-shadow-md">
             {team1 && (
               <img
                 src={team1.logoUrl}
@@ -44,7 +44,7 @@ export const TotalScoreboard: React.FC<TotalScoreboardProps> = ({ team1, team2, 
 
         {/* Team 2 */}
         <div className="flex items-center gap-2.5 flex-1 justify-start pl-2">
-          <div className="w-10 h-10 rounded-xl bg-slate-900/90 p-1 flex items-center justify-center border border-slate-800/80 shadow-inner flex-shrink-0">
+          <div className="w-12 h-12 sm:w-14 sm:h-14 flex items-center justify-center flex-shrink-0 filter drop-shadow-md">
             {team2 && (
               <img
                 src={team2.logoUrl}

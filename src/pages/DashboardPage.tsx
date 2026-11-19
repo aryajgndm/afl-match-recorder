@@ -79,7 +79,7 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({
       <header className="sticky top-0 z-30 bg-[#0e1117]/95 backdrop-blur-md border-b border-slate-800/80 px-4 py-4">
         <div className="max-w-md mx-auto flex items-center justify-between">
           <div className="flex items-center gap-2.5">
-            <div className="w-8 h-8 rounded-xl bg-blue-600/20 border border-blue-500/30 flex items-center justify-center text-blue-400 font-display font-black text-sm">
+            <div className="w-8 h-8 rounded-xl bg-[#BE2041]/20 border border-[#BE2041]/40 flex items-center justify-center text-[#BE2041] font-display font-black text-sm shadow-sm">
               AFL
             </div>
             <div>
@@ -151,7 +151,7 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({
                 onClick={() => setActiveTab(phase)}
                 className={`flex-1 py-2 text-xs font-black tracking-wider rounded-xl transition-all uppercase ${
                   isActive
-                    ? 'bg-blue-600 text-white shadow-md'
+                    ? 'bg-[#BE2041] text-white shadow-md shadow-[#BE2041]/25'
                     : 'text-slate-400 hover:text-white'
                 }`}
               >

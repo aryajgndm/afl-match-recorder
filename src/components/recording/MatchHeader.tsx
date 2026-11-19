@@ -48,7 +48,7 @@ export const MatchHeader: React.FC<MatchHeaderProps> = ({
           {canSubmit ? (
             <button
               onClick={onSubmitClick}
-              className="px-4 py-2 bg-blue-600 hover:bg-blue-500 active:scale-95 transition-all text-white rounded-full font-black text-xs tracking-wider flex items-center gap-1.5 shadow-md shadow-blue-900/30 uppercase font-sans"
+              className="px-4 py-2 bg-[#BE2041] hover:bg-[#a81938] active:scale-95 transition-all text-white rounded-full font-black text-xs tracking-wider flex items-center gap-1.5 shadow-md shadow-[#BE2041]/30 uppercase font-sans"
             >
               <span>SUBMIT</span>
               <ArrowRight size={14} className="stroke-[3]" />

@@ -60,7 +60,7 @@ export const EventTimeline: React.FC<EventTimelineProps> = ({
                 index % 2 === 0 ? 'bg-[#181d28]/70' : 'bg-[#131720]/70'
               } ${
                 isSelected
-                  ? 'ring-2 ring-blue-500 bg-blue-950/30'
+                  ? 'ring-2 ring-[#BE2041] bg-[#BE2041]/15'
                   : 'hover:bg-slate-800/50'
               }`}
             >
@@ -85,7 +85,7 @@ export const EventTimeline: React.FC<EventTimelineProps> = ({
               index % 2 === 0 ? 'bg-[#181d28]/70' : 'bg-[#131720]/70'
             } ${
               isSelected
-                ? 'ring-2 ring-blue-500 bg-blue-950/30'
+                ? 'ring-2 ring-[#BE2041] bg-[#BE2041]/15'
                 : 'hover:bg-slate-800/50'
             }`}
           >

@@ -24,7 +24,7 @@ export const ResultsTable: React.FC<ResultsTableProps> = ({ score, team1, team2 
       {/* Team 1 Row */}
       <div className="grid grid-cols-7 text-xs font-bold items-center py-2.5 border-b border-slate-800/60">
         <div className="col-span-1 flex items-center gap-1.5 pl-1">
-          <div className="w-5 h-5 rounded bg-slate-900 p-0.5 flex items-center justify-center border border-slate-800">
+          <div className="w-7 h-7 flex items-center justify-center flex-shrink-0 filter drop-shadow-sm">
             {team1 && <img src={team1.logoUrl} alt="" className="w-full h-full object-contain" />}
           </div>
           <span className="font-display text-xs font-black text-white">{team1?.shortName}</span>
@@ -40,7 +40,7 @@ export const ResultsTable: React.FC<ResultsTableProps> = ({ score, team1, team2 
       {/* Team 2 Row */}
       <div className="grid grid-cols-7 text-xs font-bold items-center pt-2.5">
         <div className="col-span-1 flex items-center gap-1.5 pl-1">
-          <div className="w-5 h-5 rounded bg-slate-900 p-0.5 flex items-center justify-center border border-slate-800">
+          <div className="w-7 h-7 flex items-center justify-center flex-shrink-0 filter drop-shadow-sm">
             {team2 && <img src={team2.logoUrl} alt="" className="w-full h-full object-contain" />}
           </div>
           <span className="font-display text-xs font-black text-white">{team2?.shortName}</span>

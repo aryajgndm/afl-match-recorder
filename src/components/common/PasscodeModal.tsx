@@ -92,27 +92,27 @@ export const PasscodeModal: React.FC<PasscodeModalProps> = ({
 
         {/* Team logos vs */}
         <div className="flex items-center justify-center gap-6 my-6">
-          <div className="w-16 h-16 rounded-2xl bg-slate-900/80 p-2 flex items-center justify-center border border-slate-800">
+          <div className="w-20 h-20 sm:w-24 sm:h-24 flex items-center justify-center flex-shrink-0">
             {team1 ? (
               <img
                 src={team1.logoUrl}
                 alt={team1.name}
-                className="w-full h-full object-contain rounded-xl"
+                className="w-full h-full object-contain filter drop-shadow-lg"
               />
             ) : (
-              <div className="w-8 h-8 rounded-full bg-slate-800" />
+              <div className="w-12 h-12 rounded-full bg-slate-800" />
             )}
           </div>
           <span className="font-display text-lg font-black text-slate-300">V</span>
-          <div className="w-16 h-16 rounded-2xl bg-slate-900/80 p-2 flex items-center justify-center border border-slate-800">
+          <div className="w-20 h-20 sm:w-24 sm:h-24 flex items-center justify-center flex-shrink-0">
             {team2 ? (
               <img
                 src={team2.logoUrl}
                 alt={team2.name}
-                className="w-full h-full object-contain rounded-xl"
+                className="w-full h-full object-contain filter drop-shadow-lg"
               />
             ) : (
-              <div className="w-8 h-8 rounded-full bg-slate-800" />
+              <div className="w-12 h-12 rounded-full bg-slate-800" />
             )}
           </div>
         </div>
@@ -134,7 +134,7 @@ export const PasscodeModal: React.FC<PasscodeModalProps> = ({
                 value={digit}
                 onChange={(e) => handleChange(idx, e.target.value)}
                 onKeyDown={(e) => handleKeyDown(idx, e)}
-                className="w-11 h-14 text-center text-2xl font-display font-black bg-[#1c2230] border border-slate-700/80 rounded-xl text-white focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 transition-all"
+                className="w-11 h-14 text-center text-2xl font-display font-black bg-[#1c2230] border border-slate-700/80 rounded-xl text-white focus:outline-none focus:border-[#BE2041] focus:ring-2 focus:ring-[#BE2041]/20 transition-all"
               />
             ))}
           </div>
@@ -145,7 +145,7 @@ export const PasscodeModal: React.FC<PasscodeModalProps> = ({
             className={`w-full py-4 rounded-full font-bold text-sm tracking-wide text-white flex items-center justify-center gap-2 shadow-lg transition-transform active:scale-95 ${
               buttonColor === 'green'
                 ? 'bg-emerald-600 hover:bg-emerald-500 shadow-emerald-900/30'
-                : 'bg-blue-600 hover:bg-blue-500 shadow-blue-900/30'
+                : 'bg-[#BE2041] hover:bg-[#a81938] shadow-[#BE2041]/30'
             }`}
           >
             <span>{buttonText}</span>

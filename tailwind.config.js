@@ -7,13 +7,19 @@ export default {
   theme: {
     extend: {
       fontFamily: {
-        sans: ['"Bricolage Grotesque"', 'system-ui', 'sans-serif'],
-        display: ['"MuseoModerno"', 'system-ui', 'sans-serif'],
+        sans: ['"Bricolage Grotesque"', 'sans-serif'],
+        display: ['"MuseoModerno"', 'cursive', 'sans-serif'],
       },
       colors: {
         background: '#0d1117',
         card: '#161b22',
         surface: '#1c2128',
+        accent: {
+          DEFAULT: '#BE2041',
+          hover: '#a81938',
+          dark: '#8a122c',
+          light: '#d72b4f',
+        },
       }
     },
   },

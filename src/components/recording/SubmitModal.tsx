@@ -93,33 +93,33 @@ export const SubmitModal: React.FC<SubmitModalProps> = ({
           {/* Team 1 Row */}
           <div className="grid grid-cols-7 text-xs font-bold items-center py-2 border-b border-slate-800/60">
             <div className="col-span-1 flex items-center gap-1.5 pl-1">
-              <div className="w-4 h-4 rounded bg-slate-900 flex items-center justify-center">
+              <div className="w-6 h-6 flex items-center justify-center flex-shrink-0 filter drop-shadow-sm">
                 {team1 && <img src={team1.logoUrl} alt="" className="w-full h-full object-contain" />}
               </div>
-              <span className="text-[11px] font-black text-white">{team1?.shortName}</span>
+              <span className="font-display text-[11px] font-black text-white">{team1?.shortName}</span>
             </div>
-            <span className="text-center text-slate-300">{score.team1QuarterScores.q1}</span>
-            <span className="text-center text-slate-300">{score.team1QuarterScores.q2}</span>
-            <span className="text-center text-slate-300">{score.team1QuarterScores.q3}</span>
-            <span className="text-center text-slate-300">{score.team1QuarterScores.q4}</span>
-            <span className="text-center text-slate-400">{score.isExtraTime ? score.team1QuarterScores.et : '/'}</span>
-            <span className="text-center font-black text-white text-sm">{score.team1Total}</span>
+            <span className="text-center font-display text-slate-300">{score.team1QuarterScores.q1}</span>
+            <span className="text-center font-display text-slate-300">{score.team1QuarterScores.q2}</span>
+            <span className="text-center font-display text-slate-300">{score.team1QuarterScores.q3}</span>
+            <span className="text-center font-display text-slate-300">{score.team1QuarterScores.q4}</span>
+            <span className="text-center font-display text-slate-400">{score.isExtraTime ? score.team1QuarterScores.et : '/'}</span>
+            <span className="text-center font-display font-black text-white text-sm">{score.team1Total}</span>
           </div>
 
           {/* Team 2 Row */}
           <div className="grid grid-cols-7 text-xs font-bold items-center pt-2">
             <div className="col-span-1 flex items-center gap-1.5 pl-1">
-              <div className="w-4 h-4 rounded bg-slate-900 flex items-center justify-center">
+              <div className="w-6 h-6 flex items-center justify-center flex-shrink-0 filter drop-shadow-sm">
                 {team2 && <img src={team2.logoUrl} alt="" className="w-full h-full object-contain" />}
               </div>
-              <span className="text-[11px] font-black text-white">{team2?.shortName}</span>
+              <span className="font-display text-[11px] font-black text-white">{team2?.shortName}</span>
             </div>
-            <span className="text-center text-slate-300">{score.team2QuarterScores.q1}</span>
-            <span className="text-center text-slate-300">{score.team2QuarterScores.q2}</span>
-            <span className="text-center text-slate-300">{score.team2QuarterScores.q3}</span>
-            <span className="text-center text-slate-300">{score.team2QuarterScores.q4}</span>
-            <span className="text-center text-slate-400">{score.isExtraTime ? score.team2QuarterScores.et : '/'}</span>
-            <span className="text-center font-black text-white text-sm">{score.team2Total}</span>
+            <span className="text-center font-display text-slate-300">{score.team2QuarterScores.q1}</span>
+            <span className="text-center font-display text-slate-300">{score.team2QuarterScores.q2}</span>
+            <span className="text-center font-display text-slate-300">{score.team2QuarterScores.q3}</span>
+            <span className="text-center font-display text-slate-300">{score.team2QuarterScores.q4}</span>
+            <span className="text-center font-display text-slate-400">{score.isExtraTime ? score.team2QuarterScores.et : '/'}</span>
+            <span className="text-center font-display font-black text-white text-sm">{score.team2Total}</span>
           </div>
         </div>
 

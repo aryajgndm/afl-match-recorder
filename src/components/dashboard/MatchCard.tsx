@@ -35,12 +35,12 @@ export const MatchCard: React.FC<MatchCardProps> = ({ fixture, onSelect }) => {
           <span className="font-display font-black text-sm tracking-wide text-white uppercase text-right">
             {team1?.name || (fixture.seriesId === 'sf1' ? 'Falcons' : 'TBD')}
           </span>
-          <div className="w-12 h-12 rounded-xl bg-slate-900/90 p-1.5 flex items-center justify-center border border-slate-800/60 shadow-inner">
+          <div className="w-14 h-14 sm:w-16 sm:h-16 flex items-center justify-center flex-shrink-0">
             {team1 ? (
               <img
                 src={team1.logoUrl}
                 alt={team1.name}
-                className="w-full h-full object-contain rounded-lg"
+                className="w-full h-full object-contain filter drop-shadow-md"
               />
             ) : (
               <span className="text-xs text-slate-500 font-bold">?</span>
@@ -55,12 +55,12 @@ export const MatchCard: React.FC<MatchCardProps> = ({ fixture, onSelect }) => {
 
         {/* Team 2 */}
         <div className="flex items-center gap-3 flex-1 justify-start pl-2">
-          <div className="w-12 h-12 rounded-xl bg-slate-900/90 p-1.5 flex items-center justify-center border border-slate-800/60 shadow-inner">
+          <div className="w-14 h-14 sm:w-16 sm:h-16 flex items-center justify-center flex-shrink-0">
             {team2 ? (
               <img
                 src={team2.logoUrl}
                 alt={team2.name}
-                className="w-full h-full object-contain rounded-lg"
+                className="w-full h-full object-contain filter drop-shadow-md"
               />
             ) : (
               <span className="text-xs text-slate-500 font-bold">?</span>
@@ -87,7 +87,7 @@ export const MatchCard: React.FC<MatchCardProps> = ({ fixture, onSelect }) => {
         {fixture.status === 'available' && (
           <button
             onClick={() => onSelect(fixture)}
-            className="w-full py-3.5 bg-blue-600 hover:bg-blue-500 active:scale-[0.98] transition-all text-white rounded-full font-bold text-xs tracking-wider flex items-center justify-center gap-2 shadow-md shadow-blue-950/40 uppercase"
+            className="w-full py-3.5 bg-[#BE2041] hover:bg-[#a81938] active:scale-[0.98] transition-all text-white rounded-full font-bold text-xs tracking-wider flex items-center justify-center gap-2 shadow-md shadow-[#BE2041]/25 uppercase"
           >
             <span>START RECORDING</span>
             <ArrowRight size={16} className="stroke-[3]" />

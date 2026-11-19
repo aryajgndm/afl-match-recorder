@@ -30,12 +30,12 @@ export const QuarterScoreboard: React.FC<QuarterScoreboardProps> = ({
       <div className="w-full max-w-sm bg-[#161a23] border border-slate-800 rounded-2xl py-2 px-4 flex items-center justify-between shadow-md">
         {/* Team 1 */}
         <div className="flex items-center gap-2 flex-1">
-          <div className="w-6 h-6 rounded-md bg-slate-900 p-0.5 flex items-center justify-center border border-slate-800">
+          <div className="w-8 h-8 flex items-center justify-center flex-shrink-0 filter drop-shadow-sm">
             {team1 && (
               <img
                 src={team1.logoUrl}
                 alt={team1.name}
-                className="w-full h-full object-contain rounded"
+                className="w-full h-full object-contain"
               />
             )}
           </div>
@@ -56,12 +56,12 @@ export const QuarterScoreboard: React.FC<QuarterScoreboardProps> = ({
           <span className="font-display font-extrabold text-xs tracking-wider text-slate-200 uppercase truncate text-right">
             {team2?.name}
           </span>
-          <div className="w-6 h-6 rounded-md bg-slate-900 p-0.5 flex items-center justify-center border border-slate-800">
+          <div className="w-8 h-8 flex items-center justify-center flex-shrink-0 filter drop-shadow-sm">
             {team2 && (
               <img
                 src={team2.logoUrl}
                 alt={team2.name}
-                className="w-full h-full object-contain rounded"
+                className="w-full h-full object-contain"
               />
             )}
           </div>
