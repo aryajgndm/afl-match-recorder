@@ -13,129 +13,98 @@ export const QuarterwiseScoresheetTable: React.FC<QuarterwiseScoresheetTableProp
   team2,
 }) => {
   return (
-    <div className="w-full max-w-sm mx-auto select-none">
-      <table className="w-full border-collapse border border-slate-300 rounded-lg overflow-hidden shadow-xs">
-        {/* Table Header: Column headers directly above each score column */}
-        <thead>
-          <tr className="bg-transparent">
-            {/* Empty header above Team column */}
-            <th className="w-[84px] py-1"></th>
-            <th className="w-9 py-1 text-center font-display font-black text-xs text-slate-800 uppercase tracking-wider">
-              Q1
-            </th>
-            <th className="w-9 py-1 text-center font-display font-black text-xs text-slate-800 uppercase tracking-wider">
-              Q2
-            </th>
-            <th className="w-9 py-1 text-center font-display font-black text-xs text-slate-800 uppercase tracking-wider">
-              Q3
-            </th>
-            <th className="w-9 py-1 text-center font-display font-black text-xs text-slate-800 uppercase tracking-wider">
-              Q4
-            </th>
-            <th className="w-9 py-1 text-center font-display font-black text-xs text-slate-800 uppercase tracking-wider">
-              ET
-            </th>
-            <th className="w-11 py-1 text-center font-display font-black text-xs text-slate-900 uppercase tracking-wider">
-              FT
-            </th>
-          </tr>
-        </thead>
+    <div className="w-full max-w-sm mx-auto select-none font-sans">
+      {/* Column Headers above the table box: Q1, Q2, Q3, Q4, ET, FT */}
+      <div className="grid grid-cols-[88px_repeat(5,_1fr)_48px] text-center mb-1.5 px-0">
+        <div>{/* Empty space above team column */}</div>
+        <div className="font-sans font-bold text-xs text-slate-700 uppercase tracking-wide">Q1</div>
+        <div className="font-sans font-bold text-xs text-slate-700 uppercase tracking-wide">Q2</div>
+        <div className="font-sans font-bold text-xs text-slate-700 uppercase tracking-wide">Q3</div>
+        <div className="font-sans font-bold text-xs text-slate-700 uppercase tracking-wide">Q4</div>
+        <div className="font-sans font-bold text-xs text-slate-700 uppercase tracking-wide">ET</div>
+        <div className="font-sans font-bold text-xs text-slate-900 uppercase tracking-wide">FT</div>
+      </div>
 
-        {/* Table Body */}
-        <tbody>
-          {/* Team 1 Row */}
-          <tr>
-            {/* Team 1 Badge Cell: Solid Black with logo + 3-letter abbreviation */}
-            <td className="bg-black text-white px-2 py-2.5 border border-black">
-              <div className="flex items-center justify-center gap-1.5">
-                <div className="w-5 h-5 flex items-center justify-center flex-shrink-0 filter drop-shadow-sm">
-                  {team1 && (
-                    <img
-                      src={team1.logoUrl}
-                      alt=""
-                      className="w-full h-full object-contain"
-                    />
-                  )}
-                </div>
-                <span className="font-display font-black text-xs tracking-wider uppercase text-white">
-                  {team1?.shortName || 'T1'}
-                </span>
-              </div>
-            </td>
+      {/* Main Table Box: Perfect rounded-xl container with crisp border on all 4 sides */}
+      <div className="border border-slate-300 rounded-xl overflow-hidden bg-white shadow-xs">
+        {/* Team 1 Row */}
+        <div className="grid grid-cols-[88px_repeat(5,_1fr)_48px] border-b border-slate-300 items-stretch">
+          {/* Team 1 Cell: Solid Black with logo + 3-letter abbreviation */}
+          <div className="bg-black text-white px-2.5 py-2 flex items-center justify-center gap-1.5 border-r border-slate-300">
+            <div className="w-5 h-5 flex items-center justify-center flex-shrink-0 filter drop-shadow-sm">
+              {team1 && (
+                <img
+                  src={team1.logoUrl}
+                  alt=""
+                  className="w-full h-full object-contain"
+                />
+              )}
+            </div>
+            <span className="font-sans font-bold text-xs tracking-wider uppercase text-white">
+              {team1?.shortName || 'T1'}
+            </span>
+          </div>
 
-            {/* Q1 */}
-            <td className="bg-white border border-slate-300 text-center font-display font-black text-base text-slate-900 py-2">
-              {score.team1QuarterScores.q1}
-            </td>
-            {/* Q2 */}
-            <td className="bg-white border border-slate-300 text-center font-display font-black text-base text-slate-900 py-2">
-              {score.team1QuarterScores.q2}
-            </td>
-            {/* Q3 */}
-            <td className="bg-white border border-slate-300 text-center font-display font-black text-base text-slate-900 py-2">
-              {score.team1QuarterScores.q3}
-            </td>
-            {/* Q4 */}
-            <td className="bg-white border border-slate-300 text-center font-display font-black text-base text-slate-900 py-2">
-              {score.team1QuarterScores.q4}
-            </td>
-            {/* ET */}
-            <td className="bg-white border border-slate-300 text-center font-display font-black text-base text-slate-400 py-2">
-              {score.isExtraTime ? score.team1QuarterScores.et : '/'}
-            </td>
-            {/* FT (Prominent Total Score) */}
-            <td className="bg-white border border-slate-300 text-center font-display font-black text-lg text-slate-900 py-2">
-              {score.team1Total}
-            </td>
-          </tr>
+          {/* Numbers in Bricolage Grotesque fontface as requested */}
+          <div className="flex items-center justify-center border-r border-slate-300 font-sans font-bold text-base text-slate-900 py-2">
+            {score.team1QuarterScores.q1}
+          </div>
+          <div className="flex items-center justify-center border-r border-slate-300 font-sans font-bold text-base text-slate-900 py-2">
+            {score.team1QuarterScores.q2}
+          </div>
+          <div className="flex items-center justify-center border-r border-slate-300 font-sans font-bold text-base text-slate-900 py-2">
+            {score.team1QuarterScores.q3}
+          </div>
+          <div className="flex items-center justify-center border-r border-slate-300 font-sans font-bold text-base text-slate-900 py-2">
+            {score.team1QuarterScores.q4}
+          </div>
+          <div className="flex items-center justify-center border-r border-slate-300 font-sans font-bold text-base text-slate-400 py-2">
+            {score.isExtraTime ? score.team1QuarterScores.et : '/'}
+          </div>
+          <div className="flex items-center justify-center font-sans font-extrabold text-lg text-slate-900 py-2">
+            {score.team1Total}
+          </div>
+        </div>
 
-          {/* Team 2 Row */}
-          <tr>
-            {/* Team 2 Badge Cell: Solid Black with logo + 3-letter abbreviation */}
-            <td className="bg-black text-white px-2 py-2.5 border border-black">
-              <div className="flex items-center justify-center gap-1.5">
-                <div className="w-5 h-5 flex items-center justify-center flex-shrink-0 filter drop-shadow-sm">
-                  {team2 && (
-                    <img
-                      src={team2.logoUrl}
-                      alt=""
-                      className="w-full h-full object-contain"
-                    />
-                  )}
-                </div>
-                <span className="font-display font-black text-xs tracking-wider uppercase text-white">
-                  {team2?.shortName || 'T2'}
-                </span>
-              </div>
-            </td>
+        {/* Team 2 Row */}
+        <div className="grid grid-cols-[88px_repeat(5,_1fr)_48px] items-stretch">
+          {/* Team 2 Cell: Solid Black with logo + 3-letter abbreviation */}
+          <div className="bg-black text-white px-2.5 py-2 flex items-center justify-center gap-1.5 border-r border-slate-300">
+            <div className="w-5 h-5 flex items-center justify-center flex-shrink-0 filter drop-shadow-sm">
+              {team2 && (
+                <img
+                  src={team2.logoUrl}
+                  alt=""
+                  className="w-full h-full object-contain"
+                />
+              )}
+            </div>
+            <span className="font-sans font-bold text-xs tracking-wider uppercase text-white">
+              {team2?.shortName || 'T2'}
+            </span>
+          </div>
 
-            {/* Q1 */}
-            <td className="bg-white border border-slate-300 text-center font-display font-black text-base text-slate-900 py-2">
-              {score.team2QuarterScores.q1}
-            </td>
-            {/* Q2 */}
-            <td className="bg-white border border-slate-300 text-center font-display font-black text-base text-slate-900 py-2">
-              {score.team2QuarterScores.q2}
-            </td>
-            {/* Q3 */}
-            <td className="bg-white border border-slate-300 text-center font-display font-black text-base text-slate-900 py-2">
-              {score.team2QuarterScores.q3}
-            </td>
-            {/* Q4 */}
-            <td className="bg-white border border-slate-300 text-center font-display font-black text-base text-slate-900 py-2">
-              {score.team2QuarterScores.q4}
-            </td>
-            {/* ET */}
-            <td className="bg-white border border-slate-300 text-center font-display font-black text-base text-slate-400 py-2">
-              {score.isExtraTime ? score.team2QuarterScores.et : '/'}
-            </td>
-            {/* FT (Prominent Total Score) */}
-            <td className="bg-white border border-slate-300 text-center font-display font-black text-lg text-slate-900 py-2">
-              {score.team2Total}
-            </td>
-          </tr>
-        </tbody>
-      </table>
+          {/* Numbers in Bricolage Grotesque fontface as requested */}
+          <div className="flex items-center justify-center border-r border-slate-300 font-sans font-bold text-base text-slate-900 py-2">
+            {score.team2QuarterScores.q1}
+          </div>
+          <div className="flex items-center justify-center border-r border-slate-300 font-sans font-bold text-base text-slate-900 py-2">
+            {score.team2QuarterScores.q2}
+          </div>
+          <div className="flex items-center justify-center border-r border-slate-300 font-sans font-bold text-base text-slate-900 py-2">
+            {score.team2QuarterScores.q3}
+          </div>
+          <div className="flex items-center justify-center border-r border-slate-300 font-sans font-bold text-base text-slate-900 py-2">
+            {score.team2QuarterScores.q4}
+          </div>
+          <div className="flex items-center justify-center border-r border-slate-300 font-sans font-bold text-base text-slate-400 py-2">
+            {score.isExtraTime ? score.team2QuarterScores.et : '/'}
+          </div>
+          <div className="flex items-center justify-center font-sans font-extrabold text-lg text-slate-900 py-2">
+            {score.team2Total}
+          </div>
+        </div>
+      </div>
     </div>
   );
 };
