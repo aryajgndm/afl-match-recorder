@@ -74,25 +74,27 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({
   const phaseFixtures = fixtures.filter((f) => f.phase === activeTab);
 
   return (
-    <div className="min-h-screen bg-[#0c0f14] text-slate-100 pb-16">
+    <div className="min-h-screen bg-[#f8f9fa] text-slate-900 pb-16">
       {/* Top App Header */}
-      <header className="sticky top-0 z-30 bg-[#0e1117]/95 backdrop-blur-md border-b border-slate-800/80 px-4 py-4">
+      <header className="sticky top-0 z-30 bg-white/95 backdrop-blur-md border-b border-slate-200 px-4 py-4 shadow-xs">
         <div className="max-w-md mx-auto flex items-center justify-between">
           <div className="flex items-center gap-2.5">
-            <div className="w-8 h-8 rounded-xl bg-[#BE2041]/20 border border-[#BE2041]/40 flex items-center justify-center text-[#BE2041] font-display font-black text-sm shadow-sm">
+            <div className="w-8 h-8 rounded-xl bg-[#BE2041]/10 border border-[#BE2041]/30 flex items-center justify-center text-[#BE2041] font-display font-black text-sm shadow-xs">
               AFL
             </div>
             <div>
-              <h1 className="font-display text-sm font-black tracking-wider uppercase text-white leading-none">
+              <h1 className="font-display text-sm font-black tracking-wider uppercase text-slate-900 leading-none">
                 MATCH RECORDER
               </h1>
-              <p className="text-[10px] text-slate-400 font-medium uppercase tracking-wider">OFFICIAL POSTSEASON SCORESHEET</p>
+              <p className="text-[10px] text-slate-500 font-medium uppercase tracking-wider">
+                OFFICIAL POSTSEASON SCORESHEET
+              </p>
             </div>
           </div>
 
           <div className="flex items-center gap-2">
-            <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-slate-800 text-slate-300 border border-slate-700/60 flex items-center gap-1">
-              <ShieldCheck size={12} className="text-emerald-400" />
+            <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-slate-100 text-slate-700 border border-slate-200 flex items-center gap-1 shadow-xs">
+              <ShieldCheck size={12} className="text-emerald-500" />
               <span>2026</span>
             </span>
           </div>
@@ -102,39 +104,39 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({
       {/* Main Container */}
       <main className="max-w-md mx-auto px-4 pt-4">
         {/* Series Standings Card Summary */}
-        <div className="bg-[#141720] border border-slate-800 rounded-3xl p-4 mb-5 shadow-lg">
-          <div className="flex items-center gap-2 text-xs font-black tracking-wider text-slate-300 uppercase mb-3">
-            <Trophy size={14} className="text-amber-400" />
+        <div className="bg-white border border-slate-200 rounded-3xl p-4 mb-5 shadow-xs">
+          <div className="flex items-center gap-2 text-xs font-black tracking-wider text-slate-800 uppercase mb-3">
+            <Trophy size={14} className="text-amber-500" />
             <span>SERIES STANDINGS (BEST-OF-5)</span>
           </div>
 
           <div className="grid grid-cols-2 gap-2 text-xs">
             {/* PO1 */}
-            <div className="bg-[#1a1f2c] rounded-2xl p-2.5 border border-slate-800/80 flex flex-col justify-between">
-              <div className="flex items-center justify-between text-[10px] font-bold text-slate-400 uppercase mb-1">
+            <div className="bg-slate-50 rounded-2xl p-2.5 border border-slate-200/80 flex flex-col justify-between">
+              <div className="flex items-center justify-between text-[10px] font-bold text-slate-500 uppercase mb-1">
                 <span>PLAYOFF 1</span>
                 {seriesMap.po1.isClinched && (
-                  <span className="text-emerald-400 font-black">CLINCHED</span>
+                  <span className="text-emerald-600 font-black">CLINCHED</span>
                 )}
               </div>
-              <div className="flex items-center justify-between font-display font-black text-white">
+              <div className="flex items-center justify-between font-display font-black text-slate-900">
                 <span className="truncate pr-1">PAN {seriesMap.po1.team1Wins}</span>
-                <span className="text-slate-500 text-[10px] font-sans">-</span>
+                <span className="text-slate-400 text-[10px] font-sans">-</span>
                 <span className="truncate pl-1">{seriesMap.po1.team2Wins} BUL</span>
               </div>
             </div>
 
             {/* PO2 */}
-            <div className="bg-[#1a1f2c] rounded-2xl p-2.5 border border-slate-800/80 flex flex-col justify-between">
-              <div className="flex items-center justify-between text-[10px] font-bold text-slate-400 uppercase mb-1">
+            <div className="bg-slate-50 rounded-2xl p-2.5 border border-slate-200/80 flex flex-col justify-between">
+              <div className="flex items-center justify-between text-[10px] font-bold text-slate-500 uppercase mb-1">
                 <span>PLAYOFF 2</span>
                 {seriesMap.po2.isClinched && (
-                  <span className="text-emerald-400 font-black">CLINCHED</span>
+                  <span className="text-emerald-600 font-black">CLINCHED</span>
                 )}
               </div>
-              <div className="flex items-center justify-between font-display font-black text-white">
+              <div className="flex items-center justify-between font-display font-black text-slate-900">
                 <span className="truncate pr-1">GRI {seriesMap.po2.team1Wins}</span>
-                <span className="text-slate-500 text-[10px] font-sans">-</span>
+                <span className="text-slate-400 text-[10px] font-sans">-</span>
                 <span className="truncate pl-1">{seriesMap.po2.team2Wins} STA</span>
               </div>
             </div>
@@ -142,17 +144,17 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({
         </div>
 
         {/* Phase Tabs: Playoffs / Semifinals / Finals */}
-        <div className="flex items-center bg-[#151924] p-1 rounded-2xl border border-slate-800/80 mb-5">
+        <div className="flex items-center bg-slate-100 p-1 rounded-2xl border border-slate-200 mb-5">
           {(['playoffs', 'semifinals', 'finals'] as PostseasonPhase[]).map((phase) => {
             const isActive = activeTab === phase;
             return (
               <button
                 key={phase}
                 onClick={() => setActiveTab(phase)}
-                className={`flex-1 py-2 text-xs font-black tracking-wider rounded-xl transition-all uppercase ${
+                className={`flex-1 py-2 text-xs font-bold tracking-wider rounded-xl transition-all uppercase ${
                   isActive
                     ? 'bg-[#BE2041] text-white shadow-md shadow-[#BE2041]/25'
-                    : 'text-slate-400 hover:text-white'
+                    : 'text-slate-600 hover:text-slate-900'
                 }`}
               >
                 {phase}
@@ -181,7 +183,7 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({
                 refreshData();
               }
             }}
-            className="inline-flex items-center gap-1.5 text-[11px] font-semibold text-slate-500 hover:text-slate-300 transition-colors py-2 px-3 rounded-lg border border-slate-800/60 hover:border-slate-700 uppercase"
+            className="inline-flex items-center gap-1.5 text-[11px] font-bold text-slate-500 hover:text-slate-800 transition-colors py-2 px-3 rounded-lg border border-slate-300 bg-white shadow-xs uppercase"
           >
             <RefreshCw size={12} />
             <span>RESET DEMO STATE</span>

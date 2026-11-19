@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Fixture, MatchScore, Team } from '../../types';
+import { QuarterwiseScoresheetTable } from '../common/QuarterwiseScoresheetTable';
 import { Check, X } from 'lucide-react';
 
 interface SubmitModalProps {
@@ -72,59 +73,14 @@ export const SubmitModal: React.FC<SubmitModalProps> = ({
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/75 backdrop-blur-sm animate-fadeIn">
       <div className="relative w-full max-w-sm bg-white border border-slate-200 rounded-3xl p-6 shadow-2xl flex flex-col items-center text-center">
         {/* Top Header Line */}
-        <div className="w-full flex items-center justify-between text-xs font-bold text-slate-500 uppercase tracking-wider mb-4">
+        <div className="w-full flex items-center justify-between text-xs font-bold text-slate-500 uppercase tracking-wider mb-4 px-1">
           <span>GAME {fixture.gameNumber} • {seriesNameFormatted}</span>
           <span className="font-medium text-slate-500 normal-case">{fixture.date}</span>
         </div>
 
-        {/* Box score preview table matching mockup */}
-        <div className="w-full bg-white border border-slate-300 rounded-xl overflow-hidden shadow-sm mb-5">
-          {/* Table Header */}
-          <div className="grid grid-cols-7 text-[10px] font-black tracking-wider text-slate-600 bg-slate-50 py-2 border-b border-slate-300">
-            <span className="col-span-2 text-left pl-3 uppercase">TEAM</span>
-            <span className="text-center uppercase">Q1</span>
-            <span className="text-center uppercase">Q2</span>
-            <span className="text-center uppercase">Q3</span>
-            <span className="text-center uppercase">Q4</span>
-            <span className="text-center uppercase">ET</span>
-            <span className="text-center font-black text-slate-900 uppercase">FT</span>
-          </div>
-
-          {/* Team 1 Row */}
-          <div className="grid grid-cols-7 text-xs font-bold items-center py-2 border-b border-slate-200">
-            <div className="col-span-2 flex items-center gap-1.5 pl-2">
-              <div className="bg-black text-white px-2 py-0.5 rounded flex items-center gap-1">
-                <div className="w-4 h-4 flex items-center justify-center flex-shrink-0">
-                  {team1 && <img src={team1.logoUrl} alt="" className="w-full h-full object-contain" />}
-                </div>
-                <span className="font-display text-[10px] font-black">{team1?.shortName}</span>
-              </div>
-            </div>
-            <span className="text-center font-display text-slate-700">{score.team1QuarterScores.q1}</span>
-            <span className="text-center font-display text-slate-700">{score.team1QuarterScores.q2}</span>
-            <span className="text-center font-display text-slate-700">{score.team1QuarterScores.q3}</span>
-            <span className="text-center font-display text-slate-700">{score.team1QuarterScores.q4}</span>
-            <span className="text-center font-display text-slate-400">{score.isExtraTime ? score.team1QuarterScores.et : '/'}</span>
-            <span className="text-center font-display font-black text-slate-900 text-sm">{score.team1Total}</span>
-          </div>
-
-          {/* Team 2 Row */}
-          <div className="grid grid-cols-7 text-xs font-bold items-center py-2">
-            <div className="col-span-2 flex items-center gap-1.5 pl-2">
-              <div className="bg-black text-white px-2 py-0.5 rounded flex items-center gap-1">
-                <div className="w-4 h-4 flex items-center justify-center flex-shrink-0">
-                  {team2 && <img src={team2.logoUrl} alt="" className="w-full h-full object-contain" />}
-                </div>
-                <span className="font-display text-[10px] font-black">{team2?.shortName}</span>
-              </div>
-            </div>
-            <span className="text-center font-display text-slate-700">{score.team2QuarterScores.q1}</span>
-            <span className="text-center font-display text-slate-700">{score.team2QuarterScores.q2}</span>
-            <span className="text-center font-display text-slate-700">{score.team2QuarterScores.q3}</span>
-            <span className="text-center font-display text-slate-700">{score.team2QuarterScores.q4}</span>
-            <span className="text-center font-display text-slate-400">{score.isExtraTime ? score.team2QuarterScores.et : '/'}</span>
-            <span className="text-center font-display font-black text-slate-900 text-sm">{score.team2Total}</span>
-          </div>
+        {/* Box Score Summary Table matching Image 2 Screen 4 */}
+        <div className="w-full mb-5">
+          <QuarterwiseScoresheetTable score={score} team1={team1} team2={team2} />
         </div>
 
         {/* 6 Digit Passcode Input */}
