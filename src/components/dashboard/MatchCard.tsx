@@ -12,27 +12,28 @@ export const MatchCard: React.FC<MatchCardProps> = ({ fixture, onSelect }) => {
   const team1 = fixture.team1Id ? TEAMS[fixture.team1Id] : null;
   const team2 = fixture.team2Id ? TEAMS[fixture.team2Id] : null;
 
+  // Informational lines in Title Case (not completely uppercase)
   const seriesNameFormatted = fixture.seriesId.startsWith('po')
-    ? `PLAYOFF ${fixture.seriesId.replace('po', '')}`
+    ? `Playoff ${fixture.seriesId.replace('po', '')}`
     : fixture.seriesId.startsWith('sf')
-    ? `SEMI-FINAL ${fixture.seriesId.replace('sf', '')}`
-    : 'FINALS';
+    ? `Semi-Final ${fixture.seriesId.replace('sf', '')}`
+    : 'Finals';
 
   return (
-    <div className="w-full bg-[#141720] border border-slate-800/80 rounded-3xl p-5 shadow-lg transition-all hover:border-slate-700">
-      {/* Top row: Match Identification and Date */}
-      <div className="flex items-center justify-between text-xs font-semibold text-slate-400 mb-4 tracking-wider uppercase">
-        <span className="font-display font-black text-slate-300">
-          GAME {fixture.gameNumber} • {seriesNameFormatted}
+    <div className="w-full bg-[#141720] border border-slate-800 rounded-3xl p-5 shadow-lg transition-all hover:border-slate-700">
+      {/* Top row: Match Identification and Date (Informational line: Bricolage Grotesque, Title Case) */}
+      <div className="flex items-center justify-between text-xs text-slate-400 mb-4 tracking-wide font-sans font-bold">
+        <span>
+          Game {fixture.gameNumber} · {seriesNameFormatted}
         </span>
-        <span className="text-slate-400 normal-case">{fixture.date}</span>
+        <span className="text-slate-400 font-medium">{fixture.date}</span>
       </div>
 
-      {/* Middle row: Teams & Logos */}
+      {/* Middle row: Teams & Logos (MuseoModerno extrabold) */}
       <div className="flex items-center justify-between my-4 px-2">
         {/* Team 1 */}
         <div className="flex items-center gap-3 flex-1 justify-end pr-2">
-          <span className="font-display font-black text-sm tracking-wide text-white uppercase text-right">
+          <span className="font-display font-extrabold text-sm tracking-wide text-white uppercase text-right">
             {team1?.name || (fixture.seriesId === 'sf1' ? 'FALCONS' : 'TBD')}
           </span>
           <div className="w-14 h-14 sm:w-16 sm:h-16 flex items-center justify-center flex-shrink-0">
@@ -50,7 +51,7 @@ export const MatchCard: React.FC<MatchCardProps> = ({ fixture, onSelect }) => {
 
         {/* Center V */}
         <div className="px-3">
-          <span className="font-display text-sm font-black text-slate-300">V</span>
+          <span className="font-display text-sm font-extrabold text-slate-400">V</span>
         </div>
 
         {/* Team 2 */}
@@ -66,7 +67,7 @@ export const MatchCard: React.FC<MatchCardProps> = ({ fixture, onSelect }) => {
               <span className="text-xs text-slate-500 font-bold">?</span>
             )}
           </div>
-          <span className="font-display font-black text-sm tracking-wide text-white uppercase text-left">
+          <span className="font-display font-extrabold text-sm tracking-wide text-white uppercase text-left">
             {team2?.name || (fixture.seriesId === 'sf1' ? 'WINNER PO1' : fixture.seriesId === 'sf2' ? 'WINNER PO2' : 'TBD')}
           </span>
         </div>
@@ -84,10 +85,11 @@ export const MatchCard: React.FC<MatchCardProps> = ({ fixture, onSelect }) => {
           </button>
         )}
 
+        {/* Start recording button: BLUE as requested */}
         {fixture.status === 'available' && (
           <button
             onClick={() => onSelect(fixture)}
-            className="w-full py-3.5 bg-[#BE2041] hover:bg-[#a81938] active:scale-[0.98] transition-all text-white rounded-full font-bold text-xs tracking-wider flex items-center justify-center gap-2 shadow-md shadow-[#BE2041]/25 uppercase"
+            className="w-full py-3.5 bg-[#007AFF] hover:bg-[#0066DD] active:scale-[0.98] transition-all text-white rounded-full font-bold text-xs tracking-wider flex items-center justify-center gap-2 shadow-md shadow-blue-500/25 uppercase font-sans"
           >
             <span>START RECORDING</span>
             <ArrowRight size={16} className="stroke-[3]" />
@@ -97,7 +99,7 @@ export const MatchCard: React.FC<MatchCardProps> = ({ fixture, onSelect }) => {
         {fixture.status === 'in_progress' && (
           <button
             onClick={() => onSelect(fixture)}
-            className="w-full py-3.5 bg-amber-600/90 hover:bg-amber-600 active:scale-[0.98] transition-all text-white rounded-full font-bold text-xs tracking-wider flex items-center justify-center gap-2 shadow-md shadow-amber-950/40 uppercase"
+            className="w-full py-3.5 bg-amber-600 hover:bg-amber-500 active:scale-[0.98] transition-all text-white rounded-full font-bold text-xs tracking-wider flex items-center justify-center gap-2 shadow-md shadow-amber-950/40 uppercase font-sans"
           >
             <Radio size={16} className="animate-pulse" />
             <span>RECORDING UNDERWAY</span>
@@ -107,7 +109,7 @@ export const MatchCard: React.FC<MatchCardProps> = ({ fixture, onSelect }) => {
         {fixture.status === 'locked' && (
           <button
             disabled
-            className="w-full py-3.5 bg-slate-800/60 text-slate-500 rounded-full font-semibold text-xs tracking-wider flex items-center justify-center gap-2 cursor-not-allowed uppercase"
+            className="w-full py-3.5 bg-slate-800/60 text-slate-400 rounded-full font-bold text-xs tracking-wider flex items-center justify-center gap-2 cursor-not-allowed uppercase font-sans"
           >
             <Lock size={14} />
             <span>{fixture.isConditional ? 'NOT YET REQUIRED' : 'AWAITING PREVIOUS GAME'}</span>
@@ -115,7 +117,7 @@ export const MatchCard: React.FC<MatchCardProps> = ({ fixture, onSelect }) => {
         )}
 
         {fixture.status === 'not_required' && (
-          <div className="w-full py-3.5 bg-slate-900/60 text-slate-400 rounded-full font-semibold text-xs tracking-wider flex items-center justify-center gap-2 border border-slate-800/40 uppercase">
+          <div className="w-full py-3.5 bg-slate-900/60 text-slate-400 rounded-full font-bold text-xs tracking-wider flex items-center justify-center gap-2 border border-slate-800/40 uppercase font-sans">
             <span>SERIES CLINCHED (NOT REQUIRED)</span>
           </div>
         )}

@@ -28,9 +28,9 @@ export const ResultsPage: React.FC<ResultsPageProps> = ({ matchId, onNavigateBac
 
   if (!fixture || !fixture.result) {
     return (
-      <div className="min-h-screen bg-white flex flex-col items-center justify-center p-4 text-center">
-        <p className="text-xs font-bold text-slate-500 uppercase mb-4 tracking-wider">
-          NO FINALIZED RESULTS AVAILABLE FOR THIS MATCH YET.
+      <div className="min-h-screen bg-[#f8f9fa] flex flex-col items-center justify-center p-4 text-center font-sans">
+        <p className="text-xs font-bold text-slate-500 mb-4 tracking-normal">
+          No finalized results available for this match yet.
         </p>
         <button
           onClick={onNavigateBack}
@@ -46,11 +46,12 @@ export const ResultsPage: React.FC<ResultsPageProps> = ({ matchId, onNavigateBac
   const team2: Team | null = fixture.team2Id ? TEAMS[fixture.team2Id] : null;
   const score = fixture.result.score;
 
+  // Informational line: Title Case
   const seriesNameFormatted = fixture.seriesId.startsWith('po')
-    ? `PLAYOFF ${fixture.seriesId.replace('po', '')}`
+    ? `Playoff ${fixture.seriesId.replace('po', '')}`
     : fixture.seriesId.startsWith('sf')
-    ? `SEMI-FINAL ${fixture.seriesId.replace('sf', '')}`
-    : 'FINALS';
+    ? `Semi-Final ${fixture.seriesId.replace('sf', '')}`
+    : 'Finals';
 
   const quarterEvents = events.filter((e) => e.quarter === currentQuarter);
   const team1QuarterScore = score.team1QuarterScores[currentQuarter] || 0;
@@ -66,7 +67,7 @@ export const ResultsPage: React.FC<ResultsPageProps> = ({ matchId, onNavigateBac
   };
 
   return (
-    <div className="min-h-screen bg-[#fbfbfb] text-slate-900 flex flex-col justify-between pb-28">
+    <div className="min-h-screen bg-[#f8f9fa] text-slate-900 flex flex-col justify-between pb-28 font-sans">
       {/* Top Header */}
       <header className="sticky top-0 z-40 bg-white/95 backdrop-blur-md border-b border-slate-200 px-4 py-3 shadow-xs">
         <div className="max-w-md mx-auto flex items-center justify-between">
@@ -74,12 +75,13 @@ export const ResultsPage: React.FC<ResultsPageProps> = ({ matchId, onNavigateBac
             <button
               onClick={onNavigateBack}
               className="p-1 -ml-1 text-slate-500 hover:text-black rounded-lg transition-colors"
-              title="BACK TO DASHBOARD"
+              title="Back to Dashboard"
             >
               <ChevronLeft size={24} />
             </button>
-            <span className="text-xs font-black tracking-wider text-slate-700 uppercase">
-              GAME {fixture.gameNumber} • {seriesNameFormatted}
+            {/* Informational line: Bricolage Grotesque, Title Case */}
+            <span className="text-xs font-bold text-slate-500 tracking-wide font-sans">
+              Game {fixture.gameNumber} · {seriesNameFormatted}
             </span>
           </div>
 
@@ -117,11 +119,11 @@ export const ResultsPage: React.FC<ResultsPageProps> = ({ matchId, onNavigateBac
         </div>
       </main>
 
-      {/* Fixed Bottom Quarter Navigation & PDF Export */}
-      <div className="fixed bottom-0 left-0 right-0 z-40 bg-[#12151c] border-t border-slate-800 rounded-t-3xl shadow-2xl p-4 max-w-md mx-auto">
+      {/* Fixed Bottom Quarter Navigation & PDF Export - Colors: #121212 and #242424 */}
+      <div className="fixed bottom-0 left-0 right-0 z-40 bg-[#121212] border-t border-[#262626] rounded-t-3xl shadow-2xl p-4 max-w-md mx-auto">
         <div className="flex items-center justify-between gap-3">
           {/* Quarter Pills */}
-          <div className="flex items-center gap-1.5 bg-[#1a1f2c] p-1 rounded-full border border-slate-800">
+          <div className="flex items-center gap-1.5 bg-[#242424] p-1 rounded-full border border-[#333333]">
             {quartersList.map((q) => {
               const isActive = currentQuarter === q;
               const label = q === 'et' ? 'ET' : q.toUpperCase();
@@ -130,10 +132,10 @@ export const ResultsPage: React.FC<ResultsPageProps> = ({ matchId, onNavigateBac
                   key={q}
                   type="button"
                   onClick={() => setCurrentQuarter(q)}
-                  className={`px-3.5 py-1.5 text-xs font-black tracking-wider rounded-full transition-all uppercase ${
+                  className={`px-3.5 py-1.5 text-xs font-bold tracking-wider rounded-full transition-all uppercase ${
                     isActive
                       ? 'bg-white text-black shadow-sm'
-                      : 'text-slate-400 hover:text-white'
+                      : 'text-neutral-400 hover:text-white'
                   }`}
                 >
                   {label}
@@ -145,7 +147,7 @@ export const ResultsPage: React.FC<ResultsPageProps> = ({ matchId, onNavigateBac
           {/* Export PDF Button */}
           <button
             onClick={handleExportPdf}
-            className="px-4 py-2 bg-emerald-600 hover:bg-emerald-500 active:scale-95 transition-all text-white rounded-full font-bold text-xs tracking-wider flex items-center gap-2 shadow-lg shadow-emerald-950/40 uppercase whitespace-nowrap"
+            className="px-4 py-2 bg-emerald-600 hover:bg-emerald-500 active:scale-95 transition-all text-white rounded-full font-bold text-xs tracking-wider flex items-center gap-2 shadow-lg shadow-emerald-950/40 uppercase whitespace-nowrap font-sans"
           >
             <FileDown size={16} />
             <span>EXPORT PDF</span>

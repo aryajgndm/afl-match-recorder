@@ -66,7 +66,7 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({
       setIsPasscodeModalOpen(false);
       onNavigateToRecording(selectedFixture.id);
     } else {
-      setPasscodeError(result.error || 'INCORRECT PASSCODE. TRY AGAIN.');
+      setPasscodeError(result.error || 'Incorrect passcode. Try again.');
     }
   };
 
@@ -74,20 +74,21 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({
   const phaseFixtures = fixtures.filter((f) => f.phase === activeTab);
 
   return (
-    <div className="min-h-screen bg-[#f8f9fa] text-slate-900 pb-16">
+    <div className="min-h-screen bg-[#f8f9fa] text-slate-900 pb-16 font-sans">
       {/* Top App Header */}
       <header className="sticky top-0 z-30 bg-white/95 backdrop-blur-md border-b border-slate-200 px-4 py-4 shadow-xs">
         <div className="max-w-md mx-auto flex items-center justify-between">
           <div className="flex items-center gap-2.5">
-            <div className="w-8 h-8 rounded-xl bg-[#BE2041]/10 border border-[#BE2041]/30 flex items-center justify-center text-[#BE2041] font-display font-black text-sm shadow-xs">
+            <div className="w-8 h-8 rounded-xl bg-[#BE2041]/10 border border-[#BE2041]/30 flex items-center justify-center text-[#BE2041] font-display font-extrabold text-sm shadow-xs">
               AFL
             </div>
             <div>
-              <h1 className="font-display text-sm font-black tracking-wider uppercase text-slate-900 leading-none">
+              <h1 className="font-display text-sm font-extrabold tracking-wider uppercase text-slate-900 leading-none">
                 MATCH RECORDER
               </h1>
-              <p className="text-[10px] text-slate-500 font-medium uppercase tracking-wider">
-                OFFICIAL POSTSEASON SCORESHEET
+              {/* Informational line: Bricolage Grotesque, Title Case */}
+              <p className="text-[10px] text-slate-500 font-medium tracking-normal mt-0.5">
+                Official Postseason Scoresheet
               </p>
             </div>
           </div>
@@ -105,21 +106,22 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({
       <main className="max-w-md mx-auto px-4 pt-4">
         {/* Series Standings Card Summary */}
         <div className="bg-white border border-slate-200 rounded-3xl p-4 mb-5 shadow-xs">
-          <div className="flex items-center gap-2 text-xs font-black tracking-wider text-slate-800 uppercase mb-3">
+          {/* Informational line: Bricolage Grotesque, Title Case */}
+          <div className="flex items-center gap-2 text-xs font-bold text-slate-800 mb-3 font-sans">
             <Trophy size={14} className="text-amber-500" />
-            <span>SERIES STANDINGS (BEST-OF-5)</span>
+            <span>Series Standings (Best-of-5)</span>
           </div>
 
           <div className="grid grid-cols-2 gap-2 text-xs">
             {/* PO1 */}
             <div className="bg-slate-50 rounded-2xl p-2.5 border border-slate-200/80 flex flex-col justify-between">
-              <div className="flex items-center justify-between text-[10px] font-bold text-slate-500 uppercase mb-1">
-                <span>PLAYOFF 1</span>
+              <div className="flex items-center justify-between text-[10px] font-bold text-slate-500 mb-1 font-sans">
+                <span>Playoff 1</span>
                 {seriesMap.po1.isClinched && (
-                  <span className="text-emerald-600 font-black">CLINCHED</span>
+                  <span className="text-emerald-600 font-bold">Clinched</span>
                 )}
               </div>
-              <div className="flex items-center justify-between font-display font-black text-slate-900">
+              <div className="flex items-center justify-between font-display font-extrabold text-slate-900">
                 <span className="truncate pr-1">PAN {seriesMap.po1.team1Wins}</span>
                 <span className="text-slate-400 text-[10px] font-sans">-</span>
                 <span className="truncate pl-1">{seriesMap.po1.team2Wins} BUL</span>
@@ -128,13 +130,13 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({
 
             {/* PO2 */}
             <div className="bg-slate-50 rounded-2xl p-2.5 border border-slate-200/80 flex flex-col justify-between">
-              <div className="flex items-center justify-between text-[10px] font-bold text-slate-500 uppercase mb-1">
-                <span>PLAYOFF 2</span>
+              <div className="flex items-center justify-between text-[10px] font-bold text-slate-500 mb-1 font-sans">
+                <span>Playoff 2</span>
                 {seriesMap.po2.isClinched && (
-                  <span className="text-emerald-600 font-black">CLINCHED</span>
+                  <span className="text-emerald-600 font-bold">Clinched</span>
                 )}
               </div>
-              <div className="flex items-center justify-between font-display font-black text-slate-900">
+              <div className="flex items-center justify-between font-display font-extrabold text-slate-900">
                 <span className="truncate pr-1">GRI {seriesMap.po2.team1Wins}</span>
                 <span className="text-slate-400 text-[10px] font-sans">-</span>
                 <span className="truncate pl-1">{seriesMap.po2.team2Wins} STA</span>
@@ -143,7 +145,7 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({
           </div>
         </div>
 
-        {/* Phase Tabs: Playoffs / Semifinals / Finals */}
+        {/* Phase Tabs: Section selector in dashboard is BLACK instead of red */}
         <div className="flex items-center bg-slate-100 p-1 rounded-2xl border border-slate-200 mb-5">
           {(['playoffs', 'semifinals', 'finals'] as PostseasonPhase[]).map((phase) => {
             const isActive = activeTab === phase;
@@ -153,8 +155,8 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({
                 onClick={() => setActiveTab(phase)}
                 className={`flex-1 py-2 text-xs font-bold tracking-wider rounded-xl transition-all uppercase ${
                   isActive
-                    ? 'bg-[#BE2041] text-white shadow-md shadow-[#BE2041]/25'
-                    : 'text-slate-600 hover:text-slate-900'
+                    ? 'bg-black text-white shadow-sm'
+                    : 'text-slate-600 hover:text-black'
                 }`}
               >
                 {phase}
@@ -178,15 +180,15 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({
         <div className="mt-12 text-center">
           <button
             onClick={() => {
-              if (confirm('RESET MATCH RECORDS BACK TO DEFAULT STARTING STATE?')) {
+              if (confirm('Reset match records back to default starting state?')) {
                 matchStorage.resetToDefault();
                 refreshData();
               }
             }}
-            className="inline-flex items-center gap-1.5 text-[11px] font-bold text-slate-500 hover:text-slate-800 transition-colors py-2 px-3 rounded-lg border border-slate-300 bg-white shadow-xs uppercase"
+            className="inline-flex items-center gap-1.5 text-[11px] font-bold text-slate-500 hover:text-slate-800 transition-colors py-2 px-3 rounded-lg border border-slate-300 bg-white shadow-xs"
           >
             <RefreshCw size={12} />
-            <span>RESET DEMO STATE</span>
+            <span>Reset Demo State</span>
           </button>
         </div>
       </main>
@@ -201,7 +203,7 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({
           error={passcodeError}
           buttonColor="blue"
           buttonText="START RECORDING"
-          subtitle="ENTER THE PASSCODE TO CONTINUE."
+          subtitle="Enter the passcode to continue."
         />
       )}
     </div>

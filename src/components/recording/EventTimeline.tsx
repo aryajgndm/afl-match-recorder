@@ -20,11 +20,11 @@ export const EventTimeline: React.FC<EventTimelineProps> = ({
 }) => {
   if (events.length === 0) {
     return (
-      <div className="flex flex-col items-center justify-center py-10 text-slate-400 text-xs font-semibold uppercase tracking-wider text-center">
-        <p>NO EVENTS RECORDED IN THIS QUARTER YET.</p>
+      <div className="flex flex-col items-center justify-center py-10 text-slate-400 text-xs font-medium text-center font-sans">
+        <p>No events recorded in this quarter yet.</p>
         {!readOnly && (
-          <p className="text-[10px] text-slate-400 mt-1 uppercase">
-            USE THE DOCK BELOW TO ADD A GOAL OR CARD.
+          <p className="text-[10px] text-slate-400 mt-1">
+            Use the dock below to add a goal or card.
           </p>
         )}
       </div>
@@ -35,7 +35,7 @@ export const EventTimeline: React.FC<EventTimelineProps> = ({
   const sorted = [...events].sort((a, b) => a.minute - b.minute);
 
   return (
-    <div className="w-full mx-auto flex flex-col rounded-xl overflow-hidden shadow-sm border border-slate-200">
+    <div className="w-full mx-auto flex flex-col rounded-xl overflow-hidden shadow-xs border border-slate-200 font-sans">
       {sorted.map((ev, index) => {
         const isTeam1 = ev.teamId === team1?.id;
         const isSelected = selectedEventId === ev.id;

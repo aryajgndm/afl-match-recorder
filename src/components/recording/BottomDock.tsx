@@ -190,11 +190,11 @@ export const BottomDock: React.FC<BottomDockProps> = ({
   }
 
   return (
-    <div className="fixed bottom-0 left-0 right-0 z-40 bg-[#12151c] border-t border-slate-800 rounded-t-3xl shadow-2xl p-4 max-w-md mx-auto font-sans font-normal">
+    <div className="fixed bottom-0 left-0 right-0 z-40 bg-[#121212] border-t border-[#262626] rounded-t-3xl shadow-2xl p-4 max-w-md mx-auto font-sans font-normal">
       {/* Top Bar: Quarter Switcher & Mode Icons */}
-      <div className="flex items-center justify-between pb-3 border-b border-slate-800/80 mb-3">
-        {/* Quarter Pills (Bold text as requested) */}
-        <div className="flex items-center gap-1.5 bg-[#1a1f2c] p-1 rounded-full border border-slate-800">
+      <div className="flex items-center justify-between pb-3 border-b border-[#262626] mb-3">
+        {/* Quarter Pills (Bold text) */}
+        <div className="flex items-center gap-1.5 bg-[#242424] p-1 rounded-full border border-[#333333]">
           {quartersList.map((q) => {
             const isActive = currentQuarter === q;
             const label = q === 'et' ? 'ET' : q.toUpperCase();
@@ -206,7 +206,7 @@ export const BottomDock: React.FC<BottomDockProps> = ({
                 className={`px-3.5 py-1 text-xs font-bold tracking-wider rounded-full transition-all uppercase ${
                   isActive
                     ? 'bg-white text-black shadow-sm'
-                    : 'text-slate-400 hover:text-white'
+                    : 'text-neutral-400 hover:text-white'
                 }`}
               >
                 {label}
@@ -216,7 +216,7 @@ export const BottomDock: React.FC<BottomDockProps> = ({
         </div>
 
         {/* Mode Toggles: Soccer Ball & Cards (Centered card icon in top right corner) */}
-        <div className="flex items-center gap-1 bg-[#1a1f2c] p-1 rounded-full border border-slate-800">
+        <div className="flex items-center gap-1 bg-[#242424] p-1 rounded-full border border-[#333333]">
           {/* Goal Mode: Classical Soccer / Football Ball */}
           <button
             type="button"
@@ -224,9 +224,9 @@ export const BottomDock: React.FC<BottomDockProps> = ({
             className={`w-8 h-8 flex items-center justify-center rounded-full transition-all ${
               mode === 'goal'
                 ? 'bg-white text-black shadow-sm'
-                : 'text-slate-400 hover:text-white'
+                : 'text-neutral-400 hover:text-white'
             }`}
-            title="GOAL MODE"
+            title="Goal Mode"
           >
             <svg
               className="w-4 h-4 fill-current"
@@ -249,9 +249,9 @@ export const BottomDock: React.FC<BottomDockProps> = ({
             className={`w-8 h-8 flex items-center justify-center rounded-full transition-all ${
               mode === 'card'
                 ? 'bg-white text-black shadow-sm'
-                : 'text-slate-400 hover:text-white'
+                : 'text-neutral-400 hover:text-white'
             }`}
-            title="CARD MODE"
+            title="Card Mode"
           >
             <svg
               className="w-4 h-4 fill-current"
@@ -265,14 +265,14 @@ export const BottomDock: React.FC<BottomDockProps> = ({
 
       {/* Editing Banner */}
       {editingEvent && (
-        <div className="flex items-center justify-between bg-[#BE2041]/15 border border-[#BE2041]/40 rounded-xl px-3 py-1.5 mb-2.5 text-xs text-[#fca5a5] uppercase">
-          <span>EDITING {editingEvent.type.toUpperCase()} ({editingEvent.minute}')</span>
+        <div className="flex items-center justify-between bg-[#BE2041]/15 border border-[#BE2041]/40 rounded-xl px-3 py-1.5 mb-2.5 text-xs text-[#fca5a5]">
+          <span>Editing {editingEvent.type === 'goal' ? 'Goal' : 'Card'} ({editingEvent.minute}')</span>
           <button
             onClick={onCancelEdit}
-            className="flex items-center gap-1 text-slate-400 hover:text-white text-[11px] font-bold uppercase"
+            className="flex items-center gap-1 text-neutral-400 hover:text-white text-[11px] font-bold"
           >
             <X size={14} />
-            <span>CANCEL</span>
+            <span>Cancel</span>
           </button>
         </div>
       )}
@@ -284,16 +284,16 @@ export const BottomDock: React.FC<BottomDockProps> = ({
           <div className="grid grid-cols-2 gap-3">
             {/* Minute Stepper */}
             <div className="flex flex-col">
-              <span className="text-[10px] font-normal tracking-wider text-slate-400 uppercase mb-1">
-                MINUTE {currentQuarter !== 'et' ? '(1-12\')' : '(ET)'}
+              <span className="text-[10px] font-normal tracking-wide text-neutral-400 mb-1">
+                Minute {currentQuarter !== 'et' ? '(1–12\')' : '(ET)'}
               </span>
-              <div className="flex items-center justify-between bg-[#191e2b] border border-slate-700/60 rounded-xl px-2 py-1.5">
+              <div className="flex items-center justify-between bg-[#242424] border border-[#383838] rounded-xl px-2 py-1.5">
                 <button
                   type="button"
                   onClick={() => handleMinuteStep(-1)}
                   disabled={minute <= 1}
-                  className={`p-1 transition-colors ${minute <= 1 ? 'text-slate-600 cursor-not-allowed' : 'text-slate-400 hover:text-white'}`}
-                  title="DECREASE MINUTE"
+                  className={`p-1 transition-colors ${minute <= 1 ? 'text-neutral-600 cursor-not-allowed' : 'text-neutral-400 hover:text-white'}`}
+                  title="Decrease Minute"
                 >
                   <ChevronLeft size={16} />
                 </button>
@@ -302,8 +302,8 @@ export const BottomDock: React.FC<BottomDockProps> = ({
                   type="button"
                   onClick={() => handleMinuteStep(1)}
                   disabled={minute >= maxMinute}
-                  className={`p-1 transition-colors ${minute >= maxMinute ? 'text-slate-600 cursor-not-allowed' : 'text-slate-400 hover:text-white'}`}
-                  title="INCREASE MINUTE"
+                  className={`p-1 transition-colors ${minute >= maxMinute ? 'text-neutral-600 cursor-not-allowed' : 'text-neutral-400 hover:text-white'}`}
+                  title="Increase Minute"
                 >
                   <ChevronRight size={16} />
                 </button>
@@ -312,14 +312,14 @@ export const BottomDock: React.FC<BottomDockProps> = ({
 
             {/* Goal For Stepper */}
             <div className="flex flex-col">
-              <span className="text-[10px] font-normal tracking-wider text-slate-400 uppercase mb-1">
-                GOAL FOR
+              <span className="text-[10px] font-normal tracking-wide text-neutral-400 mb-1">
+                Goal for
               </span>
               <div
                 onClick={toggleTeam}
-                className="flex items-center justify-between bg-[#191e2b] border border-slate-700/60 rounded-xl px-2 py-1.5 cursor-pointer hover:border-slate-600 transition-colors"
+                className="flex items-center justify-between bg-[#242424] border border-[#383838] rounded-xl px-2 py-1.5 cursor-pointer hover:border-neutral-500 transition-colors"
               >
-                <ChevronLeft size={16} className="text-slate-400" />
+                <ChevronLeft size={16} className="text-neutral-400" />
                 <div className="flex items-center gap-2 truncate">
                   <div className="w-6 h-6 flex items-center justify-center filter drop-shadow-sm flex-shrink-0">
                     {selectedTeam && (
@@ -334,23 +334,23 @@ export const BottomDock: React.FC<BottomDockProps> = ({
                     {selectedTeam?.name}
                   </span>
                 </div>
-                <ChevronRight size={16} className="text-slate-400" />
+                <ChevronRight size={16} className="text-neutral-400" />
               </div>
             </div>
           </div>
 
           {/* Row 2: Scorer Dropdown */}
           <div className="flex flex-col">
-            <span className="text-[10px] font-normal tracking-wider text-slate-400 uppercase mb-1">
-              SCORER {isOwnGoal && '(FROM CONCEDING TEAM)'}
+            <span className="text-[10px] font-normal tracking-wide text-neutral-400 mb-1">
+              Scorer {isOwnGoal && '(from conceding team)'}
             </span>
             <div className="relative">
               <select
                 value={scorerId}
                 onChange={(e) => setScorerId(e.target.value)}
-                className="w-full appearance-none bg-[#191e2b] border border-slate-700/60 rounded-xl px-3 py-2 text-xs font-normal text-white focus:outline-none focus:border-[#BE2041] uppercase"
+                className="w-full appearance-none bg-[#242424] border border-[#383838] rounded-xl px-3 py-2 text-xs font-normal text-white focus:outline-none focus:border-blue-500 uppercase"
               >
-                <option value="">SELECT SCORER...</option>
+                <option value="" className="normal-case">Select scorer...</option>
                 {scorerPlayers.map((p) => (
                   <option key={p.id} value={p.id} className="uppercase">
                     {p.fullName.toUpperCase()}
@@ -359,7 +359,7 @@ export const BottomDock: React.FC<BottomDockProps> = ({
               </select>
               <ChevronDown
                 size={16}
-                className="absolute right-3 top-2.5 text-slate-400 pointer-events-none"
+                className="absolute right-3 top-2.5 text-neutral-400 pointer-events-none"
               />
             </div>
           </div>
@@ -367,16 +367,16 @@ export const BottomDock: React.FC<BottomDockProps> = ({
           {/* Row 3: Assister Dropdown */}
           {!isOwnGoal && !isPenalty && (
             <div className="flex flex-col">
-              <span className="text-[10px] font-normal tracking-wider text-slate-400 uppercase mb-1">
-                ASSISTER (OPTIONAL)
+              <span className="text-[10px] font-normal tracking-wide text-neutral-400 mb-1">
+                Assister (optional)
               </span>
               <div className="relative">
                 <select
                   value={assisterId}
                   onChange={(e) => setAssisterId(e.target.value)}
-                  className="w-full appearance-none bg-[#191e2b] border border-slate-700/60 rounded-xl px-3 py-2 text-xs font-normal text-white focus:outline-none focus:border-[#BE2041] uppercase"
+                  className="w-full appearance-none bg-[#242424] border border-[#383838] rounded-xl px-3 py-2 text-xs font-normal text-white focus:outline-none focus:border-blue-500 uppercase"
                 >
-                  <option value="">NONE (UNASSISTED)</option>
+                  <option value="" className="normal-case">None (unassisted)</option>
                   {assisterPlayers.map((p) => (
                     <option key={p.id} value={p.id} className="uppercase">
                       {p.fullName.toUpperCase()}
@@ -385,13 +385,13 @@ export const BottomDock: React.FC<BottomDockProps> = ({
                 </select>
                 <ChevronDown
                   size={16}
-                  className="absolute right-3 top-2.5 text-slate-400 pointer-events-none"
+                  className="absolute right-3 top-2.5 text-neutral-400 pointer-events-none"
                 />
               </div>
             </div>
           )}
 
-          {/* Row 4: Toggles (PENALTY & OWN GOAL) & Add Goal Button */}
+          {/* Row 4: Toggles (Penalty & Own Goal) & Add Goal Button */}
           <div className="flex items-center justify-between pt-1">
             <div className="flex items-center gap-4">
               {/* Penalty Toggle */}
@@ -411,7 +411,7 @@ export const BottomDock: React.FC<BottomDockProps> = ({
                 />
                 <div
                   className={`w-8 h-4 rounded-full transition-colors relative ${
-                    isPenalty ? 'bg-[#BE2041]' : 'bg-slate-700'
+                    isPenalty ? 'bg-[#BE2041]' : 'bg-[#383838]'
                   }`}
                 >
                   <div
@@ -420,8 +420,8 @@ export const BottomDock: React.FC<BottomDockProps> = ({
                     }`}
                   />
                 </div>
-                <span className="text-[10px] font-normal tracking-wider text-slate-300 uppercase">
-                  PENALTY
+                <span className="text-[10px] font-normal tracking-wide text-neutral-300">
+                  Penalty
                 </span>
               </label>
 
@@ -443,7 +443,7 @@ export const BottomDock: React.FC<BottomDockProps> = ({
                 />
                 <div
                   className={`w-8 h-4 rounded-full transition-colors relative ${
-                    isOwnGoal ? 'bg-amber-600' : 'bg-slate-700'
+                    isOwnGoal ? 'bg-amber-600' : 'bg-[#383838]'
                   }`}
                 >
                   <div
@@ -452,20 +452,20 @@ export const BottomDock: React.FC<BottomDockProps> = ({
                     }`}
                   />
                 </div>
-                <span className="text-[10px] font-normal tracking-wider text-slate-300 uppercase">
-                  OWN GOAL
+                <span className="text-[10px] font-normal tracking-wide text-neutral-300">
+                  Own Goal
                 </span>
               </label>
             </div>
 
-            {/* Action Buttons: Bold text on button as requested */}
+            {/* Action Buttons: Bold text on button */}
             <div className="flex items-center gap-2">
               {editingEvent && (
                 <button
                   type="button"
                   onClick={() => onDeleteEvent(editingEvent.id)}
                   className="p-2.5 rounded-full bg-rose-900/60 hover:bg-rose-800 text-rose-300 transition-colors uppercase font-bold"
-                  title="DELETE EVENT"
+                  title="Delete Event"
                 >
                   <Trash2 size={16} />
                 </button>
@@ -476,8 +476,8 @@ export const BottomDock: React.FC<BottomDockProps> = ({
                 disabled={!scorerId}
                 className={`px-5 py-2.5 rounded-full font-bold text-xs tracking-wider uppercase transition-all shadow-md active:scale-95 ${
                   scorerId
-                    ? 'bg-white text-black hover:bg-slate-200'
-                    : 'bg-slate-800 text-slate-500 cursor-not-allowed'
+                    ? 'bg-white text-black hover:bg-neutral-200'
+                    : 'bg-[#2a2a2a] text-neutral-500 cursor-not-allowed'
                 }`}
               >
                 {editingEvent ? 'SAVE CHANGES' : '+ ADD GOAL'}
@@ -492,16 +492,16 @@ export const BottomDock: React.FC<BottomDockProps> = ({
           <div className="grid grid-cols-2 gap-3">
             {/* Minute */}
             <div className="flex flex-col">
-              <span className="text-[10px] font-normal tracking-wider text-slate-400 uppercase mb-1">
-                MINUTE {currentQuarter !== 'et' ? '(1-12\')' : '(ET)'}
+              <span className="text-[10px] font-normal tracking-wide text-neutral-400 mb-1">
+                Minute {currentQuarter !== 'et' ? '(1–12\')' : '(ET)'}
               </span>
-              <div className="flex items-center justify-between bg-[#191e2b] border border-slate-700/60 rounded-xl px-2 py-1.5">
+              <div className="flex items-center justify-between bg-[#242424] border border-[#383838] rounded-xl px-2 py-1.5">
                 <button
                   type="button"
                   onClick={() => handleMinuteStep(-1)}
                   disabled={minute <= 1}
-                  className={`p-1 transition-colors ${minute <= 1 ? 'text-slate-600 cursor-not-allowed' : 'text-slate-400 hover:text-white'}`}
-                  title="DECREASE MINUTE"
+                  className={`p-1 transition-colors ${minute <= 1 ? 'text-neutral-600 cursor-not-allowed' : 'text-neutral-400 hover:text-white'}`}
+                  title="Decrease Minute"
                 >
                   <ChevronLeft size={16} />
                 </button>
@@ -510,8 +510,8 @@ export const BottomDock: React.FC<BottomDockProps> = ({
                   type="button"
                   onClick={() => handleMinuteStep(1)}
                   disabled={minute >= maxMinute}
-                  className={`p-1 transition-colors ${minute >= maxMinute ? 'text-slate-600 cursor-not-allowed' : 'text-slate-400 hover:text-white'}`}
-                  title="INCREASE MINUTE"
+                  className={`p-1 transition-colors ${minute >= maxMinute ? 'text-neutral-600 cursor-not-allowed' : 'text-neutral-400 hover:text-white'}`}
+                  title="Increase Minute"
                 >
                   <ChevronRight size={16} />
                 </button>
@@ -520,14 +520,14 @@ export const BottomDock: React.FC<BottomDockProps> = ({
 
             {/* Card For */}
             <div className="flex flex-col">
-              <span className="text-[10px] font-normal tracking-wider text-slate-400 uppercase mb-1">
-                CARD FOR
+              <span className="text-[10px] font-normal tracking-wide text-neutral-400 mb-1">
+                Card for
               </span>
               <div
                 onClick={toggleTeam}
-                className="flex items-center justify-between bg-[#191e2b] border border-slate-700/60 rounded-xl px-2 py-1.5 cursor-pointer hover:border-slate-600 transition-colors"
+                className="flex items-center justify-between bg-[#242424] border border-[#383838] rounded-xl px-2 py-1.5 cursor-pointer hover:border-neutral-500 transition-colors"
               >
-                <ChevronLeft size={16} className="text-slate-400" />
+                <ChevronLeft size={16} className="text-neutral-400" />
                 <div className="flex items-center gap-2 truncate">
                   <div className="w-6 h-6 flex items-center justify-center filter drop-shadow-sm flex-shrink-0">
                     {selectedTeam && (
@@ -542,21 +542,21 @@ export const BottomDock: React.FC<BottomDockProps> = ({
                     {selectedTeam?.name}
                   </span>
                 </div>
-                <ChevronRight size={16} className="text-slate-400" />
+                <ChevronRight size={16} className="text-neutral-400" />
               </div>
             </div>
           </div>
 
           {/* Row 2: Card Type */}
           <div className="flex flex-col">
-            <span className="text-[10px] font-normal tracking-wider text-slate-400 uppercase mb-1">
-              CARD TYPE
+            <span className="text-[10px] font-normal tracking-wide text-neutral-400 mb-1">
+              Card type
             </span>
             <div
               onClick={() => setCardType(cardType === 'yellow' ? 'red' : 'yellow')}
-              className="flex items-center justify-between bg-[#191e2b] border border-slate-700/60 rounded-xl px-3 py-2 cursor-pointer hover:border-slate-600 transition-colors"
+              className="flex items-center justify-between bg-[#242424] border border-[#383838] rounded-xl px-3 py-2 cursor-pointer hover:border-neutral-500 transition-colors"
             >
-              <ChevronLeft size={16} className="text-slate-400" />
+              <ChevronLeft size={16} className="text-neutral-400" />
               <div className="flex items-center gap-2">
                 <span
                   className={`w-3.5 h-4.5 rounded-sm inline-block shadow-sm ${
@@ -567,22 +567,22 @@ export const BottomDock: React.FC<BottomDockProps> = ({
                   {cardType === 'yellow' ? 'YELLOW' : 'RED'}
                 </span>
               </div>
-              <ChevronRight size={16} className="text-slate-400" />
+              <ChevronRight size={16} className="text-neutral-400" />
             </div>
           </div>
 
           {/* Row 3: Card To */}
           <div className="flex flex-col">
-            <span className="text-[10px] font-normal tracking-wider text-slate-400 uppercase mb-1">
-              CARD TO
+            <span className="text-[10px] font-normal tracking-wide text-neutral-400 mb-1">
+              Card to
             </span>
             <div className="relative">
               <select
                 value={cardPlayerId}
                 onChange={(e) => setCardPlayerId(e.target.value)}
-                className="w-full appearance-none bg-[#191e2b] border border-slate-700/60 rounded-xl px-3 py-2 text-xs font-normal text-white focus:outline-none focus:border-[#BE2041] uppercase"
+                className="w-full appearance-none bg-[#242424] border border-[#383838] rounded-xl px-3 py-2 text-xs font-normal text-white focus:outline-none focus:border-blue-500 uppercase"
               >
-                <option value="">SELECT PLAYER...</option>
+                <option value="" className="normal-case">Select player...</option>
                 {cardPlayers.map((p) => (
                   <option key={p.id} value={p.id} className="uppercase">
                     {p.fullName.toUpperCase()}
@@ -591,19 +591,19 @@ export const BottomDock: React.FC<BottomDockProps> = ({
               </select>
               <ChevronDown
                 size={16}
-                className="absolute right-3 top-2.5 text-slate-400 pointer-events-none"
+                className="absolute right-3 top-2.5 text-neutral-400 pointer-events-none"
               />
             </div>
           </div>
 
-          {/* Row 4: Submit Card Button (Bold text on button as requested) */}
+          {/* Row 4: Submit Card Button (Bold text on button) */}
           <div className="flex items-center justify-end gap-2 pt-1">
             {editingEvent && (
               <button
                 type="button"
                 onClick={() => onDeleteEvent(editingEvent.id)}
                 className="p-2.5 rounded-full bg-rose-900/60 hover:bg-rose-800 text-rose-300 transition-colors uppercase font-bold"
-                title="DELETE EVENT"
+                title="Delete Event"
               >
                 <Trash2 size={16} />
               </button>
@@ -614,8 +614,8 @@ export const BottomDock: React.FC<BottomDockProps> = ({
               disabled={!cardPlayerId}
               className={`px-5 py-2.5 rounded-full font-bold text-xs tracking-wider uppercase transition-all shadow-md active:scale-95 ${
                 cardPlayerId
-                  ? 'bg-white text-black hover:bg-slate-200'
-                  : 'bg-slate-800 text-slate-500 cursor-not-allowed'
+                  ? 'bg-white text-black hover:bg-neutral-200'
+                  : 'bg-[#2a2a2a] text-neutral-500 cursor-not-allowed'
               }`}
             >
               {editingEvent ? 'SAVE CHANGES' : '+ RECORD CARD'}

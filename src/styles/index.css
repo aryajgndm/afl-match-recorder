@@ -1,12 +1,12 @@
 @import url('https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,200..800&family=MuseoModerno:ital,wght@0,100..900;1,100..900&family=Parkinsans:wght@600..800&display=swap');
 
 /* ========================================================
-   1. Genuine MuseoModerno Font Faces (Strictly Bold / Black)
+   1. Genuine MuseoModerno Font Faces (Strictly Extrabold 800)
    ======================================================== */
 @font-face {
   font-family: 'MuseoModernoApp';
-  src: url('/fonts/MuseoModerno-Bold.ttf') format('truetype');
-  font-weight: 100 700;
+  src: url('/fonts/MuseoModerno-Black.ttf') format('truetype');
+  font-weight: 800 900;
   font-style: normal;
   font-display: swap;
   unicode-range: U+0000-0046, U+0048-0066, U+0068-10FFFF; /* Everything EXCEPT 'G' and 'g' */
@@ -14,8 +14,8 @@
 
 @font-face {
   font-family: 'MuseoModernoApp';
-  src: url('/fonts/MuseoModerno-Black.ttf') format('truetype');
-  font-weight: 800 900;
+  src: url('/fonts/MuseoModerno-Bold.ttf') format('truetype');
+  font-weight: 100 799;
   font-style: normal;
   font-display: swap;
   unicode-range: U+0000-0046, U+0048-0066, U+0068-10FFFF; /* Everything EXCEPT 'G' and 'g' */
@@ -64,12 +64,12 @@
   }
 }
 
-/* Every MuseoModerno element must be bold */
+/* Every MuseoModerno element must be extrabold (weight 800) */
 .font-display,
 h1, h2, h3, h4,
 .score-font {
   font-family: 'MuseoModernoApp', 'ParkinsansG', 'MuseoModerno', cursive, sans-serif !important;
-  font-weight: 700;
+  font-weight: 800 !important;
 }
 
 .font-sans {

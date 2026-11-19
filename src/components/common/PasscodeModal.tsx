@@ -23,7 +23,7 @@ export const PasscodeModal: React.FC<PasscodeModalProps> = ({
   error,
   title,
   buttonText = 'START RECORDING',
-  subtitle = 'ENTER THE PASSCODE TO CONTINUE.',
+  subtitle = 'Enter the passcode to continue.',
   buttonColor = 'blue',
 }) => {
   const [digits, setDigits] = useState<string[]>(['', '', '', '', '', '']);
@@ -75,25 +75,25 @@ export const PasscodeModal: React.FC<PasscodeModalProps> = ({
   };
 
   const seriesNameFormatted = fixture.seriesId.startsWith('po')
-    ? `PLAYOFF ${fixture.seriesId.replace('po', '')}`
+    ? `Playoff ${fixture.seriesId.replace('po', '')}`
     : fixture.seriesId.startsWith('sf')
-    ? `SEMI-FINAL ${fixture.seriesId.replace('sf', '')}`
-    : 'FINALS';
+    ? `Semi-Final ${fixture.seriesId.replace('sf', '')}`
+    : 'Finals';
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/75 backdrop-blur-sm animate-fadeIn">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/75 backdrop-blur-sm animate-fadeIn font-sans">
       <div className="relative w-full max-w-sm bg-white border border-slate-200 rounded-3xl p-6 shadow-2xl flex flex-col items-center text-center">
         <button
           onClick={onClose}
           className="absolute top-4 right-4 p-2 text-slate-400 hover:text-slate-800 rounded-full hover:bg-slate-100 transition-colors"
-          aria-label="CLOSE"
+          aria-label="Close"
         >
           <X size={20} />
         </button>
 
-        {/* Header Title */}
-        <p className="font-display text-xs font-bold tracking-widest text-slate-500 uppercase mt-1">
-          {title || `GAME ${fixture.gameNumber} • ${seriesNameFormatted}`}
+        {/* Header Title (Informational line: Bricolage Grotesque, Title Case) */}
+        <p className="font-sans font-bold text-xs tracking-wide text-slate-500 mt-1">
+          {title || `Game ${fixture.gameNumber} · ${seriesNameFormatted}`}
         </p>
 
         {/* Team logos vs */}
@@ -110,7 +110,7 @@ export const PasscodeModal: React.FC<PasscodeModalProps> = ({
             )}
           </div>
 
-          <span className="font-display text-lg font-black text-slate-800 select-none">
+          <span className="font-display font-extrabold text-lg text-slate-800 select-none">
             V
           </span>
 
@@ -127,7 +127,7 @@ export const PasscodeModal: React.FC<PasscodeModalProps> = ({
           </div>
         </div>
 
-        {/* Match Date (normal case as per requirement) */}
+        {/* Match Date (normal case) */}
         <p className="text-xs font-medium text-slate-500 mb-5">{fixture.date}</p>
 
         {/* 6 Digit Passcode Input */}
@@ -143,12 +143,12 @@ export const PasscodeModal: React.FC<PasscodeModalProps> = ({
                 value={digit}
                 onChange={(e) => handleChange(idx, e.target.value)}
                 onKeyDown={(e) => handleKeyDown(idx, e)}
-                className="w-11 h-12 text-center text-xl font-display font-black bg-white border-2 border-slate-300 focus:border-[#BE2041] rounded-xl text-slate-900 focus:outline-none transition-colors shadow-sm"
+                className="w-11 h-12 text-center text-xl font-display font-extrabold bg-white border-2 border-slate-300 focus:border-[#007AFF] rounded-xl text-slate-900 focus:outline-none transition-colors shadow-sm"
               />
             ))}
           </div>
 
-          {/* Primary Action Button */}
+          {/* Primary Action Button: Blue for Start Recording, Green for View Results */}
           {buttonColor === 'green' ? (
             <button
               type="submit"
@@ -168,7 +168,7 @@ export const PasscodeModal: React.FC<PasscodeModalProps> = ({
               disabled={digits.join('').length !== 6}
               className={`w-full py-3.5 rounded-full font-bold text-xs tracking-wider flex items-center justify-center gap-2 transition-all shadow-md uppercase ${
                 digits.join('').length === 6
-                  ? 'bg-[#BE2041] hover:bg-[#a81938] text-white shadow-[#BE2041]/30 active:scale-[0.98]'
+                  ? 'bg-[#007AFF] hover:bg-[#0066DD] text-white shadow-blue-500/25 active:scale-[0.98]'
                   : 'bg-slate-200 text-slate-400 cursor-not-allowed'
               }`}
             >
@@ -177,14 +177,14 @@ export const PasscodeModal: React.FC<PasscodeModalProps> = ({
             </button>
           )}
 
-          {/* Helper Subtitle */}
-          <p className="text-[11px] font-medium text-slate-400 uppercase mt-3 tracking-wide">
+          {/* Helper Subtitle (Informational line: Bricolage Grotesque, sentence case) */}
+          <p className="text-[11px] font-medium text-slate-400 mt-3 tracking-normal">
             {subtitle}
           </p>
 
           {/* Error Message */}
           {error && (
-            <p className="text-xs font-semibold text-rose-600 mt-2 uppercase tracking-wide animate-shake">
+            <p className="text-xs font-semibold text-rose-600 mt-2 tracking-normal animate-shake">
               {error}
             </p>
           )}

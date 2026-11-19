@@ -63,22 +63,23 @@ export const SubmitModal: React.FC<SubmitModalProps> = ({
     onSubmit(code);
   };
 
+  // Informational line: Title Case
   const seriesNameFormatted = fixture.seriesId.startsWith('po')
-    ? `PLAYOFF ${fixture.seriesId.replace('po', '')}`
+    ? `Playoff ${fixture.seriesId.replace('po', '')}`
     : fixture.seriesId.startsWith('sf')
-    ? `SEMI-FINAL ${fixture.seriesId.replace('sf', '')}`
-    : 'FINALS';
+    ? `Semi-Final ${fixture.seriesId.replace('sf', '')}`
+    : 'Finals';
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/75 backdrop-blur-sm animate-fadeIn">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/75 backdrop-blur-sm animate-fadeIn font-sans">
       <div className="relative w-full max-w-sm bg-white border border-slate-200 rounded-3xl p-6 shadow-2xl flex flex-col items-center text-center">
-        {/* Top Header Line */}
-        <div className="w-full flex items-center justify-between text-xs font-bold text-slate-500 uppercase tracking-wider mb-4 px-1">
-          <span>GAME {fixture.gameNumber} • {seriesNameFormatted}</span>
-          <span className="font-medium text-slate-500 normal-case">{fixture.date}</span>
+        {/* Top Header Line (Informational line: Bricolage Grotesque, Title Case) */}
+        <div className="w-full flex items-center justify-between text-xs font-bold text-slate-500 mb-4 px-1 font-sans">
+          <span>Game {fixture.gameNumber} · {seriesNameFormatted}</span>
+          <span className="font-medium text-slate-500">{fixture.date}</span>
         </div>
 
-        {/* Box Score Summary Table matching Image 2 Screen 4 */}
+        {/* Box Score Summary Table */}
         <div className="w-full mb-5">
           <QuarterwiseScoresheetTable score={score} team1={team1} team2={team2} />
         </div>
@@ -96,7 +97,7 @@ export const SubmitModal: React.FC<SubmitModalProps> = ({
                 value={digit}
                 onChange={(e) => handleChange(idx, e.target.value)}
                 onKeyDown={(e) => handleKeyDown(idx, e)}
-                className="w-11 h-12 text-center text-xl font-display font-black bg-white border-2 border-slate-300 focus:border-[#BE2041] rounded-xl text-slate-900 focus:outline-none transition-colors shadow-sm"
+                className="w-11 h-12 text-center text-xl font-display font-extrabold bg-white border-2 border-slate-300 focus:border-[#BE2041] rounded-xl text-slate-900 focus:outline-none transition-colors shadow-sm"
               />
             ))}
           </div>
@@ -126,14 +127,14 @@ export const SubmitModal: React.FC<SubmitModalProps> = ({
             </button>
           </div>
 
-          {/* Subtitle helper */}
-          <p className="text-[11px] font-medium text-slate-400 uppercase mt-3 tracking-wide">
-            ENTER THE PASSCODE TO SUBMIT.
+          {/* Subtitle helper (Informational line: Bricolage Grotesque, sentence case) */}
+          <p className="text-[11px] font-medium text-slate-400 mt-3 tracking-normal">
+            Enter the passcode to submit.
           </p>
 
           {/* Error message */}
           {error && (
-            <p className="text-xs font-semibold text-rose-600 mt-2 uppercase tracking-wide animate-shake">
+            <p className="text-xs font-semibold text-rose-600 mt-2 tracking-normal animate-shake">
               {error}
             </p>
           )}

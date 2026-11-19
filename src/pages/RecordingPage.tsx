@@ -137,14 +137,14 @@ export const RecordingPage: React.FC<RecordingPageProps> = ({
       setIsSubmitModalOpen(false);
       onNavigateToResults(fixture.id);
     } else {
-      setSubmitError(res.error || 'INCORRECT PASSCODE. TRY AGAIN.');
+      setSubmitError(res.error || 'Incorrect passcode. Try again.');
     }
   };
 
   if (!fixture) {
     return (
-      <div className="min-h-screen bg-white flex items-center justify-center text-slate-500 uppercase font-bold text-xs">
-        LOADING MATCH DETAILS...
+      <div className="min-h-screen bg-white flex items-center justify-center text-slate-500 font-sans font-medium text-xs">
+        Loading match details...
       </div>
     );
   }
@@ -166,8 +166,8 @@ export const RecordingPage: React.FC<RecordingPageProps> = ({
       <main className="flex-1 w-full max-w-md mx-auto px-4">
         {/* Extra time banner if two goal lead achieved */}
         {isExtraTimeActive && etLead.clinched && (
-          <div className="bg-amber-100 border border-amber-400 rounded-2xl p-2.5 mb-2 text-center text-xs font-bold text-amber-900 uppercase animate-pulse">
-            ★ TWO-GOAL EXTRA TIME LEAD REACHED! MATCH IS READY FOR FINAL SUBMISSION.
+          <div className="bg-amber-100 border border-amber-400 rounded-2xl p-2.5 mb-2 text-center text-xs font-bold text-amber-900 font-sans animate-pulse">
+            ★ Two-goal extra time lead reached! Match is ready for final submission.
           </div>
         )}
 
