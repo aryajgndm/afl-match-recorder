@@ -20,13 +20,13 @@ export const MatchCard: React.FC<MatchCardProps> = ({ fixture, onSelect }) => {
     : 'Finals';
 
   return (
-    <div className="w-full bg-[#141720] border border-slate-800 rounded-3xl p-5 shadow-lg transition-all hover:border-slate-700">
+    <div className="w-full bg-[#242424] border border-[#333333] rounded-3xl p-5 shadow-xl transition-all hover:border-[#444444]">
       {/* Top row: Match Identification and Date (Informational line: Bricolage Grotesque, Title Case) */}
-      <div className="flex items-center justify-between text-xs text-slate-400 mb-4 tracking-wide font-sans font-bold">
+      <div className="flex items-center justify-between text-xs text-neutral-400 mb-4 tracking-wide font-sans font-bold">
         <span>
           Game {fixture.gameNumber} · {seriesNameFormatted}
         </span>
-        <span className="text-slate-400 font-medium">{fixture.date}</span>
+        <span className="text-neutral-400 font-medium">{fixture.date}</span>
       </div>
 
       {/* Middle row: Teams & Logos (MuseoModerno extrabold) */}
@@ -44,14 +44,14 @@ export const MatchCard: React.FC<MatchCardProps> = ({ fixture, onSelect }) => {
                 className="w-full h-full object-contain filter drop-shadow-md"
               />
             ) : (
-              <span className="text-xs text-slate-500 font-bold">?</span>
+              <span className="text-xs text-neutral-500 font-bold">?</span>
             )}
           </div>
         </div>
 
         {/* Center V */}
         <div className="px-3">
-          <span className="font-display text-sm font-extrabold text-slate-400">V</span>
+          <span className="font-display text-sm font-extrabold text-neutral-500">V</span>
         </div>
 
         {/* Team 2 */}
@@ -64,7 +64,7 @@ export const MatchCard: React.FC<MatchCardProps> = ({ fixture, onSelect }) => {
                 className="w-full h-full object-contain filter drop-shadow-md"
               />
             ) : (
-              <span className="text-xs text-slate-500 font-bold">?</span>
+              <span className="text-xs text-neutral-500 font-bold">?</span>
             )}
           </div>
           <span className="font-display font-extrabold text-sm tracking-wide text-white uppercase text-left">
@@ -78,7 +78,7 @@ export const MatchCard: React.FC<MatchCardProps> = ({ fixture, onSelect }) => {
         {fixture.status === 'completed' && (
           <button
             onClick={() => onSelect(fixture)}
-            className="w-full py-3.5 bg-emerald-600 hover:bg-emerald-500 active:scale-[0.98] transition-all text-white rounded-full font-bold text-xs tracking-wider flex items-center justify-center gap-2 shadow-md shadow-emerald-950/40 uppercase"
+            className="w-full py-3.5 bg-emerald-600 hover:bg-emerald-500 active:scale-[0.98] transition-all text-white rounded-full font-bold text-xs tracking-wider flex items-center justify-center gap-2 shadow-md shadow-emerald-950/40 uppercase font-sans"
           >
             <Check size={16} className="stroke-[3]" />
             <span>VIEW RESULTS</span>
@@ -109,7 +109,7 @@ export const MatchCard: React.FC<MatchCardProps> = ({ fixture, onSelect }) => {
         {fixture.status === 'locked' && (
           <button
             disabled
-            className="w-full py-3.5 bg-slate-800/60 text-slate-400 rounded-full font-bold text-xs tracking-wider flex items-center justify-center gap-2 cursor-not-allowed uppercase font-sans"
+            className="w-full py-3.5 bg-[#181818] border border-[#2e2e2e] text-neutral-500 rounded-full font-bold text-xs tracking-wider flex items-center justify-center gap-2 cursor-not-allowed uppercase font-sans"
           >
             <Lock size={14} />
             <span>{fixture.isConditional ? 'NOT YET REQUIRED' : 'AWAITING PREVIOUS GAME'}</span>
@@ -117,7 +117,7 @@ export const MatchCard: React.FC<MatchCardProps> = ({ fixture, onSelect }) => {
         )}
 
         {fixture.status === 'not_required' && (
-          <div className="w-full py-3.5 bg-slate-900/60 text-slate-400 rounded-full font-bold text-xs tracking-wider flex items-center justify-center gap-2 border border-slate-800/40 uppercase font-sans">
+          <div className="w-full py-3.5 bg-[#181818] border border-[#2e2e2e] text-neutral-500 rounded-full font-bold text-xs tracking-wider flex items-center justify-center gap-2 uppercase font-sans">
             <span>SERIES CLINCHED (NOT REQUIRED)</span>
           </div>
         )}

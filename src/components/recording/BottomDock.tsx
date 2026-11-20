@@ -190,7 +190,7 @@ export const BottomDock: React.FC<BottomDockProps> = ({
   }
 
   return (
-    <div className="fixed bottom-0 left-0 right-0 z-40 bg-[#121212] border-t border-[#262626] rounded-t-3xl shadow-2xl p-4 max-w-md mx-auto font-sans font-normal">
+    <div className="fixed bottom-0 left-0 right-0 z-40 bg-[#121212] border-t border-[#262626] rounded-t-3xl shadow-2xl p-4 max-w-md mx-auto font-sans font-normal uppercase">
       {/* Top Bar: Quarter Switcher & Mode Icons */}
       <div className="flex items-center justify-between pb-3 border-b border-[#262626] mb-3">
         {/* Quarter Pills (Bold text) */}
@@ -226,7 +226,7 @@ export const BottomDock: React.FC<BottomDockProps> = ({
                 ? 'bg-white text-black shadow-sm'
                 : 'text-neutral-400 hover:text-white'
             }`}
-            title="Goal Mode"
+            title="GOAL MODE"
           >
             <svg
               className="w-4 h-4 fill-current"
@@ -251,7 +251,7 @@ export const BottomDock: React.FC<BottomDockProps> = ({
                 ? 'bg-white text-black shadow-sm'
                 : 'text-neutral-400 hover:text-white'
             }`}
-            title="Card Mode"
+            title="CARD MODE"
           >
             <svg
               className="w-4 h-4 fill-current"
@@ -265,14 +265,14 @@ export const BottomDock: React.FC<BottomDockProps> = ({
 
       {/* Editing Banner */}
       {editingEvent && (
-        <div className="flex items-center justify-between bg-[#BE2041]/15 border border-[#BE2041]/40 rounded-xl px-3 py-1.5 mb-2.5 text-xs text-[#fca5a5]">
-          <span>Editing {editingEvent.type === 'goal' ? 'Goal' : 'Card'} ({editingEvent.minute}')</span>
+        <div className="flex items-center justify-between bg-[#BE2041]/15 border border-[#BE2041]/40 rounded-xl px-3 py-1.5 mb-2.5 text-xs text-[#fca5a5] uppercase font-sans">
+          <span>EDITING {editingEvent.type === 'goal' ? 'GOAL' : 'CARD'} ({editingEvent.minute}')</span>
           <button
             onClick={onCancelEdit}
-            className="flex items-center gap-1 text-neutral-400 hover:text-white text-[11px] font-bold"
+            className="flex items-center gap-1 text-neutral-400 hover:text-white text-[11px] font-bold uppercase"
           >
             <X size={14} />
-            <span>Cancel</span>
+            <span>CANCEL</span>
           </button>
         </div>
       )}
@@ -284,8 +284,8 @@ export const BottomDock: React.FC<BottomDockProps> = ({
           <div className="grid grid-cols-2 gap-3">
             {/* Minute Stepper */}
             <div className="flex flex-col">
-              <span className="text-[10px] font-normal tracking-wide text-neutral-400 mb-1">
-                Minute {currentQuarter !== 'et' ? '(1–12\')' : '(ET)'}
+              <span className="text-[10px] font-normal tracking-wide text-neutral-400 mb-1 uppercase">
+                MINUTE {currentQuarter !== 'et' ? '(1–12\')' : '(ET)'}
               </span>
               <div className="flex items-center justify-between bg-[#242424] border border-[#383838] rounded-xl px-2 py-1.5">
                 <button
@@ -293,7 +293,7 @@ export const BottomDock: React.FC<BottomDockProps> = ({
                   onClick={() => handleMinuteStep(-1)}
                   disabled={minute <= 1}
                   className={`p-1 transition-colors ${minute <= 1 ? 'text-neutral-600 cursor-not-allowed' : 'text-neutral-400 hover:text-white'}`}
-                  title="Decrease Minute"
+                  title="DECREASE MINUTE"
                 >
                   <ChevronLeft size={16} />
                 </button>
@@ -303,7 +303,7 @@ export const BottomDock: React.FC<BottomDockProps> = ({
                   onClick={() => handleMinuteStep(1)}
                   disabled={minute >= maxMinute}
                   className={`p-1 transition-colors ${minute >= maxMinute ? 'text-neutral-600 cursor-not-allowed' : 'text-neutral-400 hover:text-white'}`}
-                  title="Increase Minute"
+                  title="INCREASE MINUTE"
                 >
                   <ChevronRight size={16} />
                 </button>
@@ -312,8 +312,8 @@ export const BottomDock: React.FC<BottomDockProps> = ({
 
             {/* Goal For Stepper */}
             <div className="flex flex-col">
-              <span className="text-[10px] font-normal tracking-wide text-neutral-400 mb-1">
-                Goal for
+              <span className="text-[10px] font-normal tracking-wide text-neutral-400 mb-1 uppercase">
+                GOAL FOR
               </span>
               <div
                 onClick={toggleTeam}
@@ -341,8 +341,8 @@ export const BottomDock: React.FC<BottomDockProps> = ({
 
           {/* Row 2: Scorer Dropdown */}
           <div className="flex flex-col">
-            <span className="text-[10px] font-normal tracking-wide text-neutral-400 mb-1">
-              Scorer {isOwnGoal && '(from conceding team)'}
+            <span className="text-[10px] font-normal tracking-wide text-neutral-400 mb-1 uppercase">
+              SCORER {isOwnGoal && '(FROM CONCEDING TEAM)'}
             </span>
             <div className="relative">
               <select
@@ -350,7 +350,7 @@ export const BottomDock: React.FC<BottomDockProps> = ({
                 onChange={(e) => setScorerId(e.target.value)}
                 className="w-full appearance-none bg-[#242424] border border-[#383838] rounded-xl px-3 py-2 text-xs font-normal text-white focus:outline-none focus:border-blue-500 uppercase"
               >
-                <option value="" className="normal-case">Select scorer...</option>
+                <option value="" className="uppercase">SELECT SCORER...</option>
                 {scorerPlayers.map((p) => (
                   <option key={p.id} value={p.id} className="uppercase">
                     {p.fullName.toUpperCase()}
@@ -367,8 +367,8 @@ export const BottomDock: React.FC<BottomDockProps> = ({
           {/* Row 3: Assister Dropdown */}
           {!isOwnGoal && !isPenalty && (
             <div className="flex flex-col">
-              <span className="text-[10px] font-normal tracking-wide text-neutral-400 mb-1">
-                Assister (optional)
+              <span className="text-[10px] font-normal tracking-wide text-neutral-400 mb-1 uppercase">
+                ASSISTER (OPTIONAL)
               </span>
               <div className="relative">
                 <select
@@ -376,7 +376,7 @@ export const BottomDock: React.FC<BottomDockProps> = ({
                   onChange={(e) => setAssisterId(e.target.value)}
                   className="w-full appearance-none bg-[#242424] border border-[#383838] rounded-xl px-3 py-2 text-xs font-normal text-white focus:outline-none focus:border-blue-500 uppercase"
                 >
-                  <option value="" className="normal-case">None (unassisted)</option>
+                  <option value="" className="uppercase">NONE (UNASSISTED)</option>
                   {assisterPlayers.map((p) => (
                     <option key={p.id} value={p.id} className="uppercase">
                       {p.fullName.toUpperCase()}
@@ -420,8 +420,8 @@ export const BottomDock: React.FC<BottomDockProps> = ({
                     }`}
                   />
                 </div>
-                <span className="text-[10px] font-normal tracking-wide text-neutral-300">
-                  Penalty
+                <span className="text-[10px] font-normal tracking-wide text-neutral-300 uppercase">
+                  PENALTY
                 </span>
               </label>
 
@@ -452,8 +452,8 @@ export const BottomDock: React.FC<BottomDockProps> = ({
                     }`}
                   />
                 </div>
-                <span className="text-[10px] font-normal tracking-wide text-neutral-300">
-                  Own Goal
+                <span className="text-[10px] font-normal tracking-wide text-neutral-300 uppercase">
+                  OWN GOAL
                 </span>
               </label>
             </div>
@@ -465,7 +465,7 @@ export const BottomDock: React.FC<BottomDockProps> = ({
                   type="button"
                   onClick={() => onDeleteEvent(editingEvent.id)}
                   className="p-2.5 rounded-full bg-rose-900/60 hover:bg-rose-800 text-rose-300 transition-colors uppercase font-bold"
-                  title="Delete Event"
+                  title="DELETE EVENT"
                 >
                   <Trash2 size={16} />
                 </button>
@@ -492,8 +492,8 @@ export const BottomDock: React.FC<BottomDockProps> = ({
           <div className="grid grid-cols-2 gap-3">
             {/* Minute */}
             <div className="flex flex-col">
-              <span className="text-[10px] font-normal tracking-wide text-neutral-400 mb-1">
-                Minute {currentQuarter !== 'et' ? '(1–12\')' : '(ET)'}
+              <span className="text-[10px] font-normal tracking-wide text-neutral-400 mb-1 uppercase">
+                MINUTE {currentQuarter !== 'et' ? '(1–12\')' : '(ET)'}
               </span>
               <div className="flex items-center justify-between bg-[#242424] border border-[#383838] rounded-xl px-2 py-1.5">
                 <button
@@ -501,7 +501,7 @@ export const BottomDock: React.FC<BottomDockProps> = ({
                   onClick={() => handleMinuteStep(-1)}
                   disabled={minute <= 1}
                   className={`p-1 transition-colors ${minute <= 1 ? 'text-neutral-600 cursor-not-allowed' : 'text-neutral-400 hover:text-white'}`}
-                  title="Decrease Minute"
+                  title="DECREASE MINUTE"
                 >
                   <ChevronLeft size={16} />
                 </button>
@@ -511,7 +511,7 @@ export const BottomDock: React.FC<BottomDockProps> = ({
                   onClick={() => handleMinuteStep(1)}
                   disabled={minute >= maxMinute}
                   className={`p-1 transition-colors ${minute >= maxMinute ? 'text-neutral-600 cursor-not-allowed' : 'text-neutral-400 hover:text-white'}`}
-                  title="Increase Minute"
+                  title="INCREASE MINUTE"
                 >
                   <ChevronRight size={16} />
                 </button>
@@ -520,8 +520,8 @@ export const BottomDock: React.FC<BottomDockProps> = ({
 
             {/* Card For */}
             <div className="flex flex-col">
-              <span className="text-[10px] font-normal tracking-wide text-neutral-400 mb-1">
-                Card for
+              <span className="text-[10px] font-normal tracking-wide text-neutral-400 mb-1 uppercase">
+                CARD FOR
               </span>
               <div
                 onClick={toggleTeam}
@@ -549,8 +549,8 @@ export const BottomDock: React.FC<BottomDockProps> = ({
 
           {/* Row 2: Card Type */}
           <div className="flex flex-col">
-            <span className="text-[10px] font-normal tracking-wide text-neutral-400 mb-1">
-              Card type
+            <span className="text-[10px] font-normal tracking-wide text-neutral-400 mb-1 uppercase">
+              CARD TYPE
             </span>
             <div
               onClick={() => setCardType(cardType === 'yellow' ? 'red' : 'yellow')}
@@ -573,8 +573,8 @@ export const BottomDock: React.FC<BottomDockProps> = ({
 
           {/* Row 3: Card To */}
           <div className="flex flex-col">
-            <span className="text-[10px] font-normal tracking-wide text-neutral-400 mb-1">
-              Card to
+            <span className="text-[10px] font-normal tracking-wide text-neutral-400 mb-1 uppercase">
+              CARD TO
             </span>
             <div className="relative">
               <select
@@ -582,7 +582,7 @@ export const BottomDock: React.FC<BottomDockProps> = ({
                 onChange={(e) => setCardPlayerId(e.target.value)}
                 className="w-full appearance-none bg-[#242424] border border-[#383838] rounded-xl px-3 py-2 text-xs font-normal text-white focus:outline-none focus:border-blue-500 uppercase"
               >
-                <option value="" className="normal-case">Select player...</option>
+                <option value="" className="uppercase">SELECT PLAYER...</option>
                 {cardPlayers.map((p) => (
                   <option key={p.id} value={p.id} className="uppercase">
                     {p.fullName.toUpperCase()}
@@ -603,7 +603,7 @@ export const BottomDock: React.FC<BottomDockProps> = ({
                 type="button"
                 onClick={() => onDeleteEvent(editingEvent.id)}
                 className="p-2.5 rounded-full bg-rose-900/60 hover:bg-rose-800 text-rose-300 transition-colors uppercase font-bold"
-                title="Delete Event"
+                title="DELETE EVENT"
               >
                 <Trash2 size={16} />
               </button>
