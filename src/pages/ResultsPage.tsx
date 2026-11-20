@@ -48,7 +48,7 @@ export const ResultsPage: React.FC<ResultsPageProps> = ({ matchId, onNavigateBac
 
   // Informational line: Title Case
   const seriesNameFormatted = fixture.seriesId.startsWith('po')
-    ? `Playoff ${fixture.seriesId.replace('po', '')}`
+    ? `PLAYOFF ${fixture.seriesId.replace('po', '')}`
     : fixture.seriesId.startsWith('sf')
     ? `Semi-Final ${fixture.seriesId.replace('sf', '')}`
     : 'Finals';
@@ -79,9 +79,9 @@ export const ResultsPage: React.FC<ResultsPageProps> = ({ matchId, onNavigateBac
             >
               <ChevronLeft size={24} />
             </button>
-            {/* Informational line: Bricolage Grotesque, Title Case */}
+            {/* Informational line: GAME and PLAYOFF capital */}
             <span className="text-xs font-bold text-slate-500 tracking-wide font-sans">
-              Game {fixture.gameNumber} · {seriesNameFormatted}
+              GAME {fixture.gameNumber} · {seriesNameFormatted}
             </span>
           </div>
 

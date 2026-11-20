@@ -12,7 +12,7 @@ export const MatchHeader: React.FC<MatchHeaderProps> = ({
   onBackClick,
 }) => {
   const seriesNameFormatted = fixture.seriesId.startsWith('po')
-    ? `Playoff ${fixture.seriesId.replace('po', '')}`
+    ? `PLAYOFF ${fixture.seriesId.replace('po', '')}`
     : fixture.seriesId.startsWith('sf')
     ? `Semi-Final ${fixture.seriesId.replace('sf', '')}`
     : 'Finals';
@@ -28,10 +28,10 @@ export const MatchHeader: React.FC<MatchHeaderProps> = ({
         <ChevronLeft size={24} />
       </button>
 
-      {/* Centered Match ID - informational line: Bricolage Grotesque, Title Case */}
+      {/* Centered Match ID: GAME and PLAYOFF capital */}
       <div className="flex flex-col items-center">
         <span className="font-sans font-bold text-xs tracking-wide text-slate-500">
-          Game {fixture.gameNumber} · {seriesNameFormatted}
+          GAME {fixture.gameNumber} · {seriesNameFormatted}
         </span>
       </div>
 

@@ -41,12 +41,12 @@ export const QuarterScoreboard: React.FC<QuarterScoreboardProps> = ({
             {quarterTitle}
           </h2>
 
-          {/* Submit Pill Button: Light gray when disabled, #BE2041 when active (bold text) */}
+          {/* Submit Pill Button: Light gray when disabled, vibrant blue #007AFF when active (bold text) */}
           {canSubmit ? (
             <button
               type="button"
               onClick={onSubmitClick}
-              className="px-4 py-1.5 bg-[#BE2041] hover:bg-[#a81938] active:scale-95 transition-all text-white rounded-full font-bold text-xs tracking-wider flex items-center gap-1 shadow-md shadow-[#BE2041]/30 uppercase font-sans"
+              className="px-4 py-1.5 bg-[#007AFF] hover:bg-[#0066DD] active:scale-95 transition-all text-white rounded-full font-bold text-xs tracking-wider flex items-center gap-1 shadow-md shadow-blue-500/25 uppercase font-sans"
             >
               <span>SUBMIT</span>
               <Plus size={15} className="stroke-[3]" />

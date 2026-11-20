@@ -90,21 +90,20 @@ export const RecordingPage: React.FC<RecordingPageProps> = ({
     // Disciplinary second-yellow logic
     if (eventData.type === 'card' && eventData.cardType) {
       const resolution = resolveNewCard(events, eventData.playerId, eventData.cardType);
-      const newEv = matchStorage.addEvent({
+      matchStorage.addEvent({
         ...eventData,
         matchId: fixture.id,
         cardType: resolution.cardType,
         isSecondYellowRed: resolution.isSecondYellowRed,
       });
-      setEvents((prev) => [...prev, newEv]);
-      return;
+    } else {
+      matchStorage.addEvent({
+        ...eventData,
+        matchId: fixture.id,
+      });
     }
 
-    const newEv = matchStorage.addEvent({
-      ...eventData,
-      matchId: fixture.id,
-    });
-    setEvents((prev) => [...prev, newEv]);
+    loadData();
   };
 
   // Update Event handler
@@ -118,15 +117,15 @@ export const RecordingPage: React.FC<RecordingPageProps> = ({
     }
 
     matchStorage.updateEvent(updatedEvent);
-    setEvents((prev) => prev.map((e) => (e.id === updatedEvent.id ? updatedEvent : e)));
     setEditingEvent(null);
+    loadData();
   };
 
   // Delete Event handler
   const handleDeleteEvent = (eventId: string) => {
     matchStorage.deleteEvent(eventId);
-    setEvents((prev) => prev.filter((e) => e.id !== eventId));
     setEditingEvent(null);
+    loadData();
   };
 
   // Submit Match Finalization
@@ -195,7 +194,7 @@ export const RecordingPage: React.FC<RecordingPageProps> = ({
             team1={team1}
             team2={team2}
             selectedEventId={editingEvent?.id}
-            onSelectEvent={(ev) => setEditingEvent(ev)}
+            onSelectEvent={(ev) => setEditingEvent((prev) => (prev?.id === ev.id ? null : ev))}
             readOnly={false}
           />
         </div>

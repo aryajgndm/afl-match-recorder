@@ -282,11 +282,11 @@ export const BottomDock: React.FC<BottomDockProps> = ({
 
       {/* Editing Banner */}
       {editingEvent && (
-        <div className="flex items-center justify-between bg-[#BE2041]/15 border border-[#BE2041]/40 rounded-xl px-3 py-1.5 mb-2.5 text-xs text-[#fca5a5] uppercase font-sans">
+        <div className="flex items-center justify-between bg-[#007AFF]/20 border border-[#007AFF]/50 rounded-xl px-3 py-1.5 mb-2.5 text-xs text-blue-200 uppercase font-sans">
           <span>EDITING {editingEvent.type === 'goal' ? 'GOAL' : 'CARD'} ({editingEvent.minute}')</span>
           <button
             onClick={onCancelEdit}
-            className="flex items-center gap-1 text-neutral-400 hover:text-white text-[11px] font-bold uppercase"
+            className="flex items-center gap-1 text-neutral-300 hover:text-white text-[11px] font-bold uppercase"
           >
             <X size={14} />
             <span>CANCEL</span>

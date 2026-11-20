@@ -202,7 +202,7 @@ export function exportMatchScoresheetPdf(
   doc.text('GOALS & ASSISTS', margin, 20);
   setRegular(9);
   doc.text(
-    `${team1?.name} vs ${team2?.name}  •  ${fixture.date}  •  Game ${fixture.gameNumber}`,
+    `${team1?.name} vs ${team2?.name}  •  ${fixture.date}  •  GAME ${fixture.gameNumber}`,
     margin,
     26
   );

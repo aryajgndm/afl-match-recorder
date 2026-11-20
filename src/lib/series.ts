@@ -9,7 +9,7 @@ export function calculateSeriesProgress(fixtures: Fixture[]): {
     po1: {
       id: 'po1',
       phase: 'playoffs',
-      name: 'Playoff 1',
+      name: 'PLAYOFF 1',
       team1Id: 'panthers',
       team2Id: 'bulls',
       bestOf: 5,
@@ -22,7 +22,7 @@ export function calculateSeriesProgress(fixtures: Fixture[]): {
     po2: {
       id: 'po2',
       phase: 'playoffs',
-      name: 'Playoff 2',
+      name: 'PLAYOFF 2',
       team1Id: 'grizzlies',
       team2Id: 'stallions',
       bestOf: 5,

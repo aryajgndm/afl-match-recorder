@@ -12,19 +12,19 @@ export const MatchCard: React.FC<MatchCardProps> = ({ fixture, onSelect }) => {
   const team1 = fixture.team1Id ? TEAMS[fixture.team1Id] : null;
   const team2 = fixture.team2Id ? TEAMS[fixture.team2Id] : null;
 
-  // Informational lines in Title Case (not completely uppercase)
+  // Capitalize GAME and PLAYOFF
   const seriesNameFormatted = fixture.seriesId.startsWith('po')
-    ? `Playoff ${fixture.seriesId.replace('po', '')}`
+    ? `PLAYOFF ${fixture.seriesId.replace('po', '')}`
     : fixture.seriesId.startsWith('sf')
     ? `Semi-Final ${fixture.seriesId.replace('sf', '')}`
     : 'Finals';
 
   return (
     <div className="w-full bg-[#242424] border border-[#333333] rounded-3xl p-5 shadow-xl transition-all hover:border-[#444444]">
-      {/* Top row: Match Identification and Date (Informational line: Bricolage Grotesque, Title Case) */}
+      {/* Top row: Match Identification and Date (GAME and PLAYOFF capital) */}
       <div className="flex items-center justify-between text-xs text-neutral-400 mb-4 tracking-wide font-sans font-bold">
         <span>
-          Game {fixture.gameNumber} · {seriesNameFormatted}
+          GAME {fixture.gameNumber} · {seriesNameFormatted}
         </span>
         <span className="text-neutral-400 font-medium">{fixture.date}</span>
       </div>

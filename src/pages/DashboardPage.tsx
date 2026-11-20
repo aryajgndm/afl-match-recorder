@@ -170,7 +170,7 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({
                 statusText = `${winnerName} win series ${Math.max(s.team1Wins, s.team2Wins)}–${Math.min(s.team1Wins, s.team2Wins)} · Clinched`;
                 statusBadgeClass = 'text-emerald-400 bg-emerald-950/60 border-emerald-800/60';
               } else if (!team1 || !team2) {
-                statusText = s.phase === 'semifinals' ? 'Awaiting Playoff Winners' : 'Awaiting Semi-Final Winners';
+                statusText = s.phase === 'semifinals' ? 'Awaiting PLAYOFF Winners' : 'Awaiting Semi-Final Winners';
                 statusBadgeClass = 'text-neutral-500 bg-[#1a1a1a] border-neutral-800';
               } else if (s.team1Wins > s.team2Wins) {
                 statusText = `${team1.name} lead ${s.team1Wins}–${s.team2Wins}`;
@@ -194,7 +194,7 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({
                   {/* Item Top: Series Title & Status Badge */}
                   <div className="flex items-center justify-between mb-2.5">
                     <span className="text-[11px] font-bold text-neutral-400 font-sans uppercase tracking-wider">
-                      {s.name}
+                      {s.name.replace(/playoff/gi, 'PLAYOFF')}
                     </span>
                     <span
                       className={`text-[10px] font-bold px-2 py-0.5 rounded-full border font-sans ${statusBadgeClass}`}

@@ -107,12 +107,27 @@ export class MatchStorage {
     if (!raw) {
       localStorage.setItem(STORAGE_KEY_EVENTS, JSON.stringify(INITIAL_EVENTS));
     }
+
+    // Deduplicate by event id to prevent duplicate entries
+    const seen = new Set<string>();
+    const uniqueEvents: MatchEvent[] = [];
+    for (const ev of allEvents) {
+      if (!seen.has(ev.id)) {
+        seen.add(ev.id);
+        uniqueEvents.push(ev);
+      }
+    }
+
+    if (uniqueEvents.length !== allEvents.length) {
+      localStorage.setItem(STORAGE_KEY_EVENTS, JSON.stringify(uniqueEvents));
+    }
+
     if (matchId) {
-      return allEvents
+      return uniqueEvents
         .filter((e) => e.matchId === matchId)
         .sort((a, b) => a.minute - b.minute);
     }
-    return allEvents;
+    return uniqueEvents;
   }
 
   public addEvent(event: Omit<MatchEvent, 'id' | 'createdAt'>): MatchEvent {

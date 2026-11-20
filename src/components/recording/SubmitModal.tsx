@@ -63,9 +63,9 @@ export const SubmitModal: React.FC<SubmitModalProps> = ({
     onSubmit(code);
   };
 
-  // Informational line: Title Case
+  // Capitalize GAME and PLAYOFF
   const seriesNameFormatted = fixture.seriesId.startsWith('po')
-    ? `Playoff ${fixture.seriesId.replace('po', '')}`
+    ? `PLAYOFF ${fixture.seriesId.replace('po', '')}`
     : fixture.seriesId.startsWith('sf')
     ? `Semi-Final ${fixture.seriesId.replace('sf', '')}`
     : 'Finals';
@@ -73,9 +73,9 @@ export const SubmitModal: React.FC<SubmitModalProps> = ({
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/75 backdrop-blur-sm animate-fadeIn font-sans">
       <div className="relative w-full max-w-sm bg-white border border-slate-200 rounded-3xl p-6 shadow-2xl flex flex-col items-center text-center">
-        {/* Top Header Line (Informational line: Bricolage Grotesque, Title Case) */}
+        {/* Top Header Line: GAME and PLAYOFF capital */}
         <div className="w-full flex items-center justify-between text-xs font-bold text-slate-500 mb-4 px-1 font-sans">
-          <span>Game {fixture.gameNumber} · {seriesNameFormatted}</span>
+          <span>GAME {fixture.gameNumber} · {seriesNameFormatted}</span>
           <span className="font-medium text-slate-500">{fixture.date}</span>
         </div>
 
@@ -102,14 +102,14 @@ export const SubmitModal: React.FC<SubmitModalProps> = ({
             ))}
           </div>
 
-          {/* Action Buttons: Submit (Green) & Cancel (Red) */}
+          {/* Action Buttons: Submit (Blue) & Cancel */}
           <div className="flex items-center justify-center gap-3 w-full">
             <button
               type="submit"
               disabled={digits.join('').length !== 6}
               className={`flex-1 py-3 rounded-full font-bold text-xs tracking-wider flex items-center justify-center gap-1.5 transition-all shadow-md uppercase ${
                 digits.join('').length === 6
-                  ? 'bg-emerald-600 hover:bg-emerald-500 text-white shadow-emerald-600/30 active:scale-95'
+                  ? 'bg-[#007AFF] hover:bg-[#0066DD] text-white shadow-blue-500/25 active:scale-95'
                   : 'bg-slate-200 text-slate-400 cursor-not-allowed'
               }`}
             >

@@ -75,7 +75,7 @@ export const PasscodeModal: React.FC<PasscodeModalProps> = ({
   };
 
   const seriesNameFormatted = fixture.seriesId.startsWith('po')
-    ? `Playoff ${fixture.seriesId.replace('po', '')}`
+    ? `PLAYOFF ${fixture.seriesId.replace('po', '')}`
     : fixture.seriesId.startsWith('sf')
     ? `Semi-Final ${fixture.seriesId.replace('sf', '')}`
     : 'Finals';
@@ -91,9 +91,9 @@ export const PasscodeModal: React.FC<PasscodeModalProps> = ({
           <X size={20} />
         </button>
 
-        {/* Header Title (Informational line: Bricolage Grotesque, Title Case) */}
+        {/* Header Title: GAME and PLAYOFF capital */}
         <p className="font-sans font-bold text-xs tracking-wide text-slate-500 mt-1">
-          {title || `Game ${fixture.gameNumber} · ${seriesNameFormatted}`}
+          {title || `GAME ${fixture.gameNumber} · ${seriesNameFormatted}`}
         </p>
 
         {/* Team logos vs */}
