@@ -174,10 +174,10 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({
                 statusBadgeClass = 'text-neutral-500 bg-[#1a1a1a] border-neutral-800';
               } else if (s.team1Wins > s.team2Wins) {
                 statusText = `${team1.name} lead ${s.team1Wins}–${s.team2Wins}`;
-                statusBadgeClass = 'text-[#f87171] bg-[#BE2041]/15 border-[#BE2041]/40';
+                statusBadgeClass = 'text-blue-300 bg-blue-500/15 border-blue-500/40';
               } else if (s.team2Wins > s.team1Wins) {
                 statusText = `${team2.name} lead ${s.team2Wins}–${s.team1Wins}`;
-                statusBadgeClass = 'text-[#f87171] bg-[#BE2041]/15 border-[#BE2041]/40';
+                statusBadgeClass = 'text-blue-300 bg-blue-500/15 border-blue-500/40';
               } else if (s.team1Wins === 0 && s.team2Wins === 0) {
                 statusText = 'Series Tied 0–0';
                 statusBadgeClass = 'text-neutral-400 bg-[#1e1e1e] border-neutral-800';
@@ -231,7 +231,7 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({
                               key={i}
                               className={`w-2 h-2 rounded-full transition-all ${
                                 i < s.team1Wins
-                                  ? 'bg-[#BE2041] ring-2 ring-[#BE2041]/30'
+                                  ? 'bg-[#007AFF] ring-2 ring-[#007AFF]/35 shadow-xs'
                                   : 'bg-neutral-800 border border-neutral-700'
                               }`}
                               title={`Win ${i + 1}: ${i < s.team1Wins ? 'Achieved' : 'Needed'}`}
@@ -270,7 +270,7 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({
                               key={i}
                               className={`w-2 h-2 rounded-full transition-all ${
                                 i < s.team2Wins
-                                  ? 'bg-[#BE2041] ring-2 ring-[#BE2041]/30'
+                                  ? 'bg-[#007AFF] ring-2 ring-[#007AFF]/35 shadow-xs'
                                   : 'bg-neutral-800 border border-neutral-700'
                               }`}
                               title={`Win ${i + 1}: ${i < s.team2Wins ? 'Achieved' : 'Needed'}`}
