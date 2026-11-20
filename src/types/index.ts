@@ -74,6 +74,7 @@ export interface Fixture {
   team2Id: string | null;
   status: MatchStatus;
   isConditional: boolean;
+  isUnopenable?: boolean;
   passcode: string;
   activeSessionId?: string | null;
   lockHeartbeatAt?: string | null;

@@ -75,7 +75,14 @@ export const MatchCard: React.FC<MatchCardProps> = ({ fixture, onSelect }) => {
 
       {/* Bottom Button Action */}
       <div className="mt-5">
-        {fixture.status === 'completed' && (
+        {fixture.status === 'completed' && fixture.isUnopenable && (
+          <div className="w-full py-3.5 bg-[#1c1c1c] border border-[#2d2d2d] text-neutral-400 rounded-full font-bold text-xs tracking-wider flex items-center justify-center gap-2 uppercase font-sans cursor-default select-none shadow-inner">
+            <Check size={16} className="text-neutral-500 stroke-[2.5]" />
+            <span>COMPLETED</span>
+          </div>
+        )}
+
+        {fixture.status === 'completed' && !fixture.isUnopenable && (
           <button
             onClick={() => onSelect(fixture)}
             className="w-full py-3.5 bg-emerald-600 hover:bg-emerald-500 active:scale-[0.98] transition-all text-white rounded-full font-bold text-xs tracking-wider flex items-center justify-center gap-2 shadow-md shadow-emerald-950/40 uppercase font-sans"

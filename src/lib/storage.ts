@@ -4,9 +4,9 @@ import { calculateSeriesProgress } from './series';
 import { calculateMatchScore } from './scoring';
 import { TEAMS } from '../data/teams';
 
-const STORAGE_KEY_FIXTURES = 'afl_fixtures_v1';
-const STORAGE_KEY_EVENTS = 'afl_events_v1';
-const STORAGE_KEY_SESSIONS = 'afl_active_sessions_v1';
+const STORAGE_KEY_FIXTURES = 'afl_fixtures_v2';
+const STORAGE_KEY_EVENTS = 'afl_events_v2';
+const STORAGE_KEY_SESSIONS = 'afl_active_sessions_v2';
 
 const LOCK_EXPIRATION_MS = 3 * 60 * 1000; // 3 minutes without heartbeat expires lock
 

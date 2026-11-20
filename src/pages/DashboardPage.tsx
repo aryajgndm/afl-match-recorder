@@ -39,6 +39,11 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({
   const seriesMap = matchStorage.getSeries();
 
   const handleSelectFixture = (fixture: Fixture) => {
+    // Unopenable historical matches before the use of this site
+    if (fixture.isUnopenable) {
+      return;
+    }
+
     if (fixture.status === 'completed') {
       onNavigateToResults(fixture.id);
       return;
@@ -123,8 +128,8 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({
           <div className="flex items-center justify-between pb-3 border-b border-[#333333] mb-3.5">
             <div className="flex items-center gap-2">
               <Trophy size={15} className="text-amber-400" />
-              <span className="text-xs font-bold text-white font-sans tracking-wide">
-                Series Standings (Best-of-5)
+              <span className="text-xs font-bold text-white font-sans tracking-wide uppercase">
+                SERIES STANDINGS (BEST-OF-5)
               </span>
             </div>
 
@@ -161,28 +166,28 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({
               const team1 = s.team1Id ? TEAMS[s.team1Id] : null;
               const team2 = s.team2Id ? TEAMS[s.team2Id] : null;
 
-              // Format series status badge
+              // Format series status badge: light blue accent and 3-letter abbreviations
               let statusText = '';
               let statusBadgeClass = 'text-neutral-400 bg-neutral-800/80 border-neutral-700/60';
 
               if (s.isClinched && s.winnerId) {
-                const winnerName = TEAMS[s.winnerId]?.name || 'Winner';
-                statusText = `${winnerName} win series ${Math.max(s.team1Wins, s.team2Wins)}–${Math.min(s.team1Wins, s.team2Wins)} · Clinched`;
+                const winnerShort = TEAMS[s.winnerId]?.shortName || 'WIN';
+                statusText = `${winnerShort} win series ${Math.max(s.team1Wins, s.team2Wins)} – ${Math.min(s.team1Wins, s.team2Wins)} · Clinched`;
                 statusBadgeClass = 'text-emerald-400 bg-emerald-950/60 border-emerald-800/60';
               } else if (!team1 || !team2) {
                 statusText = s.phase === 'semifinals' ? 'Awaiting PLAYOFF Winners' : 'Awaiting Semi-Final Winners';
                 statusBadgeClass = 'text-neutral-500 bg-[#1a1a1a] border-neutral-800';
               } else if (s.team1Wins > s.team2Wins) {
-                statusText = `${team1.name} lead ${s.team1Wins}–${s.team2Wins}`;
-                statusBadgeClass = 'text-blue-300 bg-blue-500/15 border-blue-500/40';
+                statusText = `${team1.shortName} lead ${s.team1Wins} – ${s.team2Wins}`;
+                statusBadgeClass = 'text-sky-300 bg-sky-400/15 border-sky-400/40';
               } else if (s.team2Wins > s.team1Wins) {
-                statusText = `${team2.name} lead ${s.team2Wins}–${s.team1Wins}`;
-                statusBadgeClass = 'text-blue-300 bg-blue-500/15 border-blue-500/40';
+                statusText = `${team2.shortName} lead ${s.team2Wins} – ${s.team1Wins}`;
+                statusBadgeClass = 'text-sky-300 bg-sky-400/15 border-sky-400/40';
               } else if (s.team1Wins === 0 && s.team2Wins === 0) {
-                statusText = 'Series Tied 0–0';
+                statusText = 'Series Tied 0 – 0';
                 statusBadgeClass = 'text-neutral-400 bg-[#1e1e1e] border-neutral-800';
               } else {
-                statusText = `Series Tied ${s.team1Wins}–${s.team2Wins}`;
+                statusText = `Series Tied ${s.team1Wins} – ${s.team2Wins}`;
                 statusBadgeClass = 'text-neutral-300 bg-[#282828] border-neutral-700';
               }
 
@@ -224,14 +229,14 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({
                         <span className="font-display font-extrabold text-xs text-white uppercase truncate">
                           {team1 ? team1.name : (s.id === 'sf1' ? 'FALCONS' : s.id === 'sf2' ? 'RAPTORS' : 'TBD')}
                         </span>
-                        {/* 3 Win Indicator Pips */}
+                        {/* 3 Win Indicator Pips (Light Blue Accent) */}
                         <div className="flex items-center gap-1.5 mt-1">
                           {[0, 1, 2].map((i) => (
                             <span
                               key={i}
                               className={`w-2 h-2 rounded-full transition-all ${
                                 i < s.team1Wins
-                                  ? 'bg-[#007AFF] ring-2 ring-[#007AFF]/35 shadow-xs'
+                                  ? 'bg-[#38BDF8] ring-2 ring-[#38BDF8]/40 shadow-xs shadow-[#38BDF8]/30'
                                   : 'bg-neutral-800 border border-neutral-700'
                               }`}
                               title={`Win ${i + 1}: ${i < s.team1Wins ? 'Achieved' : 'Needed'}`}
@@ -263,14 +268,14 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({
                         <span className="font-display font-extrabold text-xs text-white uppercase truncate">
                           {team2 ? team2.name : (s.id === 'sf1' ? 'WINNER PO1' : s.id === 'sf2' ? 'WINNER PO2' : 'TBD')}
                         </span>
-                        {/* 3 Win Indicator Pips */}
+                        {/* 3 Win Indicator Pips (Light Blue Accent) */}
                         <div className="flex items-center gap-1.5 mt-1 justify-end">
                           {[0, 1, 2].map((i) => (
                             <span
                               key={i}
                               className={`w-2 h-2 rounded-full transition-all ${
                                 i < s.team2Wins
-                                  ? 'bg-[#007AFF] ring-2 ring-[#007AFF]/35 shadow-xs'
+                                  ? 'bg-[#38BDF8] ring-2 ring-[#38BDF8]/40 shadow-xs shadow-[#38BDF8]/30'
                                   : 'bg-neutral-800 border border-neutral-700'
                               }`}
                               title={`Win ${i + 1}: ${i < s.team2Wins ? 'Achieved' : 'Needed'}`}
