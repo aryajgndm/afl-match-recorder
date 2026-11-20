@@ -203,6 +203,7 @@ export const RecordingPage: React.FC<RecordingPageProps> = ({
 
       {/* Fixed Bottom Input Dock */}
       <BottomDock
+        events={events}
         currentQuarter={currentQuarter}
         onQuarterChange={(q) => {
           setCurrentQuarter(q);

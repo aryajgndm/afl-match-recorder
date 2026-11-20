@@ -58,6 +58,17 @@
     font-family: 'Bricolage Grotesque', system-ui, sans-serif;
   }
 
+  /* High contrast select options in dark mode */
+  select option {
+    background-color: #242424;
+    color: #ffffff;
+  }
+
+  select option:disabled {
+    color: #737373;
+    background-color: #1a1a1a;
+  }
+
   /* All button text must be bold */
   button {
     font-weight: 700;
