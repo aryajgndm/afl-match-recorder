@@ -32,7 +32,7 @@ export const QuarterScoreboard: React.FC<QuarterScoreboardProps> = ({
       {isReadOnly || !onSubmitClick ? (
         <div className="flex items-center justify-center py-1 mb-3.5">
           <h2
-            className="font-sans text-xs font-bold tracking-wider text-white uppercase leading-none"
+            className="font-sans text-lg font-bold tracking-wide text-white uppercase leading-none flex items-center h-[28px]"
             style={{ fontFamily: "'Bricolage Grotesque', system-ui, sans-serif" }}
           >
             {quarterTitle}
@@ -41,7 +41,7 @@ export const QuarterScoreboard: React.FC<QuarterScoreboardProps> = ({
       ) : (
         <div className="flex items-center justify-between px-1 mb-3.5">
           <h2
-            className="font-sans text-xs font-bold tracking-wider text-white uppercase leading-none flex items-center"
+            className="font-sans text-lg font-bold tracking-wide text-white uppercase leading-none flex items-center h-[28px]"
             style={{ fontFamily: "'Bricolage Grotesque', system-ui, sans-serif" }}
           >
             {quarterTitle}

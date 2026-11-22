@@ -210,11 +210,11 @@ export const BottomDock: React.FC<BottomDockProps> = ({
     <div className="w-full bg-[#121212] border-t border-[#262626] rounded-t-3xl p-4 max-w-md mx-auto font-sans font-normal uppercase">
       {/* Top Bar: Quarter Switcher & Mode Icons */}
       <div className="flex items-center justify-between pb-3 border-b border-[#262626] mb-3">
-        {/* Quarter Selector: compact tabs with smooth sliding white pill */}
+        {/* Quarter Selector: wide tabs with smooth sliding white pill */}
         <div className="relative flex items-center bg-[#242424] p-0.5 rounded-full border border-[#333333] select-none">
           {/* Animated sliding indicator pill */}
           <div
-            className="absolute top-0.5 bottom-0.5 left-0.5 w-[38px] h-7 rounded-full bg-white shadow-sm transition-transform duration-300 ease-out pointer-events-none"
+            className="absolute top-0.5 bottom-0.5 left-0.5 w-[52px] h-7 rounded-full bg-white shadow-sm transition-transform duration-300 ease-out pointer-events-none"
             style={{
               transform: `translateX(${Math.max(0, quartersList.indexOf(currentQuarter)) * 100}%)`,
             }}
@@ -228,7 +228,7 @@ export const BottomDock: React.FC<BottomDockProps> = ({
                 key={q}
                 type="button"
                 onClick={() => onQuarterChange(q)}
-                className={`relative z-10 w-[38px] h-7 flex items-center justify-center text-xs font-bold rounded-full transition-colors duration-200 uppercase tracking-wider ${
+                className={`relative z-10 w-[52px] h-7 flex items-center justify-center text-xs font-bold rounded-full transition-colors duration-200 uppercase tracking-wider ${
                   isActive
                     ? 'text-black'
                     : 'text-neutral-400 hover:text-white'

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Fixture, PostseasonPhase, Series } from '../types';
 import { matchStorage } from '../lib/storage';
 import { MatchCard } from '../components/dashboard/MatchCard';
@@ -18,6 +18,22 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({
   const [fixtures, setFixtures] = useState<Fixture[]>([]);
   const [activeTab, setActiveTab] = useState<PostseasonPhase>('playoffs');
   const [standingsView, setStandingsView] = useState<'round' | 'all'>('round');
+  const roundButtonRef = useRef<HTMLButtonElement>(null);
+  const allButtonRef = useRef<HTMLButtonElement>(null);
+  const [standingsIndicator, setStandingsIndicator] = useState<{ left: number; width: number }>({
+    left: 2,
+    width: 60,
+  });
+
+  useEffect(() => {
+    const target = standingsView === 'round' ? roundButtonRef.current : allButtonRef.current;
+    if (target) {
+      setStandingsIndicator({
+        left: target.offsetLeft,
+        width: target.offsetWidth,
+      });
+    }
+  }, [standingsView, activeTab]);
 
   // Passcode modal state
   const [selectedFixture, setSelectedFixture] = useState<Fixture | null>(null);
@@ -137,20 +153,21 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({
             </span>
 
             {/* View Toggle: Round vs All with smooth sliding indicator pill */}
-            <div className="relative flex items-center bg-[#181818] p-0.5 rounded-full border border-[#333333] select-none min-w-[130px]">
+            <div className="relative flex items-center bg-[#181818] p-0.5 rounded-full border border-[#333333] select-none">
               {/* Animated sliding indicator pill */}
               <div
-                className="absolute top-0.5 bottom-0.5 left-0.5 rounded-full bg-[#333333] border border-[#484848] shadow-sm transition-transform duration-300 ease-out pointer-events-none"
+                className="absolute top-0.5 bottom-0.5 rounded-full bg-[#333333] border border-[#484848] shadow-sm transition-all duration-300 ease-out pointer-events-none"
                 style={{
-                  width: 'calc((100% - 4px) / 2)',
-                  transform: `translateX(${standingsView === 'round' ? '0%' : '100%'})`,
+                  left: `${standingsIndicator.left}px`,
+                  width: `${standingsIndicator.width}px`,
                 }}
               />
 
               <button
+                ref={roundButtonRef}
                 type="button"
                 onClick={() => setStandingsView('round')}
-                className={`relative z-10 flex-1 px-2.5 py-0.5 text-center text-[10px] font-bold rounded-full transition-colors duration-200 uppercase ${
+                className={`relative z-10 px-3 py-1 text-center text-[10px] font-bold rounded-full transition-colors duration-200 uppercase whitespace-nowrap ${
                   standingsView === 'round'
                     ? 'text-white'
                     : 'text-neutral-400 hover:text-white'
@@ -159,9 +176,10 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({
                 {activeTab}
               </button>
               <button
+                ref={allButtonRef}
                 type="button"
                 onClick={() => setStandingsView('all')}
-                className={`relative z-10 flex-1 px-2.5 py-0.5 text-center text-[10px] font-bold rounded-full transition-colors duration-200 uppercase ${
+                className={`relative z-10 px-3 py-1 text-center text-[10px] font-bold rounded-full transition-colors duration-200 uppercase whitespace-nowrap ${
                   standingsView === 'all'
                     ? 'text-white'
                     : 'text-neutral-400 hover:text-white'
