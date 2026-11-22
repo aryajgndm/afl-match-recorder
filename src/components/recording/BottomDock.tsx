@@ -207,10 +207,10 @@ export const BottomDock: React.FC<BottomDockProps> = ({
     selectedCardPlayerState?.isDismissed && (!editingEvent || editingEvent.playerId !== cardPlayerId);
 
   return (
-    <div className="fixed bottom-0 left-0 right-0 z-40 bg-[#121212] border-t border-[#262626] rounded-t-3xl p-4 max-w-md mx-auto font-sans font-normal uppercase">
+    <div className="w-full bg-[#121212] border-t border-[#262626] rounded-t-3xl p-4 max-w-md mx-auto font-sans font-normal uppercase">
       {/* Top Bar: Quarter Switcher & Mode Icons */}
       <div className="flex items-center justify-between pb-3 border-b border-[#262626] mb-3">
-        {/* Quarter Selector: matches size and shape of Goal/Card selector (w-8 h-8, rounded-full) */}
+        {/* Quarter Selector: wider tabs with slightly larger font */}
         <div className="flex items-center gap-1 bg-[#242424] p-1 rounded-full border border-[#333333]">
           {quartersList.map((q) => {
             const isActive = currentQuarter === q;
@@ -220,7 +220,7 @@ export const BottomDock: React.FC<BottomDockProps> = ({
                 key={q}
                 type="button"
                 onClick={() => onQuarterChange(q)}
-                className={`w-8 h-8 flex items-center justify-center text-xs font-bold rounded-full transition-all uppercase ${
+                className={`min-w-[46px] px-3.5 h-8 flex items-center justify-center text-sm font-bold rounded-full transition-all uppercase tracking-wider ${
                   isActive
                     ? 'bg-white text-black shadow-sm'
                     : 'text-neutral-400 hover:text-white'

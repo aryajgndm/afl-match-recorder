@@ -189,69 +189,72 @@ export const RecordingPage: React.FC<RecordingPageProps> = ({
   const team2QuarterScore = score.team2QuarterScores[currentQuarter] || 0;
 
   return (
-    <div className="min-h-screen bg-[#121212] text-white flex flex-col justify-between pb-64">
-      {/* Top Header */}
-      <MatchHeader
-        fixture={fixture}
-        onBackClick={onNavigateBack}
-      />
-
-      {/* Main Recording Workspace */}
-      <main className="flex-1 w-full max-w-md mx-auto px-4">
-        {/* Extra time banner if two goal lead achieved */}
-        {isExtraTimeActive && etLead.clinched && (
-          <div className="bg-amber-950/60 border border-amber-600/50 rounded-2xl p-2.5 mb-2 text-center text-xs font-bold text-amber-200 font-sans">
-            ★ Two-goal extra time lead reached! Match is ready for final submission.
-          </div>
-        )}
-
-        {/* Total Match Scoreboard centered directly on top of quarter title */}
-        <TotalScoreboard team1={team1} team2={team2} score={score} />
-
-        {/* Quarter indicator, Quarter Scoreboard bar, and Submit button */}
-        <QuarterScoreboard
-          quarter={currentQuarter}
-          team1={team1}
-          team2={team2}
-          team1QuarterScore={team1QuarterScore}
-          team2QuarterScore={team2QuarterScore}
-          canSubmit={canSubmit}
-          onSubmitClick={() => {
-            setSubmitError(null);
-            setIsSubmitModalOpen(true);
-          }}
+    <div className="h-screen bg-[#121212] text-white flex flex-col justify-between overflow-hidden">
+      {/* Top Header & Scoreboards - Fixed at top */}
+      <header className="flex-shrink-0 w-full z-10 bg-[#121212]">
+        <MatchHeader
+          fixture={fixture}
+          onBackClick={onNavigateBack}
         />
 
-        {/* Events Timeline with zebra striping */}
-        <div className="mt-2">
-          <EventTimeline
-            events={quarterEvents}
+        <div className="w-full max-w-md mx-auto px-4 pt-1">
+          {/* Extra time banner if two goal lead achieved */}
+          {isExtraTimeActive && etLead.clinched && (
+            <div className="bg-amber-950/60 border border-amber-600/50 rounded-2xl p-2.5 mb-2 text-center text-xs font-bold text-amber-200 font-sans">
+              ★ Two-goal extra time lead reached! Match is ready for final submission.
+            </div>
+          )}
+
+          {/* Total Match Scoreboard centered directly on top of quarter title */}
+          <TotalScoreboard team1={team1} team2={team2} score={score} />
+
+          {/* Quarter indicator, Quarter Scoreboard bar, and Submit button */}
+          <QuarterScoreboard
+            quarter={currentQuarter}
             team1={team1}
             team2={team2}
-            selectedEventId={editingEvent?.id}
-            onSelectEvent={(ev) => setEditingEvent((prev) => (prev?.id === ev.id ? null : ev))}
-            readOnly={false}
+            team1QuarterScore={team1QuarterScore}
+            team2QuarterScore={team2QuarterScore}
+            canSubmit={canSubmit}
+            onSubmitClick={() => {
+              setSubmitError(null);
+              setIsSubmitModalOpen(true);
+            }}
           />
         </div>
+      </header>
+
+      {/* Main Recording Workspace: Scoresheet Section Independently Scrollable */}
+      <main className="flex-1 min-h-0 w-full max-w-md mx-auto px-4 overflow-y-auto py-2">
+        <EventTimeline
+          events={quarterEvents}
+          team1={team1}
+          team2={team2}
+          selectedEventId={editingEvent?.id}
+          onSelectEvent={(ev) => setEditingEvent((prev) => (prev?.id === ev.id ? null : ev))}
+          readOnly={false}
+        />
       </main>
 
-      {/* Fixed Bottom Input Dock */}
-      <BottomDock
-        events={events}
-        currentQuarter={currentQuarter}
-        onQuarterChange={(q) => {
-          setCurrentQuarter(q);
-          setEditingEvent(null);
-        }}
-        team1={team1}
-        team2={team2}
-        isExtraTimeActive={isExtraTimeActive}
-        onAddEvent={handleAddEvent}
-        onUpdateEvent={handleUpdateEvent}
-        onDeleteEvent={handleDeleteEvent}
-        editingEvent={editingEvent}
-        onCancelEdit={() => setEditingEvent(null)}
-      />
+      {/* Pinned Bottom Input Dock */}
+      <footer className="flex-shrink-0 w-full bg-[#121212] z-40">
+        <BottomDock
+          events={events}
+          currentQuarter={currentQuarter}
+          onQuarterChange={(q) => {
+            setCurrentQuarter(q);
+            setEditingEvent(null);
+          }}
+          team1={team1}
+          team2={team2}
+          isExtraTimeActive={isExtraTimeActive}
+          onAddEvent={handleAddEvent}
+          onUpdateEvent={handleUpdateEvent}
+          onDeleteEvent={handleDeleteEvent}
+          editingEvent={editingEvent}
+          onCancelEdit={() => setEditingEvent(null)}
+        />
+      </footer>
 
       {/* Match Submission Confirmation Modal */}
       <SubmitModal
