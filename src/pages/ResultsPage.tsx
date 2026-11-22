@@ -7,7 +7,7 @@ import { QuarterScoreboard } from '../components/recording/QuarterScoreboard';
 import { EventTimeline } from '../components/recording/EventTimeline';
 import { exportMatchScoresheetPdf } from '../lib/pdfExport';
 import { PasscodeModal } from '../components/common/PasscodeModal';
-import { ChevronLeft, FileDown } from 'lucide-react';
+import { ChevronLeft, FileDown, Loader2 } from 'lucide-react';
 
 interface ResultsPageProps {
   matchId: string;
@@ -22,6 +22,7 @@ export const ResultsPage: React.FC<ResultsPageProps> = ({ matchId, onNavigateBac
     return sessionStorage.getItem(`afl_unlocked_${matchId}`) === 'true';
   });
   const [passcodeError, setPasscodeError] = useState<string | null>(null);
+  const [isExporting, setIsExporting] = useState<boolean>(false);
 
   useEffect(() => {
     const f = matchStorage.getFixtureById(matchId);
@@ -95,8 +96,32 @@ export const ResultsPage: React.FC<ResultsPageProps> = ({ matchId, onNavigateBac
     quartersList.push('et');
   }
 
-  const handleExportPdf = () => {
-    exportMatchScoresheetPdf(fixture, events, team1, team2);
+  const handleExportPdf = async () => {
+    if (!fixture || isExporting) return;
+    setIsExporting(true);
+    try {
+      // 1. Attempt server-side PDF generation endpoint
+      const res = await fetch(`/api/results/${fixture.id}/pdf`);
+      if (res.ok) {
+        const blob = await res.blob();
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `AFL_Scoresheet_${fixture.id}.pdf`;
+        document.body.appendChild(a);
+        a.click();
+        a.remove();
+        window.URL.revokeObjectURL(url);
+        return;
+      }
+      throw new Error(`Server returned ${res.status}`);
+    } catch (err) {
+      console.warn('Server PDF generation failed or offline, falling back to client-side vector generator:', err);
+      // 2. Seamless client-side vector PDF generation fallback
+      exportMatchScoresheetPdf(fixture, events, team1, team2);
+    } finally {
+      setIsExporting(false);
+    }
   };
 
   return (
@@ -180,10 +205,11 @@ export const ResultsPage: React.FC<ResultsPageProps> = ({ matchId, onNavigateBac
           {/* Export PDF Button */}
           <button
             onClick={handleExportPdf}
-            className="px-4 py-2 bg-emerald-600 hover:bg-emerald-500 active:scale-95 transition-all text-white rounded-full font-bold text-xs tracking-wider flex items-center gap-2 uppercase whitespace-nowrap font-sans"
+            disabled={isExporting}
+            className="px-4 py-2 bg-emerald-600 hover:bg-emerald-500 active:scale-95 transition-all text-white rounded-full font-bold text-xs tracking-wider flex items-center gap-2 uppercase whitespace-nowrap font-sans disabled:opacity-75 disabled:pointer-events-none"
           >
-            <FileDown size={16} />
-            <span>EXPORT PDF</span>
+            {isExporting ? <Loader2 size={16} className="animate-spin" /> : <FileDown size={16} />}
+            <span>{isExporting ? 'GENERATING...' : 'EXPORT PDF'}</span>
           </button>
         </div>
       </div>

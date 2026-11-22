@@ -254,11 +254,9 @@
       "phase": "playoffs",
       "team1Id": "panthers",
       "team2Id": "bulls",
-      "status": "in_progress",
+      "status": "available",
       "isConditional": true,
-      "passcode": "123456",
-      "activeSessionId": "sess_rd94c49n4_1795318619187",
-      "lockHeartbeatAt": "2026-11-22T05:26:39.649Z"
+      "passcode": "123456"
     },
     {
       "id": "po2-g5",
@@ -792,5 +790,14 @@
     }
   ],
   "activeSessions": {},
-  "dataTeamAccessLog": []
+  "dataTeamAccessLog": [
+    {
+      "matchId": "po1-g1",
+      "accessedAt": "2026-11-22T06:30:20.089Z",
+      "clientInfo": {
+        "ip": "127.0.0.1",
+        "userAgent": "test-agent"
+      }
+    }
+  ]
 }

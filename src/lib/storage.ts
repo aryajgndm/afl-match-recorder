@@ -4,6 +4,7 @@ import { calculateSeriesProgress } from './series';
 import { calculateMatchScore } from './scoring';
 import { TEAMS } from '../data/teams';
 import { api } from './api';
+import { supabaseStorage } from './supabaseStorage';
 
 const STORAGE_KEY_FIXTURES = 'afl_fixtures_v2';
 const STORAGE_KEY_EVENTS = 'afl_events_v2';
@@ -61,6 +62,43 @@ export class MatchStorage {
 
   // --- Backend Sync ---
   public async syncWithBackend(): Promise<void> {
+    // 1. Supabase Cloud Sync & Realtime Subscription
+    if (supabaseStorage.isConfigured()) {
+      try {
+        const fixtures = await supabaseStorage.fetchFixtures();
+        if (fixtures && fixtures.length > 0) {
+          localStorage.setItem(STORAGE_KEY_FIXTURES, JSON.stringify(fixtures));
+          this.backendAvailable = true;
+        }
+        const events = await supabaseStorage.fetchEvents();
+        if (events) {
+          localStorage.setItem(STORAGE_KEY_EVENTS, JSON.stringify(events));
+        }
+        this.broadcast();
+
+        supabaseStorage.subscribeRealtime(
+          async () => {
+            const updated = await supabaseStorage.fetchFixtures();
+            if (updated) {
+              localStorage.setItem(STORAGE_KEY_FIXTURES, JSON.stringify(updated));
+              this.broadcast();
+            }
+          },
+          async () => {
+            const updated = await supabaseStorage.fetchEvents();
+            if (updated) {
+              localStorage.setItem(STORAGE_KEY_EVENTS, JSON.stringify(updated));
+              this.broadcast();
+            }
+          }
+        );
+        return;
+      } catch (err) {
+        console.warn('Supabase sync error, falling back to local backend:', err);
+      }
+    }
+
+    // 2. Local Node Backend Sync
     try {
       const data = await api.getFixtures();
       if (data && data.fixtures) {
@@ -166,11 +204,17 @@ export class MatchStorage {
     localStorage.setItem(STORAGE_KEY_EVENTS, JSON.stringify(allEvents));
     this.broadcast();
 
-    // Sync to backend
+    // Sync to backend / Supabase
     const sessionId = this.getOrCreateClientSessionId();
-    api.addEvent(event.matchId, newEvent, sessionId).catch((err) => {
-      console.warn('Backend event add error:', err);
-    });
+    if (supabaseStorage.isConfigured()) {
+      supabaseStorage.addEvent(event.matchId, newEvent, sessionId).catch((err) => {
+        console.warn('Supabase event add error:', err);
+      });
+    } else {
+      api.addEvent(event.matchId, newEvent, sessionId).catch((err) => {
+        console.warn('Backend event add error:', err);
+      });
+    }
 
     return newEvent;
   }
@@ -200,9 +244,15 @@ export class MatchStorage {
 
     if (event) {
       const sessionId = this.getOrCreateClientSessionId();
-      api.deleteEvent(event.matchId, eventId, sessionId).catch((err) => {
-        console.warn('Backend event delete error:', err);
-      });
+      if (supabaseStorage.isConfigured()) {
+        supabaseStorage.deleteEvent(event.matchId, eventId, sessionId).catch((err) => {
+          console.warn('Supabase event delete error:', err);
+        });
+      } else {
+        api.deleteEvent(event.matchId, eventId, sessionId).catch((err) => {
+          console.warn('Backend event delete error:', err);
+        });
+      }
     }
   }
 
@@ -222,7 +272,28 @@ export class MatchStorage {
       return { success: false, error: 'Incorrect passcode. Try again.' };
     }
 
-    // First try backend to guarantee no other device holds the lock
+    // 1. Try Supabase cloud lock if configured
+    if (supabaseStorage.isConfigured()) {
+      const sbRes = await supabaseStorage.acquireLock(matchId, passcode, sessionId);
+      if (!sbRes.success) {
+        return {
+          success: false,
+          error: sbRes.error || 'This match is currently being recorded on another device.',
+        };
+      }
+      const fixtures = this.getFixtures();
+      const fixture = fixtures.find((f) => f.id === matchId);
+      if (fixture) {
+        fixture.status = 'in_progress';
+        fixture.activeSessionId = sessionId;
+        fixture.lockHeartbeatAt = new Date().toISOString();
+        localStorage.setItem(STORAGE_KEY_FIXTURES, JSON.stringify(fixtures));
+        this.broadcast();
+      }
+      return { success: true };
+    }
+
+    // 2. Node Backend lock attempt
     try {
       const res = await api.acquireLock(matchId, passcode, sessionId);
       if (!res.success) {
@@ -290,7 +361,11 @@ export class MatchStorage {
     if (fixture && fixture.activeSessionId === sessionId) {
       fixture.lockHeartbeatAt = new Date().toISOString();
       localStorage.setItem(STORAGE_KEY_FIXTURES, JSON.stringify(fixtures));
-      api.sendHeartbeat(matchId, sessionId).catch(() => {});
+      if (supabaseStorage.isConfigured()) {
+        supabaseStorage.sendHeartbeat(matchId, sessionId);
+      } else {
+        api.sendHeartbeat(matchId, sessionId).catch(() => {});
+      }
     }
   }
 
@@ -303,7 +378,11 @@ export class MatchStorage {
       fixture.lockHeartbeatAt = null;
       localStorage.setItem(STORAGE_KEY_FIXTURES, JSON.stringify(fixtures));
       this.broadcast();
-      api.releaseLock(matchId, sessionId).catch(() => {});
+      if (supabaseStorage.isConfigured()) {
+        supabaseStorage.releaseLock(matchId, sessionId);
+      } else {
+        api.releaseLock(matchId, sessionId).catch(() => {});
+      }
     }
   }
 
@@ -356,14 +435,22 @@ export class MatchStorage {
     localStorage.setItem(STORAGE_KEY_FIXTURES, JSON.stringify(updatedFixtures));
     this.broadcast();
 
-    // Persist to backend
-    api.submitMatch(matchId, passcode, sessionId).then((res) => {
-      if (res.success && res.seriesMap) {
+    // Persist to Supabase / backend
+    if (supabaseStorage.isConfigured()) {
+      supabaseStorage.submitMatch(matchId, passcode, sessionId, result).then(() => {
         this.syncWithBackend().catch(() => {});
-      }
-    }).catch((err) => {
-      console.warn('Backend submit error:', err);
-    });
+      }).catch((err) => {
+        console.warn('Supabase submit error:', err);
+      });
+    } else {
+      api.submitMatch(matchId, passcode, sessionId).then((res) => {
+        if (res.success && res.seriesMap) {
+          this.syncWithBackend().catch(() => {});
+        }
+      }).catch((err) => {
+        console.warn('Backend submit error:', err);
+      });
+    }
 
     return { success: true };
   }
@@ -380,6 +467,10 @@ export class MatchStorage {
   }> {
     if (!this.validatePasscode(matchId, passcode)) {
       return { success: false, error: 'Incorrect passcode. Try again.' };
+    }
+
+    if (supabaseStorage.isConfigured()) {
+      supabaseStorage.logDataTeamAccess(matchId, passcode).catch(() => {});
     }
 
     try {

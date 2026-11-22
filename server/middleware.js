@@ -1,4 +1,6 @@
 import { db } from './db.js';
+import { generateMatchScoresheetPdfBuffer } from './pdfGenerator.js';
+import { TEAMS_MAP } from './rosters.js';
 
 // Helper to send JSON responses
 function sendJson(res, statusCode, data) {
@@ -107,6 +109,36 @@ export async function handleApiRequest(req, res, next) {
         return sendJson(res, 401, result);
       }
       return sendJson(res, 200, result);
+    }
+
+    // 4.1. Server-side PDF export for match results
+    const pdfMatch = pathname.match(/^\/api\/results\/([^/]+)\/pdf$/);
+    if (pdfMatch && (method === 'GET' || method === 'POST')) {
+      const matchId = pdfMatch[1];
+      const fixture = db.getFixture(matchId);
+      if (!fixture) {
+        return sendJson(res, 404, { success: false, error: 'Match not found.' });
+      }
+
+      const events = db.getEvents(matchId);
+      const team1 = TEAMS_MAP[fixture.team1Id] || null;
+      const team2 = TEAMS_MAP[fixture.team2Id] || null;
+
+      try {
+        const pdfBuffer = generateMatchScoresheetPdfBuffer(fixture, events, team1, team2);
+        res.writeHead(200, {
+          'Content-Type': 'application/pdf',
+          'Content-Disposition': `attachment; filename="AFL_Scoresheet_${matchId}.pdf"`,
+          'Content-Length': pdfBuffer.length,
+          'Access-Control-Allow-Origin': '*',
+          'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
+          'Access-Control-Allow-Headers': 'Content-Type, Authorization, X-Session-Id',
+        });
+        return res.end(pdfBuffer);
+      } catch (err) {
+        console.error('PDF Generation Error:', err);
+        return sendJson(res, 500, { success: false, error: 'Failed to generate PDF scoresheet.' });
+      }
     }
 
     // 5. Match Lock routes
