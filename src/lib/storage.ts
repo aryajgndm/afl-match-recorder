@@ -213,13 +213,37 @@ export class MatchStorage {
     return fixture.passcode.trim() === passcode.trim() || passcode.trim() === '123456';
   }
 
-  public acquireRecordingLock(
+  public async acquireRecordingLock(
     matchId: string,
     passcode: string,
     sessionId: string
-  ): { success: boolean; error?: string } {
+  ): Promise<{ success: boolean; error?: string }> {
     if (!this.validatePasscode(matchId, passcode)) {
       return { success: false, error: 'Incorrect passcode. Try again.' };
+    }
+
+    // First try backend to guarantee no other device holds the lock
+    try {
+      const res = await api.acquireLock(matchId, passcode, sessionId);
+      if (!res.success) {
+        return {
+          success: false,
+          error: res.error || 'This match is currently being recorded on another device.',
+        };
+      }
+      if (res.fixture) {
+        const fixtures = this.getFixtures().map((f) => (f.id === matchId ? res.fixture! : f));
+        localStorage.setItem(STORAGE_KEY_FIXTURES, JSON.stringify(fixtures));
+        this.broadcast();
+        return { success: true };
+      }
+    } catch (err: any) {
+      if (err?.status === 409 || err?.message?.includes('another device')) {
+        return {
+          success: false,
+          error: 'This match is currently being recorded on another device.',
+        };
+      }
     }
 
     const fixtures = this.getFixtures();
@@ -244,7 +268,7 @@ export class MatchStorage {
       if (now - lastHb < LOCK_EXPIRATION_MS) {
         return {
           success: false,
-          error: 'This match is currently being recorded by someone else.',
+          error: 'This match is currently being recorded on another device.',
         };
       }
     }
@@ -256,11 +280,6 @@ export class MatchStorage {
 
     localStorage.setItem(STORAGE_KEY_FIXTURES, JSON.stringify(fixtures));
     this.broadcast();
-
-    // Sync lock to backend
-    api.acquireLock(matchId, passcode, sessionId).catch((err) => {
-      console.warn('Backend lock error:', err);
-    });
 
     return { success: true };
   }

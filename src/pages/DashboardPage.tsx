@@ -31,13 +31,21 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({
 
   useEffect(() => {
     refreshData();
+    matchStorage.syncWithBackend().catch(() => {});
+    const interval = setInterval(() => {
+      matchStorage.syncWithBackend().catch(() => {});
+    }, 3000);
     const unsubscribe = matchStorage.subscribe(() => {
       refreshData();
     });
-    return () => unsubscribe();
+    return () => {
+      clearInterval(interval);
+      unsubscribe();
+    };
   }, []);
 
   const seriesMap = matchStorage.getSeries();
+  const sessionId = matchStorage.getOrCreateClientSessionId();
 
   const handleSelectFixture = (fixture: Fixture) => {
     // Unopenable historical matches before the use of this site
@@ -59,10 +67,14 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({
     }
 
     if (fixture.status === 'available' || fixture.status === 'in_progress') {
-      const sessionId = matchStorage.getOrCreateClientSessionId();
       // If already has active lock by this session, enter directly
       if (fixture.activeSessionId === sessionId) {
         onNavigateToRecording(fixture.id);
+        return;
+      }
+
+      // If active recording lock belongs to another device, prevent opening
+      if (fixture.status === 'in_progress' && fixture.activeSessionId && fixture.activeSessionId !== sessionId) {
         return;
       }
 
@@ -73,7 +85,7 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({
     }
   };
 
-  const handlePasscodeSubmit = (code: string) => {
+  const handlePasscodeSubmit = async (code: string) => {
     if (!selectedFixture) return;
 
     if (passcodeModalMode === 'results' || selectedFixture.status === 'completed') {
@@ -88,8 +100,7 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({
       return;
     }
 
-    const sessionId = matchStorage.getOrCreateClientSessionId();
-    const result = matchStorage.acquireRecordingLock(selectedFixture.id, code, sessionId);
+    const result = await matchStorage.acquireRecordingLock(selectedFixture.id, code, sessionId);
 
     if (result.success) {
       setIsPasscodeModalOpen(false);
@@ -167,7 +178,7 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({
                 statusText = `${winnerShort} win series ${Math.max(s.team1Wins, s.team2Wins)} – ${Math.min(s.team1Wins, s.team2Wins)}`;
                 statusBadgeClass = 'text-white bg-white/10 border border-white/20';
               } else if (!team1 || !team2) {
-                statusText = s.phase === 'semifinals' ? 'Awaiting PLAYOFF Winners' : 'Awaiting Semi-Final Winners';
+                statusText = s.phase === 'semifinals' ? 'Awaiting Playoff Winners' : 'Awaiting Semi-Final Winners';
                 statusBadgeClass = 'text-neutral-500 bg-[#1a1a1a] border border-neutral-800';
               } else if (s.team1Wins > s.team2Wins) {
                 statusText = `${team1.shortName} lead ${s.team1Wins} – ${s.team2Wins}`;
@@ -324,6 +335,7 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({
               key={fixture.id}
               fixture={fixture}
               onSelect={handleSelectFixture}
+              currentSessionId={sessionId}
             />
           ))}
         </div>

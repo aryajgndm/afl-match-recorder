@@ -305,7 +305,7 @@ export class Database {
     ) {
       return {
         success: false,
-        error: 'Match is currently being recorded by another device or session.',
+        error: 'This match is currently being recorded on another device. Simultaneous recording is prevented.',
       };
     }
 
@@ -358,6 +358,10 @@ export class Database {
       return { success: false, error: 'Cannot add events to a completed match.' };
     }
 
+    if (fixture.status === 'in_progress' && fixture.activeSessionId && fixture.activeSessionId !== sessionId) {
+      return { success: false, error: 'Cannot add events: match is locked by another device.' };
+    }
+
     // Deduplicate by ID
     const existingIndex = this.store.events.findIndex((e) => e.id === event.id);
     if (existingIndex >= 0) {
@@ -382,6 +386,10 @@ export class Database {
       return { success: false, error: 'Cannot modify events of a completed match.' };
     }
 
+    if (fixture.status === 'in_progress' && fixture.activeSessionId && fixture.activeSessionId !== sessionId) {
+      return { success: false, error: 'Cannot modify events: match is locked by another device.' };
+    }
+
     const idx = this.store.events.findIndex((e) => e.id === eventId && e.matchId === matchId);
     if (idx === -1) {
       return { success: false, error: 'Event not found.' };
@@ -401,6 +409,10 @@ export class Database {
     if (!fixture) return { success: false, error: 'Match not found.' };
     if (fixture.status === 'completed') {
       return { success: false, error: 'Cannot delete events from a completed match.' };
+    }
+
+    if (fixture.status === 'in_progress' && fixture.activeSessionId && fixture.activeSessionId !== sessionId) {
+      return { success: false, error: 'Cannot delete events: match is locked by another device.' };
     }
 
     const beforeLen = this.store.events.length;

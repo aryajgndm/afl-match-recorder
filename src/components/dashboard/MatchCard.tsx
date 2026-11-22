@@ -6,11 +6,18 @@ import { Check, ArrowRight, Lock, Radio } from 'lucide-react';
 interface MatchCardProps {
   fixture: Fixture;
   onSelect: (fixture: Fixture) => void;
+  currentSessionId?: string;
 }
 
-export const MatchCard: React.FC<MatchCardProps> = ({ fixture, onSelect }) => {
+export const MatchCard: React.FC<MatchCardProps> = ({
+  fixture,
+  onSelect,
+  currentSessionId,
+}) => {
   const team1 = fixture.team1Id ? TEAMS[fixture.team1Id] : null;
   const team2 = fixture.team2Id ? TEAMS[fixture.team2Id] : null;
+
+  const isOwnSession = !!(currentSessionId && fixture.activeSessionId === currentSessionId);
 
   // Capitalize GAME and PLAYOFF
   const seriesNameFormatted = fixture.seriesId.startsWith('po')
@@ -104,13 +111,23 @@ export const MatchCard: React.FC<MatchCardProps> = ({ fixture, onSelect }) => {
         )}
 
         {fixture.status === 'in_progress' && (
-          <button
-            onClick={() => onSelect(fixture)}
-            className="w-full py-3.5 bg-amber-700 hover:bg-amber-600 border border-amber-600/40 active:scale-[0.98] transition-all text-amber-100 rounded-full font-bold text-xs tracking-wider flex items-center justify-center gap-2 uppercase font-sans"
-          >
-            <Radio size={16} />
-            <span>RECORDING UNDERWAY</span>
-          </button>
+          isOwnSession ? (
+            <button
+              onClick={() => onSelect(fixture)}
+              className="w-full py-3.5 bg-blue-700 hover:bg-blue-600 border border-blue-500/40 active:scale-[0.98] transition-all text-white rounded-full font-bold text-xs tracking-wider flex items-center justify-center gap-2 uppercase font-sans"
+            >
+              <Radio size={16} />
+              <span>RESUME RECORDING</span>
+            </button>
+          ) : (
+            <div
+              className="w-full py-3.5 bg-[#181818] border border-amber-900/50 text-amber-400/90 rounded-full font-bold text-xs tracking-wider flex items-center justify-center gap-2 uppercase font-sans cursor-not-allowed select-none"
+              title="This match is currently locked and being recorded on another device"
+            >
+              <Lock size={15} className="text-amber-400/90" />
+              <span>RECORDING IN PROGRESS (LOCKED)</span>
+            </div>
+          )
         )}
 
         {fixture.status === 'locked' && (

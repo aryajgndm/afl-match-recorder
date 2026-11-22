@@ -210,7 +210,7 @@ export const BottomDock: React.FC<BottomDockProps> = ({
     <div className="fixed bottom-0 left-0 right-0 z-40 bg-[#121212] border-t border-[#262626] rounded-t-3xl p-4 max-w-md mx-auto font-sans font-normal uppercase">
       {/* Top Bar: Quarter Switcher & Mode Icons */}
       <div className="flex items-center justify-between pb-3 border-b border-[#262626] mb-3">
-        {/* Quarter Pills (Bold text) */}
+        {/* Quarter Pills (Bold text, White when toggled on) */}
         <div className="flex items-center gap-1.5 bg-[#242424] p-1 rounded-full border border-[#333333]">
           {quartersList.map((q) => {
             const isActive = currentQuarter === q;
@@ -222,7 +222,7 @@ export const BottomDock: React.FC<BottomDockProps> = ({
                 onClick={() => onQuarterChange(q)}
                 className={`px-3.5 py-1 text-xs font-bold tracking-wider rounded-full transition-all uppercase ${
                   isActive
-                    ? 'bg-[#383838] text-white shadow-sm'
+                    ? 'bg-white text-black shadow-sm'
                     : 'text-neutral-400 hover:text-white'
                 }`}
               >
@@ -232,7 +232,7 @@ export const BottomDock: React.FC<BottomDockProps> = ({
           })}
         </div>
 
-        {/* Mode Toggles: Soccer Ball & Cards (Centered card icon in top right corner) */}
+        {/* Mode Toggles: Soccer Ball & Cards (White when toggled on) */}
         <div className="flex items-center gap-1 bg-[#242424] p-1 rounded-full border border-[#333333]">
           {/* Goal Mode: Classical Soccer / Football Ball */}
           <button
@@ -240,7 +240,7 @@ export const BottomDock: React.FC<BottomDockProps> = ({
             onClick={() => setMode('goal')}
             className={`w-8 h-8 flex items-center justify-center rounded-full transition-all ${
               mode === 'goal'
-                ? 'bg-[#383838] text-white shadow-sm'
+                ? 'bg-white text-black shadow-sm'
                 : 'text-neutral-400 hover:text-white'
             }`}
             title="GOAL MODE"
@@ -265,7 +265,7 @@ export const BottomDock: React.FC<BottomDockProps> = ({
             onClick={() => setMode('card')}
             className={`w-8 h-8 flex items-center justify-center rounded-full transition-all ${
               mode === 'card'
-                ? 'bg-[#383838] text-white shadow-sm'
+                ? 'bg-white text-black shadow-sm'
                 : 'text-neutral-400 hover:text-white'
             }`}
             title="CARD MODE"
@@ -412,7 +412,7 @@ export const BottomDock: React.FC<BottomDockProps> = ({
             </div>
           )}
 
-          {/* Row 4: Toggles (Penalty & Own Goal) & Add Goal Button */}
+          {/* Row 4: Toggles (Penalty & Own Goal, White when toggled on) & Add Goal Button (White Button) */}
           <div className="flex items-center justify-between pt-1">
             <div className="flex items-center gap-4">
               {/* Penalty Toggle */}
@@ -432,12 +432,12 @@ export const BottomDock: React.FC<BottomDockProps> = ({
                 />
                 <div
                   className={`w-8 h-4 rounded-full transition-colors relative ${
-                    isPenalty ? 'bg-[#BE2041]' : 'bg-[#383838]'
+                    isPenalty ? 'bg-white' : 'bg-[#383838]'
                   }`}
                 >
                   <div
-                    className={`w-3.5 h-3.5 rounded-full bg-white transition-transform absolute top-[1px] ${
-                      isPenalty ? 'left-4' : 'left-0.5'
+                    className={`w-3.5 h-3.5 rounded-full transition-transform absolute top-[1px] ${
+                      isPenalty ? 'left-4 bg-black' : 'left-0.5 bg-white'
                     }`}
                   />
                 </div>
@@ -464,12 +464,12 @@ export const BottomDock: React.FC<BottomDockProps> = ({
                 />
                 <div
                   className={`w-8 h-4 rounded-full transition-colors relative ${
-                    isOwnGoal ? 'bg-amber-600' : 'bg-[#383838]'
+                    isOwnGoal ? 'bg-white' : 'bg-[#383838]'
                   }`}
                 >
                   <div
-                    className={`w-3.5 h-3.5 rounded-full bg-white transition-transform absolute top-[1px] ${
-                      isOwnGoal ? 'left-4' : 'left-0.5'
+                    className={`w-3.5 h-3.5 rounded-full transition-transform absolute top-[1px] ${
+                      isOwnGoal ? 'left-4 bg-black' : 'left-0.5 bg-white'
                     }`}
                   />
                 </div>
@@ -479,7 +479,7 @@ export const BottomDock: React.FC<BottomDockProps> = ({
               </label>
             </div>
 
-            {/* Action Buttons: Bold text on button */}
+            {/* Action Buttons: Add Goal (White Button) */}
             <div className="flex items-center gap-2">
               {editingEvent && (
                 <button
@@ -497,8 +497,8 @@ export const BottomDock: React.FC<BottomDockProps> = ({
                 disabled={!scorerId}
                 className={`px-5 py-2.5 rounded-full font-bold text-xs tracking-wider uppercase transition-all active:scale-95 ${
                   scorerId
-                    ? 'bg-[#333333] hover:bg-[#3f3f3f] text-white border border-[#4a4a4a]'
-                    : 'bg-[#1e1e1e] text-neutral-600 border border-[#2a2a2a] cursor-not-allowed'
+                    ? 'bg-white hover:bg-neutral-200 text-black shadow-sm'
+                    : 'bg-[#242424] text-neutral-500 border border-[#383838] cursor-not-allowed'
                 }`}
               >
                 {editingEvent ? 'SAVE CHANGES' : '+ ADD GOAL'}
@@ -723,8 +723,8 @@ export const BottomDock: React.FC<BottomDockProps> = ({
               disabled={!cardPlayerId || isSelectedPlayerDismissed}
               className={`px-5 py-2.5 rounded-full font-bold text-xs tracking-wider uppercase transition-all active:scale-95 ${
                 cardPlayerId && !isSelectedPlayerDismissed
-                  ? 'bg-[#333333] hover:bg-[#3f3f3f] text-white border border-[#4a4a4a]'
-                  : 'bg-[#1e1e1e] text-neutral-600 border border-[#2a2a2a] cursor-not-allowed'
+                  ? 'bg-white hover:bg-neutral-200 text-black shadow-sm'
+                  : 'bg-[#242424] text-neutral-500 border border-[#383838] cursor-not-allowed'
               }`}
             >
               {editingEvent ? 'SAVE CHANGES' : '+ RECORD CARD'}

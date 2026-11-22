@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import { Fixture, MatchEvent, Quarter, Team } from '../types';
 import { matchStorage } from '../lib/storage';
+import { api } from '../lib/api';
 import { calculateMatchScore, checkExtraTimeTwoGoalLead } from '../lib/scoring';
 import { resolveNewCard } from '../lib/disciplinary';
 import { TEAMS } from '../data/teams';
@@ -10,6 +11,7 @@ import { QuarterScoreboard } from '../components/recording/QuarterScoreboard';
 import { EventTimeline } from '../components/recording/EventTimeline';
 import { BottomDock } from '../components/recording/BottomDock';
 import { SubmitModal } from '../components/recording/SubmitModal';
+import { Lock } from 'lucide-react';
 
 interface RecordingPageProps {
   matchId: string;
@@ -49,13 +51,17 @@ export const RecordingPage: React.FC<RecordingPageProps> = ({
     return () => unsub();
   }, [matchId]);
 
-  // Lock heartbeat: ping every 30 seconds
+  // Periodic sync and lock heartbeat: ping every 15 seconds
   useEffect(() => {
     if (!fixture || fixture.status !== 'in_progress') return;
 
-    const interval = setInterval(() => {
+    const interval = setInterval(async () => {
       matchStorage.sendHeartbeat(matchId, sessionId);
-    }, 30 * 1000);
+      const ok = await api.sendHeartbeat(matchId, sessionId);
+      if (!ok) {
+        await matchStorage.syncWithBackend();
+      }
+    }, 15 * 1000);
 
     return () => clearInterval(interval);
   }, [matchId, sessionId, fixture?.status]);
@@ -144,6 +150,35 @@ export const RecordingPage: React.FC<RecordingPageProps> = ({
     return (
       <div className="min-h-screen bg-[#121212] flex items-center justify-center text-neutral-400 font-sans font-medium text-xs">
         Loading match details...
+      </div>
+    );
+  }
+
+  // Prevent any second device from opening the match while it's being recorded
+  const isLockedByOtherDevice =
+    (fixture.status === 'in_progress' &&
+      Boolean(fixture.activeSessionId) &&
+      fixture.activeSessionId !== sessionId) ||
+    (fixture.status === 'available' && fixture.activeSessionId !== sessionId);
+
+  if (isLockedByOtherDevice) {
+    return (
+      <div className="min-h-screen bg-[#121212] text-white flex flex-col items-center justify-center p-6 text-center font-sans">
+        <div className="w-16 h-16 rounded-full bg-amber-500/10 border border-amber-500/30 flex items-center justify-center mb-4 text-amber-400">
+          <Lock size={32} />
+        </div>
+        <h1 className="font-display font-extrabold text-lg text-white mb-2 uppercase tracking-wide">
+          MATCH CURRENTLY RECORDING
+        </h1>
+        <p className="text-xs text-neutral-400 max-w-xs mb-6 font-sans">
+          This match is actively being recorded on another device. Simultaneous recording from multiple devices is prevented.
+        </p>
+        <button
+          onClick={onNavigateBack}
+          className="px-6 py-2.5 bg-[#242424] hover:bg-[#2e2e2e] border border-[#383838] text-white rounded-full text-xs font-bold uppercase tracking-wider transition-colors font-sans"
+        >
+          RETURN TO DASHBOARD
+        </button>
       </div>
     );
   }
