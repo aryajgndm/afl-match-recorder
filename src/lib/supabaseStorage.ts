@@ -35,6 +35,7 @@ export interface DbEventRow {
 }
 
 function mapDbFixtureToFixture(row: DbFixtureRow): Fixture {
+  const isHistoricalPlayoff = ['po1-g1', 'po1-g2', 'po1-g3', 'po2-g1', 'po2-g2', 'po2-g3'].includes(row.id);
   return {
     id: row.id,
     seriesId: row.series_id as SeriesId,
@@ -45,6 +46,7 @@ function mapDbFixtureToFixture(row: DbFixtureRow): Fixture {
     team2Id: row.team2_id,
     status: row.status as any,
     isConditional: row.is_conditional,
+    isUnopenable: isHistoricalPlayoff,
     passcode: '1111', // Fixed league default passcode
     activeSessionId: row.active_session_id,
     lockHeartbeatAt: row.lock_heartbeat_at,
@@ -89,7 +91,14 @@ export const supabaseStorage = {
         return null;
       }
 
-      return (data as DbFixtureRow[]).map(mapDbFixtureToFixture);
+      return (data as DbFixtureRow[])
+        .map(mapDbFixtureToFixture)
+        .sort((a, b) => {
+          const timeA = Date.parse(a.date) || 0;
+          const timeB = Date.parse(b.date) || 0;
+          if (timeA !== timeB) return timeA - timeB;
+          return a.gameNumber - b.gameNumber;
+        });
     } catch (err) {
       console.error('Supabase fetchFixtures exception:', err);
       return null;

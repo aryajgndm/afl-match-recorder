@@ -169,7 +169,9 @@ export class MatchStorage {
     // Prune expired locks
     const now = Date.now();
     let changed = false;
+    const historicalPlayoffs = ['po1-g1', 'po1-g2', 'po1-g3', 'po2-g1', 'po2-g2', 'po2-g3'];
     fixtures = fixtures.map((f) => {
+      const isHistorical = historicalPlayoffs.includes(f.id);
       if (f.status === 'in_progress' && f.lockHeartbeatAt) {
         const lastHb = new Date(f.lockHeartbeatAt).getTime();
         if (now - lastHb > LOCK_EXPIRATION_MS) {
@@ -179,17 +181,31 @@ export class MatchStorage {
             status: 'available',
             activeSessionId: null,
             lockHeartbeatAt: null,
+            isUnopenable: isHistorical || f.isUnopenable,
           };
         }
+      }
+      if (isHistorical && !f.isUnopenable) {
+        return {
+          ...f,
+          isUnopenable: true,
+        };
       }
       return f;
     });
 
     const { updatedFixtures } = calculateSeriesProgress(fixtures);
+    const sortedFixtures = updatedFixtures.sort((a, b) => {
+      const timeA = Date.parse(a.date) || 0;
+      const timeB = Date.parse(b.date) || 0;
+      if (timeA !== timeB) return timeA - timeB;
+      return a.gameNumber - b.gameNumber;
+    });
+
     if (changed || !raw) {
-      localStorage.setItem(STORAGE_KEY_FIXTURES, JSON.stringify(updatedFixtures));
+      localStorage.setItem(STORAGE_KEY_FIXTURES, JSON.stringify(sortedFixtures));
     }
-    return updatedFixtures;
+    return sortedFixtures;
   }
 
   public getSeries(): Record<SeriesId, Series> {

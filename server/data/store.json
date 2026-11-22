@@ -37,7 +37,9 @@
           "winDescription": "Grizzlies win 8–5"
         },
         "completedAt": "2026-11-16T20:00:00Z"
-      }
+      },
+      "activeSessionId": null,
+      "lockHeartbeatAt": null
     },
     {
       "id": "po1-g1",
@@ -76,7 +78,9 @@
           "winDescription": "Panthers win 6–5"
         },
         "completedAt": "2026-11-17T21:30:00Z"
-      }
+      },
+      "activeSessionId": null,
+      "lockHeartbeatAt": null
     },
     {
       "id": "po2-g2",
@@ -115,7 +119,9 @@
           "winDescription": "Grizzlies win 7–5"
         },
         "completedAt": "2026-11-18T20:00:00Z"
-      }
+      },
+      "activeSessionId": null,
+      "lockHeartbeatAt": null
     },
     {
       "id": "po1-g2",
@@ -154,7 +160,9 @@
           "winDescription": "Panthers win 7–4"
         },
         "completedAt": "2026-11-19T21:30:00Z"
-      }
+      },
+      "activeSessionId": null,
+      "lockHeartbeatAt": null
     },
     {
       "id": "po2-g3",
@@ -193,7 +201,9 @@
           "winDescription": "Grizzlies win 6–4"
         },
         "completedAt": "2026-11-20T20:00:00Z"
-      }
+      },
+      "activeSessionId": null,
+      "lockHeartbeatAt": null
     },
     {
       "id": "po1-g3",
@@ -232,7 +242,9 @@
           "winDescription": "Bulls win 5–4"
         },
         "completedAt": "2026-11-21T21:00:00Z"
-      }
+      },
+      "activeSessionId": null,
+      "lockHeartbeatAt": null
     },
     {
       "id": "po2-g4",
@@ -244,7 +256,9 @@
       "team2Id": "stallions",
       "status": "not_required",
       "isConditional": true,
-      "passcode": "123456"
+      "passcode": "123456",
+      "activeSessionId": null,
+      "lockHeartbeatAt": null
     },
     {
       "id": "po1-g4",
@@ -256,7 +270,9 @@
       "team2Id": "bulls",
       "status": "available",
       "isConditional": true,
-      "passcode": "123456"
+      "passcode": "123456",
+      "activeSessionId": null,
+      "lockHeartbeatAt": null
     },
     {
       "id": "po2-g5",
@@ -266,9 +282,11 @@
       "phase": "playoffs",
       "team1Id": "grizzlies",
       "team2Id": "stallions",
-      "status": "locked",
+      "status": "not_required",
       "isConditional": true,
-      "passcode": "123456"
+      "passcode": "123456",
+      "activeSessionId": null,
+      "lockHeartbeatAt": null
     },
     {
       "id": "po1-g5",
@@ -280,7 +298,9 @@
       "team2Id": "bulls",
       "status": "locked",
       "isConditional": true,
-      "passcode": "123456"
+      "passcode": "123456",
+      "activeSessionId": null,
+      "lockHeartbeatAt": null
     },
     {
       "id": "sf1-g1",
@@ -292,7 +312,9 @@
       "team2Id": null,
       "status": "locked",
       "isConditional": false,
-      "passcode": "123456"
+      "passcode": "123456",
+      "activeSessionId": null,
+      "lockHeartbeatAt": null
     },
     {
       "id": "sf2-g1",
@@ -304,7 +326,9 @@
       "team2Id": null,
       "status": "locked",
       "isConditional": false,
-      "passcode": "123456"
+      "passcode": "123456",
+      "activeSessionId": null,
+      "lockHeartbeatAt": null
     },
     {
       "id": "sf1-g2",
@@ -316,7 +340,9 @@
       "team2Id": null,
       "status": "locked",
       "isConditional": false,
-      "passcode": "123456"
+      "passcode": "123456",
+      "activeSessionId": null,
+      "lockHeartbeatAt": null
     },
     {
       "id": "sf2-g2",
@@ -328,7 +354,9 @@
       "team2Id": null,
       "status": "locked",
       "isConditional": false,
-      "passcode": "123456"
+      "passcode": "123456",
+      "activeSessionId": null,
+      "lockHeartbeatAt": null
     },
     {
       "id": "sf1-g3",
@@ -340,7 +368,9 @@
       "team2Id": null,
       "status": "locked",
       "isConditional": false,
-      "passcode": "123456"
+      "passcode": "123456",
+      "activeSessionId": null,
+      "lockHeartbeatAt": null
     },
     {
       "id": "sf2-g3",
@@ -352,7 +382,9 @@
       "team2Id": null,
       "status": "locked",
       "isConditional": false,
-      "passcode": "123456"
+      "passcode": "123456",
+      "activeSessionId": null,
+      "lockHeartbeatAt": null
     },
     {
       "id": "sf1-g4",
@@ -364,7 +396,9 @@
       "team2Id": null,
       "status": "locked",
       "isConditional": true,
-      "passcode": "123456"
+      "passcode": "123456",
+      "activeSessionId": null,
+      "lockHeartbeatAt": null
     },
     {
       "id": "sf2-g4",
@@ -376,7 +410,9 @@
       "team2Id": null,
       "status": "locked",
       "isConditional": true,
-      "passcode": "123456"
+      "passcode": "123456",
+      "activeSessionId": null,
+      "lockHeartbeatAt": null
     },
     {
       "id": "sf1-g5",
@@ -388,7 +424,9 @@
       "team2Id": null,
       "status": "locked",
       "isConditional": true,
-      "passcode": "123456"
+      "passcode": "123456",
+      "activeSessionId": null,
+      "lockHeartbeatAt": null
     },
     {
       "id": "sf2-g5",
@@ -400,7 +438,9 @@
       "team2Id": null,
       "status": "locked",
       "isConditional": true,
-      "passcode": "123456"
+      "passcode": "123456",
+      "activeSessionId": null,
+      "lockHeartbeatAt": null
     },
     {
       "id": "fin-g1",
@@ -412,7 +452,9 @@
       "team2Id": null,
       "status": "locked",
       "isConditional": false,
-      "passcode": "123456"
+      "passcode": "123456",
+      "activeSessionId": null,
+      "lockHeartbeatAt": null
     },
     {
       "id": "fin-g2",
@@ -424,7 +466,9 @@
       "team2Id": null,
       "status": "locked",
       "isConditional": false,
-      "passcode": "123456"
+      "passcode": "123456",
+      "activeSessionId": null,
+      "lockHeartbeatAt": null
     },
     {
       "id": "fin-g3",
@@ -436,7 +480,9 @@
       "team2Id": null,
       "status": "locked",
       "isConditional": false,
-      "passcode": "123456"
+      "passcode": "123456",
+      "activeSessionId": null,
+      "lockHeartbeatAt": null
     },
     {
       "id": "fin-g4",
@@ -448,7 +494,9 @@
       "team2Id": null,
       "status": "locked",
       "isConditional": true,
-      "passcode": "123456"
+      "passcode": "123456",
+      "activeSessionId": null,
+      "lockHeartbeatAt": null
     },
     {
       "id": "fin-g5",
@@ -460,344 +508,12 @@
       "team2Id": null,
       "status": "locked",
       "isConditional": true,
-      "passcode": "123456"
+      "passcode": "123456",
+      "activeSessionId": null,
+      "lockHeartbeatAt": null
     }
   ],
-  "events": [
-    {
-      "id": "po1-g1-ev1",
-      "matchId": "po1-g1",
-      "quarter": "q1",
-      "minute": 3,
-      "type": "goal",
-      "goalType": "regular",
-      "teamId": "panthers",
-      "playerId": "pan-13",
-      "assisterId": "pan-10",
-      "createdAt": "2026-11-17T20:05:00Z"
-    },
-    {
-      "id": "po1-g1-ev2",
-      "matchId": "po1-g1",
-      "quarter": "q1",
-      "minute": 6,
-      "type": "goal",
-      "goalType": "regular",
-      "teamId": "bulls",
-      "playerId": "bul-11",
-      "assisterId": "bul-10",
-      "createdAt": "2026-11-17T20:10:00Z"
-    },
-    {
-      "id": "po1-g1-ev3",
-      "matchId": "po1-g1",
-      "quarter": "q1",
-      "minute": 10,
-      "type": "goal",
-      "goalType": "regular",
-      "teamId": "panthers",
-      "playerId": "pan-11",
-      "assisterId": "pan-10",
-      "createdAt": "2026-11-17T20:15:00Z"
-    },
-    {
-      "id": "po1-g1-ev4",
-      "matchId": "po1-g1",
-      "quarter": "q2",
-      "minute": 4,
-      "type": "goal",
-      "goalType": "regular",
-      "teamId": "bulls",
-      "playerId": "bul-12",
-      "createdAt": "2026-11-17T20:25:00Z"
-    },
-    {
-      "id": "po1-g1-ev5",
-      "matchId": "po1-g1",
-      "quarter": "q2",
-      "minute": 7,
-      "type": "goal",
-      "goalType": "penalty",
-      "teamId": "bulls",
-      "playerId": "bul-13",
-      "createdAt": "2026-11-17T20:30:00Z"
-    },
-    {
-      "id": "po1-g1-ev6",
-      "matchId": "po1-g1",
-      "quarter": "q2",
-      "minute": 9,
-      "type": "goal",
-      "goalType": "regular",
-      "teamId": "panthers",
-      "playerId": "pan-9",
-      "assisterId": "pan-11",
-      "createdAt": "2026-11-17T20:34:00Z"
-    },
-    {
-      "id": "po1-g1-ev7",
-      "matchId": "po1-g1",
-      "quarter": "q2",
-      "minute": 11,
-      "type": "card",
-      "cardType": "yellow",
-      "teamId": "bulls",
-      "playerId": "bul-7",
-      "createdAt": "2026-11-17T20:37:00Z"
-    },
-    {
-      "id": "po1-g1-ev8",
-      "matchId": "po1-g1",
-      "quarter": "q3",
-      "minute": 5,
-      "type": "goal",
-      "goalType": "regular",
-      "teamId": "panthers",
-      "playerId": "pan-12",
-      "assisterId": "pan-9",
-      "createdAt": "2026-11-17T20:45:00Z"
-    },
-    {
-      "id": "po1-g1-ev9",
-      "matchId": "po1-g1",
-      "quarter": "q3",
-      "minute": 8,
-      "type": "goal",
-      "goalType": "regular",
-      "teamId": "bulls",
-      "playerId": "bul-6",
-      "createdAt": "2026-11-17T20:50:00Z"
-    },
-    {
-      "id": "po1-g1-ev10",
-      "matchId": "po1-g1",
-      "quarter": "q4",
-      "minute": 3,
-      "type": "goal",
-      "goalType": "regular",
-      "teamId": "panthers",
-      "playerId": "pan-13",
-      "createdAt": "2026-11-17T21:05:00Z"
-    },
-    {
-      "id": "po1-g1-ev11",
-      "matchId": "po1-g1",
-      "quarter": "q4",
-      "minute": 7,
-      "type": "goal",
-      "goalType": "regular",
-      "teamId": "bulls",
-      "playerId": "bul-2",
-      "createdAt": "2026-11-17T21:12:00Z"
-    },
-    {
-      "id": "po1-g1-ev12",
-      "matchId": "po1-g1",
-      "quarter": "q4",
-      "minute": 11,
-      "type": "goal",
-      "goalType": "regular",
-      "teamId": "panthers",
-      "playerId": "pan-10",
-      "createdAt": "2026-11-17T21:18:00Z"
-    },
-    {
-      "id": "po2-g1-ev1",
-      "matchId": "po2-g1",
-      "quarter": "q1",
-      "minute": 2,
-      "type": "goal",
-      "goalType": "regular",
-      "teamId": "stallions",
-      "playerId": "sta-1",
-      "createdAt": "2026-11-17T18:05:00Z"
-    },
-    {
-      "id": "po2-g1-ev2",
-      "matchId": "po2-g1",
-      "quarter": "q1",
-      "minute": 5,
-      "type": "goal",
-      "goalType": "regular",
-      "teamId": "grizzlies",
-      "playerId": "gri-1",
-      "createdAt": "2026-11-17T18:10:00Z"
-    },
-    {
-      "id": "po2-g1-ev3",
-      "matchId": "po2-g1",
-      "quarter": "q1",
-      "minute": 7,
-      "type": "goal",
-      "goalType": "regular",
-      "teamId": "stallions",
-      "playerId": "sta-2",
-      "createdAt": "2026-11-17T18:14:00Z"
-    },
-    {
-      "id": "po2-g1-ev4",
-      "matchId": "po2-g1",
-      "quarter": "q1",
-      "minute": 9,
-      "type": "goal",
-      "goalType": "regular",
-      "teamId": "stallions",
-      "playerId": "sta-3",
-      "createdAt": "2026-11-17T18:18:00Z"
-    },
-    {
-      "id": "po2-g1-ev5",
-      "matchId": "po2-g1",
-      "quarter": "q1",
-      "minute": 11,
-      "type": "goal",
-      "goalType": "regular",
-      "teamId": "stallions",
-      "playerId": "sta-4",
-      "createdAt": "2026-11-17T18:22:00Z"
-    },
-    {
-      "id": "po2-g1-ev6",
-      "matchId": "po2-g1",
-      "quarter": "q2",
-      "minute": 2,
-      "type": "goal",
-      "goalType": "regular",
-      "teamId": "stallions",
-      "playerId": "sta-5",
-      "createdAt": "2026-11-17T18:32:00Z"
-    },
-    {
-      "id": "po2-g1-ev7",
-      "matchId": "po2-g1",
-      "quarter": "q2",
-      "minute": 5,
-      "type": "goal",
-      "goalType": "regular",
-      "teamId": "stallions",
-      "playerId": "sta-6",
-      "createdAt": "2026-11-17T18:36:00Z"
-    },
-    {
-      "id": "po2-g1-ev8",
-      "matchId": "po2-g1",
-      "quarter": "q2",
-      "minute": 8,
-      "type": "goal",
-      "goalType": "regular",
-      "teamId": "stallions",
-      "playerId": "sta-1",
-      "createdAt": "2026-11-17T18:40:00Z"
-    },
-    {
-      "id": "po2-g1-ev9",
-      "matchId": "po2-g1",
-      "quarter": "q2",
-      "minute": 11,
-      "type": "goal",
-      "goalType": "regular",
-      "teamId": "stallions",
-      "playerId": "sta-7",
-      "createdAt": "2026-11-17T18:45:00Z"
-    },
-    {
-      "id": "po2-g1-ev10",
-      "matchId": "po2-g1",
-      "quarter": "q3",
-      "minute": 3,
-      "type": "goal",
-      "goalType": "regular",
-      "teamId": "stallions",
-      "playerId": "sta-8",
-      "createdAt": "2026-11-17T18:55:00Z"
-    },
-    {
-      "id": "po2-g1-ev11",
-      "matchId": "po2-g1",
-      "quarter": "q3",
-      "minute": 6,
-      "type": "goal",
-      "goalType": "regular",
-      "teamId": "stallions",
-      "playerId": "sta-9",
-      "createdAt": "2026-11-17T19:00:00Z"
-    },
-    {
-      "id": "po2-g1-ev12",
-      "matchId": "po2-g1",
-      "quarter": "q3",
-      "minute": 9,
-      "type": "goal",
-      "goalType": "regular",
-      "teamId": "stallions",
-      "playerId": "sta-10",
-      "createdAt": "2026-11-17T19:05:00Z"
-    },
-    {
-      "id": "po2-g1-ev13",
-      "matchId": "po2-g1",
-      "quarter": "q3",
-      "minute": 11,
-      "type": "goal",
-      "goalType": "regular",
-      "teamId": "grizzlies",
-      "playerId": "gri-2",
-      "createdAt": "2026-11-17T19:08:00Z"
-    },
-    {
-      "id": "po2-g1-ev14",
-      "matchId": "po2-g1",
-      "quarter": "q4",
-      "minute": 1,
-      "type": "goal",
-      "goalType": "regular",
-      "teamId": "stallions",
-      "playerId": "sta-11",
-      "createdAt": "2026-11-17T19:15:00Z"
-    },
-    {
-      "id": "po2-g1-ev15",
-      "matchId": "po2-g1",
-      "quarter": "q4",
-      "minute": 4,
-      "type": "goal",
-      "goalType": "regular",
-      "teamId": "stallions",
-      "playerId": "sta-12",
-      "createdAt": "2026-11-17T19:20:00Z"
-    },
-    {
-      "id": "po2-g1-ev16",
-      "matchId": "po2-g1",
-      "quarter": "q4",
-      "minute": 8,
-      "type": "goal",
-      "goalType": "regular",
-      "teamId": "stallions",
-      "playerId": "sta-13",
-      "createdAt": "2026-11-17T19:25:00Z"
-    },
-    {
-      "id": "po2-g1-ev17",
-      "matchId": "po2-g1",
-      "quarter": "q4",
-      "minute": 11,
-      "type": "goal",
-      "goalType": "regular",
-      "teamId": "stallions",
-      "playerId": "sta-1",
-      "createdAt": "2026-11-17T19:30:00Z"
-    }
-  ],
+  "events": [],
   "activeSessions": {},
-  "dataTeamAccessLog": [
-    {
-      "matchId": "po1-g1",
-      "accessedAt": "2026-11-22T06:30:20.089Z",
-      "clientInfo": {
-        "ip": "127.0.0.1",
-        "userAgent": "test-agent"
-      }
-    }
-  ]
+  "dataTeamAccessLog": []
 }

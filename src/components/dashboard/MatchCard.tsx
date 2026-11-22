@@ -18,6 +18,9 @@ export const MatchCard: React.FC<MatchCardProps> = ({
   const team2 = fixture.team2Id ? TEAMS[fixture.team2Id] : null;
 
   const isOwnSession = !!(currentSessionId && fixture.activeSessionId === currentSessionId);
+  const isUnopenable =
+    fixture.isUnopenable ||
+    ['po1-g1', 'po1-g2', 'po1-g3', 'po2-g1', 'po2-g2', 'po2-g3'].includes(fixture.id);
 
   // Capitalize GAME and PLAYOFF
   const seriesNameFormatted = fixture.seriesId.startsWith('po')
@@ -82,14 +85,14 @@ export const MatchCard: React.FC<MatchCardProps> = ({
 
       {/* Bottom Button Action (Darker buttons matching dark theme) */}
       <div className="mt-5">
-        {fixture.status === 'completed' && fixture.isUnopenable && (
+        {fixture.status === 'completed' && isUnopenable && (
           <div className="w-full py-3.5 bg-[#181818] border border-[#2d2d2d] text-neutral-400 rounded-full font-bold text-xs tracking-wider flex items-center justify-center gap-2 uppercase font-sans cursor-default select-none">
             <Check size={16} className="text-neutral-500 stroke-[2.5]" />
             <span>COMPLETED</span>
           </div>
         )}
 
-        {fixture.status === 'completed' && !fixture.isUnopenable && (
+        {fixture.status === 'completed' && !isUnopenable && (
           <button
             onClick={() => onSelect(fixture)}
             className="w-full py-3.5 bg-emerald-800 hover:bg-emerald-700 border border-emerald-600/40 active:scale-[0.98] transition-all text-white rounded-full font-bold text-xs tracking-wider flex items-center justify-center gap-2 uppercase font-sans"

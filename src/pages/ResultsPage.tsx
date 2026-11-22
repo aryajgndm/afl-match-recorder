@@ -42,15 +42,16 @@ export const ResultsPage: React.FC<ResultsPageProps> = ({ matchId, onNavigateBac
     }
   };
 
-  if (!fixture || !fixture.result) {
+  const isHistoricalPlayoff = ['po1-g1', 'po1-g2', 'po1-g3', 'po2-g1', 'po2-g2', 'po2-g3'].includes(matchId);
+  if (!fixture || !fixture.result || fixture.isUnopenable || isHistoricalPlayoff) {
     return (
-      <div className="min-h-screen bg-[#f8f9fa] flex flex-col items-center justify-center p-4 text-center font-sans">
-        <p className="text-xs font-bold text-slate-500 mb-4 tracking-normal">
-          No finalized results available for this match yet.
+      <div className="min-h-screen bg-[#121212] flex flex-col items-center justify-center p-4 text-center font-sans">
+        <p className="text-xs font-bold text-neutral-400 mb-4 tracking-normal">
+          This match record is closed and inaccessible.
         </p>
         <button
           onClick={onNavigateBack}
-          className="px-5 py-2.5 bg-slate-900 text-white rounded-full text-xs font-bold uppercase tracking-wider shadow-md hover:bg-slate-800 transition-colors"
+          className="px-5 py-2.5 bg-[#242424] border border-[#333333] text-white rounded-full text-xs font-bold uppercase tracking-wider hover:bg-[#2e2e2e] transition-colors"
         >
           RETURN TO DASHBOARD
         </button>

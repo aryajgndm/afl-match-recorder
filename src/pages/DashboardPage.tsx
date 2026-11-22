@@ -72,8 +72,11 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({
   const sessionId = matchStorage.getOrCreateClientSessionId();
 
   const handleSelectFixture = (fixture: Fixture) => {
-    // Unopenable historical matches before the use of this site
-    if (fixture.isUnopenable) {
+    // Unopenable historical matches before the use of this site (Playoff games 1-3)
+    if (
+      fixture.isUnopenable ||
+      ['po1-g1', 'po1-g2', 'po1-g3', 'po2-g1', 'po2-g2', 'po2-g3'].includes(fixture.id)
+    ) {
       return;
     }
 
@@ -134,8 +137,15 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({
     }
   };
 
-  // Filter and sort chronologically by date/game
-  const phaseFixtures = fixtures.filter((f) => f.phase === activeTab);
+  // Filter and sort chronologically by date
+  const phaseFixtures = fixtures
+    .filter((f) => f.phase === activeTab)
+    .sort((a, b) => {
+      const timeA = Date.parse(a.date) || 0;
+      const timeB = Date.parse(b.date) || 0;
+      if (timeA !== timeB) return timeA - timeB;
+      return a.gameNumber - b.gameNumber;
+    });
 
   // Determine series to display in standings
   const displayedSeries: Series[] = standingsView === 'round'
