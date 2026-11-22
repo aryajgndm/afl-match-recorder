@@ -23,7 +23,7 @@ export const EventTimeline: React.FC<EventTimelineProps> = ({
       <div className="flex flex-col items-center justify-center py-10 text-neutral-500 text-xs font-medium text-center font-sans">
         <p>No events recorded in this quarter yet.</p>
         {!readOnly && (
-          <p className="text-[10px] text-neutral-600 mt-1">
+          <p className="text-[10px] text-neutral-500 mt-1">
             Use the dock below to add a goal or card.
           </p>
         )}
@@ -35,7 +35,7 @@ export const EventTimeline: React.FC<EventTimelineProps> = ({
   const sorted = [...events].sort((a, b) => a.minute - b.minute);
 
   return (
-    <div className="w-full mx-auto flex flex-col rounded-xl overflow-hidden border border-[#2e2e2e] bg-[#181818] font-sans">
+    <div className="w-full mx-auto flex flex-col rounded-xl overflow-hidden border border-[#2d2d2d] bg-[#181818] font-sans">
       {sorted.map((ev, index) => {
         const isTeam1 = ev.teamId === team1?.id;
         const isSelected = selectedEventId === ev.id;
@@ -57,11 +57,11 @@ export const EventTimeline: React.FC<EventTimelineProps> = ({
               key={ev.id}
               onClick={() => !readOnly && onSelectEvent?.(ev)}
               className={`w-full py-2.5 px-4 flex items-center justify-center gap-2 transition-all cursor-pointer select-none ${
-                index % 2 === 0 ? 'bg-[#181818]' : 'bg-[#222222]'
+                index % 2 === 0 ? 'bg-[#181818]' : 'bg-[#1e1e1e]'
               } ${
                 isSelected
-                ? 'bg-blue-950/40 ring-2 ring-[#007AFF]'
-                : 'hover:bg-[#282828]'
+                  ? 'bg-[#007AFF]/25 ring-2 ring-[#007AFF]'
+                  : 'hover:bg-[#252525]'
               }`}
             >
               <span
@@ -101,11 +101,11 @@ export const EventTimeline: React.FC<EventTimelineProps> = ({
             key={ev.id}
             onClick={() => !readOnly && onSelectEvent?.(ev)}
             className={`w-full py-2.5 px-4 flex items-center justify-between text-xs select-none transition-all cursor-pointer ${
-              index % 2 === 0 ? 'bg-[#181818]' : 'bg-[#222222]'
+              index % 2 === 0 ? 'bg-[#181818]' : 'bg-[#1e1e1e]'
             } ${
               isSelected
-                ? 'bg-blue-950/40 ring-2 ring-[#007AFF]'
-                : 'hover:bg-[#282828]'
+                ? 'bg-[#007AFF]/25 ring-2 ring-[#007AFF]'
+                : 'hover:bg-[#252525]'
             }`}
           >
             {/* Team 1 event column */}

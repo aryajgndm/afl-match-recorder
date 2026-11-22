@@ -258,7 +258,7 @@
       "isConditional": true,
       "passcode": "123456",
       "activeSessionId": "sess_rd94c49n4_1795318619187",
-      "lockHeartbeatAt": "2026-11-22T04:00:47.788Z"
+      "lockHeartbeatAt": "2026-11-22T04:29:00.002Z"
     },
     {
       "id": "po2-g5",
@@ -789,6 +789,17 @@
       "teamId": "stallions",
       "playerId": "sta-1",
       "createdAt": "2026-11-17T19:30:00Z"
+    },
+    {
+      "matchId": "po1-g4",
+      "quarter": "q1",
+      "minute": 1,
+      "type": "goal",
+      "teamId": "panthers",
+      "playerId": "pan-1",
+      "goalType": "regular",
+      "id": "ev_jdbkt16e_1795321694257",
+      "createdAt": "2026-11-22T04:28:14.257Z"
     }
   ],
   "activeSessions": {},

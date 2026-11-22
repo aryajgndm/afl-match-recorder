@@ -41,12 +41,12 @@ export const QuarterScoreboard: React.FC<QuarterScoreboardProps> = ({
             {quarterTitle}
           </h2>
 
-          {/* Submit Pill Button: Dark matching gray when disabled, vibrant blue #007AFF when active */}
+          {/* Submit Pill Button: Dark gray when disabled, darker blue when active (bold text) */}
           {canSubmit ? (
             <button
               type="button"
               onClick={onSubmitClick}
-              className="px-4 py-1.5 bg-[#007AFF] hover:bg-[#0066DD] active:scale-95 transition-all text-white rounded-full font-bold text-xs tracking-wider flex items-center gap-1 uppercase font-sans"
+              className="px-4 py-1.5 bg-[#0052cc] hover:bg-[#0047b3] border border-blue-500/30 active:scale-95 transition-all text-white rounded-full font-bold text-xs tracking-wider flex items-center gap-1 uppercase font-sans"
             >
               <span>SUBMIT</span>
               <Plus size={15} className="stroke-[3]" />
@@ -55,7 +55,7 @@ export const QuarterScoreboard: React.FC<QuarterScoreboardProps> = ({
             <button
               type="button"
               disabled
-              className="px-4 py-1.5 bg-[#242424] text-neutral-500 border border-[#333333] rounded-full font-bold text-xs tracking-wider flex items-center gap-1 cursor-not-allowed uppercase font-sans"
+              className="px-4 py-1.5 bg-[#242424] text-neutral-500 border border-[#383838] rounded-full font-bold text-xs tracking-wider flex items-center gap-1 cursor-not-allowed uppercase font-sans"
               title="MATCH CAN BE SUBMITTED IN Q4 OR EXTRA TIME"
             >
               <span>SUBMIT</span>
@@ -66,7 +66,7 @@ export const QuarterScoreboard: React.FC<QuarterScoreboardProps> = ({
       )}
 
       {/* Mini Scoreboard Pill: [logo] PANTHERS 4 3 BULLS [logo] */}
-      <div className="w-full bg-[#181818] border border-[#2e2e2e] text-white rounded-2xl py-2 px-4 flex items-center justify-between">
+      <div className="w-full bg-[#181818] border border-[#2d2d2d] text-white rounded-2xl py-2 px-4 flex items-center justify-between">
         {/* Team 1 */}
         <div className="flex items-center gap-2 flex-1 truncate">
           <div className="w-8 h-8 flex items-center justify-center flex-shrink-0">

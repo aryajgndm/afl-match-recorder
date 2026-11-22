@@ -82,7 +82,7 @@ export const PasscodeModal: React.FC<PasscodeModalProps> = ({
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm animate-fadeIn font-sans">
-      <div className="relative w-full max-w-sm bg-[#1a1a1a] border border-[#2e2e2e] rounded-3xl p-6 flex flex-col items-center text-center">
+      <div className="relative w-full max-w-sm bg-[#1c1c1c] border border-[#333333] rounded-3xl p-6 shadow-2xl flex flex-col items-center text-center">
         <button
           onClick={onClose}
           className="absolute top-4 right-4 p-2 text-neutral-400 hover:text-white rounded-full hover:bg-[#282828] transition-colors"
@@ -106,11 +106,11 @@ export const PasscodeModal: React.FC<PasscodeModalProps> = ({
                 className="w-full h-full object-contain"
               />
             ) : (
-              <span className="text-sm text-neutral-400 font-bold">?</span>
+              <span className="text-sm text-neutral-500 font-bold">?</span>
             )}
           </div>
 
-          <span className="font-display font-extrabold text-lg text-neutral-500 select-none">
+          <span className="font-display font-extrabold text-lg text-neutral-400 select-none">
             V
           </span>
 
@@ -122,7 +122,7 @@ export const PasscodeModal: React.FC<PasscodeModalProps> = ({
                 className="w-full h-full object-contain"
               />
             ) : (
-              <span className="text-sm text-neutral-400 font-bold">?</span>
+              <span className="text-sm text-neutral-500 font-bold">?</span>
             )}
           </div>
         </div>
@@ -143,20 +143,20 @@ export const PasscodeModal: React.FC<PasscodeModalProps> = ({
                 value={digit}
                 onChange={(e) => handleChange(idx, e.target.value)}
                 onKeyDown={(e) => handleKeyDown(idx, e)}
-                className="w-11 h-12 text-center text-xl font-display font-extrabold bg-[#242424] border-2 border-[#383838] focus:border-[#007AFF] rounded-xl text-white focus:outline-none transition-colors"
+                className="w-11 h-12 text-center text-xl font-display font-extrabold bg-[#121212] border-2 border-[#383838] focus:border-[#0052cc] rounded-xl text-white focus:outline-none transition-colors"
               />
             ))}
           </div>
 
-          {/* Primary Action Button: Blue for Start Recording, Green for View Results */}
+          {/* Primary Action Button: Darker blue for Start Recording, Dark emerald for View Results */}
           {buttonColor === 'green' ? (
             <button
               type="submit"
               disabled={digits.join('').length !== 6}
               className={`w-full py-3.5 rounded-full font-bold text-xs tracking-wider flex items-center justify-center gap-2 transition-all uppercase ${
                 digits.join('').length === 6
-                  ? 'bg-emerald-600 hover:bg-emerald-500 text-white active:scale-[0.98]'
-                  : 'bg-[#282828] text-neutral-500 border border-[#333333] cursor-not-allowed'
+                  ? 'bg-emerald-800 hover:bg-emerald-700 text-white border border-emerald-600/40 active:scale-[0.98]'
+                  : 'bg-[#282828] text-neutral-500 cursor-not-allowed'
               }`}
             >
               <Check size={16} className="stroke-[3]" />
@@ -168,8 +168,8 @@ export const PasscodeModal: React.FC<PasscodeModalProps> = ({
               disabled={digits.join('').length !== 6}
               className={`w-full py-3.5 rounded-full font-bold text-xs tracking-wider flex items-center justify-center gap-2 transition-all uppercase ${
                 digits.join('').length === 6
-                  ? 'bg-[#007AFF] hover:bg-[#0066DD] text-white active:scale-[0.98]'
-                  : 'bg-[#282828] text-neutral-500 border border-[#333333] cursor-not-allowed'
+                  ? 'bg-[#0052cc] hover:bg-[#0047b3] text-white border border-blue-500/30 active:scale-[0.98]'
+                  : 'bg-[#282828] text-neutral-500 cursor-not-allowed'
               }`}
             >
               <span>{buttonText}</span>

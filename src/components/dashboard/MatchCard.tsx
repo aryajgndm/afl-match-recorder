@@ -73,10 +73,10 @@ export const MatchCard: React.FC<MatchCardProps> = ({ fixture, onSelect }) => {
         </div>
       </div>
 
-      {/* Bottom Button Action */}
+      {/* Bottom Button Action (Darker buttons matching dark theme) */}
       <div className="mt-5">
         {fixture.status === 'completed' && fixture.isUnopenable && (
-          <div className="w-full py-3.5 bg-[#1c1c1c] border border-[#2d2d2d] text-neutral-400 rounded-full font-bold text-xs tracking-wider flex items-center justify-center gap-2 uppercase font-sans cursor-default select-none">
+          <div className="w-full py-3.5 bg-[#181818] border border-[#2d2d2d] text-neutral-400 rounded-full font-bold text-xs tracking-wider flex items-center justify-center gap-2 uppercase font-sans cursor-default select-none">
             <Check size={16} className="text-neutral-500 stroke-[2.5]" />
             <span>COMPLETED</span>
           </div>
@@ -85,18 +85,18 @@ export const MatchCard: React.FC<MatchCardProps> = ({ fixture, onSelect }) => {
         {fixture.status === 'completed' && !fixture.isUnopenable && (
           <button
             onClick={() => onSelect(fixture)}
-            className="w-full py-3.5 bg-emerald-600 hover:bg-emerald-500 active:scale-[0.98] transition-all text-white rounded-full font-bold text-xs tracking-wider flex items-center justify-center gap-2 uppercase font-sans"
+            className="w-full py-3.5 bg-emerald-800 hover:bg-emerald-700 border border-emerald-600/40 active:scale-[0.98] transition-all text-white rounded-full font-bold text-xs tracking-wider flex items-center justify-center gap-2 uppercase font-sans"
           >
             <Check size={16} className="stroke-[3]" />
             <span>VIEW RESULTS</span>
           </button>
         )}
 
-        {/* Start recording button: BLUE as requested */}
+        {/* Start recording button: Darker blue matching dark theme */}
         {fixture.status === 'available' && (
           <button
             onClick={() => onSelect(fixture)}
-            className="w-full py-3.5 bg-[#007AFF] hover:bg-[#0066DD] active:scale-[0.98] transition-all text-white rounded-full font-bold text-xs tracking-wider flex items-center justify-center gap-2 uppercase font-sans"
+            className="w-full py-3.5 bg-[#0052cc] hover:bg-[#0047b3] border border-blue-500/30 active:scale-[0.98] transition-all text-white rounded-full font-bold text-xs tracking-wider flex items-center justify-center gap-2 uppercase font-sans"
           >
             <span>START RECORDING</span>
             <ArrowRight size={16} className="stroke-[3]" />
@@ -106,7 +106,7 @@ export const MatchCard: React.FC<MatchCardProps> = ({ fixture, onSelect }) => {
         {fixture.status === 'in_progress' && (
           <button
             onClick={() => onSelect(fixture)}
-            className="w-full py-3.5 bg-amber-600 hover:bg-amber-500 active:scale-[0.98] transition-all text-white rounded-full font-bold text-xs tracking-wider flex items-center justify-center gap-2 uppercase font-sans"
+            className="w-full py-3.5 bg-amber-700 hover:bg-amber-600 border border-amber-600/40 active:scale-[0.98] transition-all text-amber-100 rounded-full font-bold text-xs tracking-wider flex items-center justify-center gap-2 uppercase font-sans"
           >
             <Radio size={16} />
             <span>RECORDING UNDERWAY</span>
@@ -116,7 +116,7 @@ export const MatchCard: React.FC<MatchCardProps> = ({ fixture, onSelect }) => {
         {fixture.status === 'locked' && (
           <button
             disabled
-            className="w-full py-3.5 bg-[#181818] border border-[#2e2e2e] text-neutral-500 rounded-full font-bold text-xs tracking-wider flex items-center justify-center gap-2 cursor-not-allowed uppercase font-sans"
+            className="w-full py-3.5 bg-[#181818] border border-[#2e2e2e] text-neutral-600 rounded-full font-bold text-xs tracking-wider flex items-center justify-center gap-2 cursor-not-allowed uppercase font-sans"
           >
             <Lock size={14} />
             <span>{fixture.isConditional ? 'NOT YET REQUIRED' : 'AWAITING PREVIOUS GAME'}</span>

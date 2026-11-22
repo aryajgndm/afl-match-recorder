@@ -18,7 +18,7 @@ export const MatchHeader: React.FC<MatchHeaderProps> = ({
     : 'Finals';
 
   return (
-    <header className="w-full max-w-md mx-auto pt-3 pb-1 px-4 flex items-center justify-between">
+    <header className="w-full max-w-md mx-auto pt-3 pb-1 px-4 flex items-center justify-between font-sans">
       {/* Back button */}
       <button
         onClick={onBackClick}

@@ -28,10 +28,10 @@ export const TotalScoreboard: React.FC<TotalScoreboardProps> = ({ team1, team2, 
 
       {/* Score Digits in Clean Rounded Cards */}
       <div className="flex items-center gap-1.5">
-        <div className="w-10 h-10 flex items-center justify-center bg-[#242424] border border-[#383838] rounded-xl font-display font-black text-2xl text-white">
+        <div className="w-10 h-10 flex items-center justify-center bg-[#242424] border border-[#333333] rounded-xl font-display font-black text-2xl text-white">
           {score.team1Total}
         </div>
-        <div className="w-10 h-10 flex items-center justify-center bg-[#242424] border border-[#383838] rounded-xl font-display font-black text-2xl text-white">
+        <div className="w-10 h-10 flex items-center justify-center bg-[#242424] border border-[#333333] rounded-xl font-display font-black text-2xl text-white">
           {score.team2Total}
         </div>
       </div>

@@ -125,14 +125,14 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({
               SERIES STANDINGS (BEST-OF-5)
             </span>
 
-            {/* View Toggle: Round vs All */}
+            {/* View Toggle: Round vs All (Dark buttons matching dark theme) */}
             <div className="flex items-center bg-[#181818] p-0.5 rounded-full border border-[#333333]">
               <button
                 type="button"
                 onClick={() => setStandingsView('round')}
                 className={`px-2.5 py-0.5 text-[10px] font-bold rounded-full transition-all uppercase ${
                   standingsView === 'round'
-                    ? 'bg-white text-black'
+                    ? 'bg-[#333333] text-white border border-[#484848]'
                     : 'text-neutral-400 hover:text-white'
                 }`}
               >
@@ -143,7 +143,7 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({
                 onClick={() => setStandingsView('all')}
                 className={`px-2.5 py-0.5 text-[10px] font-bold rounded-full transition-all uppercase ${
                   standingsView === 'all'
-                    ? 'bg-white text-black'
+                    ? 'bg-[#333333] text-white border border-[#484848]'
                     : 'text-neutral-400 hover:text-white'
                 }`}
               >
@@ -158,7 +158,7 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({
               const team1 = s.team1Id ? TEAMS[s.team1Id] : null;
               const team2 = s.team2Id ? TEAMS[s.team2Id] : null;
 
-              // Format series status badge: white accent and 3-letter abbreviations (no glow)
+              // Format series status badge: white accent and 3-letter abbreviations (no glow, no " · Clinched")
               let statusText = '';
               let statusBadgeClass = 'text-neutral-400 bg-neutral-800 border-neutral-700';
 

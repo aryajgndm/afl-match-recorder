@@ -165,7 +165,7 @@ export const RecordingPage: React.FC<RecordingPageProps> = ({
       <main className="flex-1 w-full max-w-md mx-auto px-4">
         {/* Extra time banner if two goal lead achieved */}
         {isExtraTimeActive && etLead.clinched && (
-          <div className="bg-amber-950/40 border border-amber-500/40 rounded-2xl p-2.5 mb-2 text-center text-xs font-bold text-amber-200 font-sans">
+          <div className="bg-amber-950/60 border border-amber-600/50 rounded-2xl p-2.5 mb-2 text-center text-xs font-bold text-amber-200 font-sans">
             ★ Two-goal extra time lead reached! Match is ready for final submission.
           </div>
         )}

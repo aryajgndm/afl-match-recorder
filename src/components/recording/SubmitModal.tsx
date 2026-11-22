@@ -72,16 +72,16 @@ export const SubmitModal: React.FC<SubmitModalProps> = ({
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm animate-fadeIn font-sans">
-      <div className="relative w-full max-w-sm bg-[#1a1a1a] border border-[#2e2e2e] rounded-3xl p-6 flex flex-col items-center text-center">
+      <div className="relative w-full max-w-sm bg-[#1c1c1c] border border-[#333333] rounded-3xl p-6 shadow-2xl flex flex-col items-center text-center">
         {/* Top Header Line: GAME and PLAYOFF capital */}
         <div className="w-full flex items-center justify-between text-xs font-bold text-neutral-400 mb-4 px-1 font-sans">
           <span>GAME {fixture.gameNumber} · {seriesNameFormatted}</span>
           <span className="font-medium text-neutral-400">{fixture.date}</span>
         </div>
 
-        {/* Box Score Summary Table */}
+        {/* Box Score Summary Table (Dark theme) */}
         <div className="w-full mb-5">
-          <QuarterwiseScoresheetTable score={score} team1={team1} team2={team2} />
+          <QuarterwiseScoresheetTable score={score} team1={team1} team2={team2} theme="dark" />
         </div>
 
         {/* 6 Digit Passcode Input */}
@@ -97,20 +97,20 @@ export const SubmitModal: React.FC<SubmitModalProps> = ({
                 value={digit}
                 onChange={(e) => handleChange(idx, e.target.value)}
                 onKeyDown={(e) => handleKeyDown(idx, e)}
-                className="w-11 h-12 text-center text-xl font-display font-extrabold bg-[#242424] border-2 border-[#383838] focus:border-[#007AFF] rounded-xl text-white focus:outline-none transition-colors"
+                className="w-11 h-12 text-center text-xl font-display font-extrabold bg-[#121212] border-2 border-[#383838] focus:border-[#0052cc] rounded-xl text-white focus:outline-none transition-colors"
               />
             ))}
           </div>
 
-          {/* Action Buttons: Submit (Blue) & Cancel */}
+          {/* Action Buttons: Submit (Darker blue) & Cancel */}
           <div className="flex items-center justify-center gap-3 w-full">
             <button
               type="submit"
               disabled={digits.join('').length !== 6}
               className={`flex-1 py-3 rounded-full font-bold text-xs tracking-wider flex items-center justify-center gap-1.5 transition-all uppercase ${
                 digits.join('').length === 6
-                  ? 'bg-[#007AFF] hover:bg-[#0066DD] text-white active:scale-95'
-                  : 'bg-[#282828] text-neutral-500 border border-[#333333] cursor-not-allowed'
+                  ? 'bg-[#0052cc] hover:bg-[#0047b3] border border-blue-500/30 text-white active:scale-95'
+                  : 'bg-[#282828] text-neutral-500 cursor-not-allowed'
               }`}
             >
               <Check size={16} className="stroke-[3]" />
@@ -120,7 +120,7 @@ export const SubmitModal: React.FC<SubmitModalProps> = ({
             <button
               type="button"
               onClick={onClose}
-              className="flex-1 py-3 bg-[#242424] hover:bg-[#2c2c2c] text-neutral-300 border border-[#383838] rounded-full font-bold text-xs tracking-wider flex items-center justify-center gap-1.5 transition-all active:scale-95 uppercase"
+              className="flex-1 py-3 bg-rose-700 hover:bg-rose-600 text-white rounded-full font-bold text-xs tracking-wider flex items-center justify-center gap-1.5 transition-all active:scale-95 uppercase"
             >
               <X size={16} className="stroke-[3]" />
               <span>CANCEL</span>
