@@ -92,6 +92,16 @@ CREATE POLICY "Public read audit_logs" ON audit_logs FOR SELECT USING (true);
 -- Allow authenticated or anon access via verified RPCs
 CREATE POLICY "Anon insert audit_logs" ON audit_logs FOR INSERT WITH CHECK (true);
 
+-- Grants for Supabase API roles (anon, authenticated, service_role)
+GRANT USAGE ON SCHEMA public TO anon, authenticated, service_role;
+GRANT ALL ON ALL TABLES IN SCHEMA public TO anon, authenticated, service_role;
+GRANT ALL ON ALL SEQUENCES IN SCHEMA public TO anon, authenticated, service_role;
+GRANT ALL ON ALL ROUTINES IN SCHEMA public TO anon, authenticated, service_role;
+
+ALTER DEFAULT PRIVILEGES IN SCHEMA public GRANT ALL ON TABLES TO anon, authenticated, service_role;
+ALTER DEFAULT PRIVILEGES IN SCHEMA public GRANT ALL ON SEQUENCES TO anon, authenticated, service_role;
+ALTER DEFAULT PRIVILEGES IN SCHEMA public GRANT ALL ON ROUTINES TO anon, authenticated, service_role;
+
 -- ==========================================================
 -- REALTIME CONFIGURATION
 -- ==========================================================
@@ -382,9 +392,10 @@ END;
 $$;
 
 -- ==========================================================
--- SEED DATA (Teams & Initial Postseason Fixtures)
+-- SEED DATA (TEAMS, PLAYERS, POSTSEASON FIXTURES & EVENTS)
 -- ==========================================================
 
+-- 1. TEAMS
 INSERT INTO teams (id, name, short_name, logo_url) VALUES
 ('panthers', 'Panthers', 'PAN', './logos/panthers.png'),
 ('bulls', 'Bulls', 'BUL', './logos/bulls.png'),
@@ -392,23 +403,146 @@ INSERT INTO teams (id, name, short_name, logo_url) VALUES
 ('stallions', 'Stallions', 'STA', './logos/stallions.png'),
 ('falcons', 'Falcons', 'FAL', './logos/falcons.png'),
 ('raptors', 'Raptors', 'RAP', './logos/raptors.png')
-ON CONFLICT (id) DO NOTHING;
+ON CONFLICT (id) DO UPDATE SET name = EXCLUDED.name, short_name = EXCLUDED.short_name, logo_url = EXCLUDED.logo_url;
 
--- Initial Playoffs Fixture Seeds (Passcode: 1111)
-INSERT INTO fixtures (id, series_id, game_number, date, phase, team1_id, team2_id, status, is_conditional, passcode_hash) VALUES
-('po1-g1', 'po1', 1, 'Nov 18, 2026', 'playoffs', 'bulls', 'falcons', 'available', false, '1111'),
-('po1-g2', 'po1', 2, 'Nov 19, 2026', 'playoffs', 'falcons', 'bulls', 'locked', false, '1111'),
-('po1-g3', 'po1', 3, 'Nov 20, 2026', 'playoffs', 'bulls', 'falcons', 'locked', true, '1111'),
-('po2-g1', 'po2', 1, 'Nov 18, 2026', 'playoffs', 'grizzlies', 'panthers', 'available', false, '1111'),
-('po2-g2', 'po2', 2, 'Nov 19, 2026', 'playoffs', 'panthers', 'grizzlies', 'locked', false, '1111'),
-('po2-g3', 'po2', 3, 'Nov 20, 2026', 'playoffs', 'grizzlies', 'panthers', 'locked', true, '1111'),
-('sf1-g1', 'sf1', 1, 'Nov 22, 2026', 'semifinals', 'stallions', NULL, 'locked', false, '1111'),
-('sf1-g2', 'sf1', 2, 'Nov 23, 2026', 'semifinals', NULL, 'stallions', 'locked', false, '1111'),
-('sf1-g3', 'sf1', 3, 'Nov 24, 2026', 'semifinals', 'stallions', NULL, 'locked', true, '1111'),
-('sf2-g1', 'sf2', 1, 'Nov 22, 2026', 'semifinals', 'raptors', NULL, 'locked', false, '1111'),
-('sf2-g2', 'sf2', 2, 'Nov 23, 2026', 'semifinals', NULL, 'raptors', 'locked', false, '1111'),
-('sf2-g3', 'sf2', 3, 'Nov 24, 2026', 'semifinals', 'raptors', NULL, 'locked', true, '1111'),
-('fn-g1', 'finals', 1, 'Nov 26, 2026', 'finals', NULL, NULL, 'locked', false, '1111'),
-('fn-g2', 'finals', 2, 'Nov 27, 2026', 'finals', NULL, NULL, 'locked', false, '1111'),
-('fn-g3', 'finals', 3, 'Nov 28, 2026', 'finals', NULL, NULL, 'locked', true, '1111')
+-- 2. PLAYERS
+INSERT INTO players (id, full_name, name, team_id) VALUES
+('bul-1', 'Varshit', 'Varshit', 'bulls'),
+('bul-2', 'Gokul Reddy', 'Gokul', 'bulls'),
+('bul-3', 'Abdul Asif S.', 'Asif', 'bulls'),
+('bul-4', 'Nandish K. G.', 'Nandish', 'bulls'),
+('bul-5', 'Pratheeksh S.', 'Pratheeksh', 'bulls'),
+('bul-6', 'Rahul A.', 'Rahul', 'bulls'),
+('bul-7', 'Syed Fardeen', 'Fardeen', 'bulls'),
+('bul-8', 'Likith Varna S.', 'Likith', 'bulls'),
+('bul-9', 'Hatim Juzer Kaderbhai', 'Hatim', 'bulls'),
+('bul-10', 'Mohd. Nabeel Ahmed', 'Nabeel', 'bulls'),
+('bul-11', 'Mohammed Ifraaz', 'Ifraaz', 'bulls'),
+('bul-12', 'Poojith Reddy', 'Poojith', 'bulls'),
+('bul-13', 'S. V. Rakesh', 'Rakesh', 'bulls'),
+('fal-1', 'Umar Farooq', 'Umar', 'falcons'),
+('fal-2', 'Joel Dokka', 'Joel', 'falcons'),
+('fal-3', 'Abhishek Yadav', 'Abhishek Y.', 'falcons'),
+('fal-4', 'Abhishek S. Manur', 'Abhishek M.', 'falcons'),
+('fal-5', 'Shaik Arfaan Akmal', 'Arfaan', 'falcons'),
+('fal-6', 'Dhanush Preetham R.', 'Dhanush', 'falcons'),
+('fal-7', 'Sidhant Biradar', 'Sidhant', 'falcons'),
+('fal-8', 'Chinmayi R.', 'Chinmayi', 'falcons'),
+('fal-9', 'Gahan R.', 'Gahan', 'falcons'),
+('fal-10', 'Ashwin Sunil', 'Ashwin', 'falcons'),
+('fal-11', 'Harsha A.', 'Harsha', 'falcons'),
+('fal-12', 'David Jeremiah J.', 'David', 'falcons'),
+('gri-1', 'Aryan J.', 'Aryan', 'grizzlies'),
+('gri-2', 'Lakshya Hada', 'Lakshya', 'grizzlies'),
+('gri-3', 'Prajeeth Praveen', 'Prajeeth', 'grizzlies'),
+('gri-4', 'Sujan Khadka', 'Sujan', 'grizzlies'),
+('gri-5', 'Binayak Bhandari', 'Binayak', 'grizzlies'),
+('gri-6', 'Kushal G. V.', 'Kushal', 'grizzlies'),
+('gri-7', 'Yathin N.', 'Yathin', 'grizzlies'),
+('gri-8', 'Blessen Thomas', 'Blessen', 'grizzlies'),
+('gri-9', 'Venktesh Nandan', 'Venktesh', 'grizzlies'),
+('gri-10', 'Prasant Kumar Tiwary', 'Prasant', 'grizzlies'),
+('gri-11', 'Prathik Bagare', 'Prathik', 'grizzlies'),
+('gri-12', 'Abhishek Vidukumar', 'Abhishek', 'grizzlies'),
+('pan-1', 'Vedant Dharmgond', 'Vedant', 'panthers'),
+('pan-2', 'Adib Fareed Hasan', 'Adib', 'panthers'),
+('pan-3', 'Syed Zuheb Jeeyaulaa', 'Zuheb', 'panthers'),
+('pan-4', 'Hamza Mohammed', 'Hamza', 'panthers'),
+('pan-5', 'Mohd. Ibrahim Arshath', 'Ibrahim', 'panthers'),
+('pan-6', 'Rithwik Ramesh', 'Rithwik', 'panthers'),
+('pan-7', 'Rayhan Zain', 'Rayhan', 'panthers'),
+('pan-8', 'Yeshwanth R.', 'Yeshwanth', 'panthers'),
+('pan-9', 'Amit Sharma', 'Amit', 'panthers'),
+('pan-10', 'Rehaan Saha', 'Rehaan', 'panthers'),
+('pan-11', 'Hemanth Singh', 'Hemanth', 'panthers'),
+('pan-12', 'Raj Singh', 'Raj', 'panthers'),
+('pan-13', 'Anurag Singh', 'Anurag', 'panthers'),
+('rap-1', 'Mohammed Ibrahim', 'Ibrahim', 'raptors'),
+('rap-2', 'Ayush Sharma', 'Ayush', 'raptors'),
+('rap-3', 'Sahil A. Nadaf', 'Sahil', 'raptors'),
+('rap-4', 'Roshan Khadka', 'Roshan', 'raptors'),
+('rap-5', 'Sharan Shetty', 'Sharan', 'raptors'),
+('rap-6', 'Syed Ghouse', 'Syed', 'raptors'),
+('rap-7', 'Mohammed Zaid', 'Zaid', 'raptors'),
+('rap-8', 'Divyanshu Kushwaha', 'Divyanshu', 'raptors'),
+('rap-9', 'Chetan K. V.', 'Chetan', 'raptors'),
+('rap-10', 'Ayush Kumar', 'Ayush K.', 'raptors'),
+('rap-11', 'Abdul Wahid', 'Wahid', 'raptors'),
+('rap-12', 'Aditya K. Priyadarshi', 'Aditya', 'raptors'),
+('rap-13', 'Shashank Das', 'Shashank', 'raptors'),
+('sta-1', 'Shubhraj', 'Shubhraj', 'stallions'),
+('sta-2', 'Mohd. Kasaf Warsi', 'Kasaf', 'stallions'),
+('sta-3', 'P. Hemanth Sai', 'Hemanth', 'stallions'),
+('sta-4', 'Salman S. Ghadiali', 'Salman', 'stallions'),
+('sta-5', 'Anshuman Rai', 'Anshuman', 'stallions'),
+('sta-6', 'Arya Jagannadham', 'Arya', 'stallions'),
+('sta-7', 'Sufiyan Ahmed', 'Sufiyan', 'stallions'),
+('sta-8', 'Avi Jangra', 'Avi', 'stallions'),
+('sta-9', 'Arbind Kumar', 'Arbind', 'stallions'),
+('sta-10', 'Syed A. Faaz Barmawer', 'Faaz', 'stallions'),
+('sta-11', 'Mohammad Tariz', 'Tariz', 'stallions'),
+('sta-12', 'Mohamed Aaqil', 'Aaqil', 'stallions'),
+('sta-13', 'Syed Baseer Ahmed', 'Baseer', 'stallions')
+ON CONFLICT (id) DO UPDATE SET full_name = EXCLUDED.full_name, name = EXCLUDED.name, team_id = EXCLUDED.team_id;
+
+-- 3. FIXTURES
+INSERT INTO fixtures (id, series_id, game_number, date, phase, team1_id, team2_id, status, is_conditional, passcode_hash, submitted_at, result) VALUES
+('po2-g1', 'po2', 1, '16 November 2026', 'playoffs', 'grizzlies', 'stallions', 'completed', false, '1111', '2026-11-16T20:00:00Z', '{"matchId":"po2-g1","score":{"team1QuarterScores":{"q1":2,"q2":2,"q3":2,"q4":2,"et":0},"team2QuarterScores":{"q1":1,"q2":1,"q3":2,"q4":1,"et":0},"team1Total":8,"team2Total":5,"isExtraTime":false,"winnerTeamId":"grizzlies","winDescription":"Grizzlies win 8–5"},"completedAt":"2026-11-16T20:00:00Z"}'::jsonb),
+('po1-g1', 'po1', 1, '17 November 2026', 'playoffs', 'panthers', 'bulls', 'completed', false, '1111', '2026-11-17T21:30:00Z', '{"matchId":"po1-g1","score":{"team1QuarterScores":{"q1":2,"q2":1,"q3":1,"q4":2,"et":0},"team2QuarterScores":{"q1":1,"q2":2,"q3":1,"q4":1,"et":0},"team1Total":6,"team2Total":5,"isExtraTime":false,"winnerTeamId":"panthers","winDescription":"Panthers win 6–5"},"completedAt":"2026-11-17T21:30:00Z"}'::jsonb),
+('po2-g2', 'po2', 2, '18 November 2026', 'playoffs', 'grizzlies', 'stallions', 'completed', false, '1111', '2026-11-18T20:00:00Z', '{"matchId":"po2-g2","score":{"team1QuarterScores":{"q1":2,"q2":2,"q3":2,"q4":1,"et":0},"team2QuarterScores":{"q1":1,"q2":1,"q3":1,"q4":2,"et":0},"team1Total":7,"team2Total":5,"isExtraTime":false,"winnerTeamId":"grizzlies","winDescription":"Grizzlies win 7–5"},"completedAt":"2026-11-18T20:00:00Z"}'::jsonb),
+('po1-g2', 'po1', 2, '19 November 2026', 'playoffs', 'panthers', 'bulls', 'completed', false, '1111', '2026-11-19T21:30:00Z', '{"matchId":"po1-g2","score":{"team1QuarterScores":{"q1":2,"q2":2,"q3":1,"q4":2,"et":0},"team2QuarterScores":{"q1":1,"q2":1,"q3":1,"q4":1,"et":0},"team1Total":7,"team2Total":4,"isExtraTime":false,"winnerTeamId":"panthers","winDescription":"Panthers win 7–4"},"completedAt":"2026-11-19T21:30:00Z"}'::jsonb),
+('po2-g3', 'po2', 3, '20 November 2026', 'playoffs', 'grizzlies', 'stallions', 'completed', false, '1111', '2026-11-20T20:00:00Z', '{"matchId":"po2-g3","score":{"team1QuarterScores":{"q1":1,"q2":2,"q3":1,"q4":2,"et":0},"team2QuarterScores":{"q1":1,"q2":1,"q3":1,"q4":1,"et":0},"team1Total":6,"team2Total":4,"isExtraTime":false,"winnerTeamId":"grizzlies","winDescription":"Grizzlies win 6–4"},"completedAt":"2026-11-20T20:00:00Z"}'::jsonb),
+('po1-g3', 'po1', 3, '21 November 2026', 'playoffs', 'panthers', 'bulls', 'completed', false, '1111', '2026-11-21T21:00:00Z', '{"matchId":"po1-g3","score":{"team1QuarterScores":{"q1":1,"q2":1,"q3":1,"q4":1,"et":0},"team2QuarterScores":{"q1":2,"q2":1,"q3":1,"q4":1,"et":0},"team1Total":4,"team2Total":5,"isExtraTime":false,"winnerTeamId":"bulls","winDescription":"Bulls win 5–4"},"completedAt":"2026-11-21T21:00:00Z"}'::jsonb),
+('po2-g4', 'po2', 4, '23 November 2026', 'playoffs', 'grizzlies', 'stallions', 'not_required', true, '1111', NULL, NULL),
+('po1-g4', 'po1', 4, '24 November 2026', 'playoffs', 'panthers', 'bulls', 'in_progress', true, '1111', NULL, NULL),
+('po2-g5', 'po2', 5, '25 November 2026', 'playoffs', 'grizzlies', 'stallions', 'locked', true, '1111', NULL, NULL),
+('po1-g5', 'po1', 5, '26 November 2026', 'playoffs', 'panthers', 'bulls', 'locked', true, '1111', NULL, NULL),
+('sf1-g1', 'sf1', 1, '30 November 2026', 'semifinals', 'falcons', NULL, 'locked', false, '1111', NULL, NULL),
+('sf2-g1', 'sf2', 1, '1 December 2026', 'semifinals', 'raptors', NULL, 'locked', false, '1111', NULL, NULL),
+('sf1-g2', 'sf1', 2, '2 December 2026', 'semifinals', 'falcons', NULL, 'locked', false, '1111', NULL, NULL),
+('sf2-g2', 'sf2', 2, '3 December 2026', 'semifinals', 'raptors', NULL, 'locked', false, '1111', NULL, NULL),
+('sf1-g3', 'sf1', 3, '4 December 2026', 'semifinals', 'falcons', NULL, 'locked', false, '1111', NULL, NULL),
+('sf2-g3', 'sf2', 3, '5 December 2026', 'semifinals', 'raptors', NULL, 'locked', false, '1111', NULL, NULL),
+('sf1-g4', 'sf1', 4, '7 December 2026', 'semifinals', 'falcons', NULL, 'locked', true, '1111', NULL, NULL),
+('sf2-g4', 'sf2', 4, '8 December 2026', 'semifinals', 'raptors', NULL, 'locked', true, '1111', NULL, NULL),
+('sf1-g5', 'sf1', 5, '9 December 2026', 'semifinals', 'falcons', NULL, 'locked', true, '1111', NULL, NULL),
+('sf2-g5', 'sf2', 5, '10 December 2026', 'semifinals', 'raptors', NULL, 'locked', true, '1111', NULL, NULL),
+('fin-g1', 'finals', 1, '17 December 2026', 'finals', NULL, NULL, 'locked', false, '1111', NULL, NULL),
+('fin-g2', 'finals', 2, '19 December 2026', 'finals', NULL, NULL, 'locked', false, '1111', NULL, NULL),
+('fin-g3', 'finals', 3, '21 December 2026', 'finals', NULL, NULL, 'locked', false, '1111', NULL, NULL),
+('fin-g4', 'finals', 4, '23 December 2026', 'finals', NULL, NULL, 'locked', true, '1111', NULL, NULL),
+('fin-g5', 'finals', 5, '26 December 2026', 'finals', NULL, NULL, 'locked', true, '1111', NULL, NULL)
+ON CONFLICT (id) DO UPDATE SET series_id = EXCLUDED.series_id, game_number = EXCLUDED.game_number, date = EXCLUDED.date, phase = EXCLUDED.phase, team1_id = EXCLUDED.team1_id, team2_id = EXCLUDED.team2_id, status = EXCLUDED.status, is_conditional = EXCLUDED.is_conditional, passcode_hash = EXCLUDED.passcode_hash, submitted_at = EXCLUDED.submitted_at, result = EXCLUDED.result;
+
+-- 4. EVENTS
+INSERT INTO events (id, match_id, quarter, minute, type, goal_type, card_type, team_id, player_id, assister_id, conceding_team_id, is_second_yellow_red, created_at) VALUES
+('po1-g1-ev1', 'po1-g1', 'q1', 3, 'goal', 'regular', NULL, 'panthers', 'pan-13', 'pan-10', NULL, false, '2026-11-17T20:05:00Z'),
+('po1-g1-ev2', 'po1-g1', 'q1', 6, 'goal', 'regular', NULL, 'bulls', 'bul-11', 'bul-10', NULL, false, '2026-11-17T20:10:00Z'),
+('po1-g1-ev3', 'po1-g1', 'q1', 10, 'goal', 'regular', NULL, 'panthers', 'pan-11', 'pan-10', NULL, false, '2026-11-17T20:15:00Z'),
+('po1-g1-ev4', 'po1-g1', 'q2', 4, 'goal', 'regular', NULL, 'bulls', 'bul-12', NULL, NULL, false, '2026-11-17T20:25:00Z'),
+('po1-g1-ev5', 'po1-g1', 'q2', 7, 'goal', 'penalty', NULL, 'bulls', 'bul-13', NULL, NULL, false, '2026-11-17T20:30:00Z'),
+('po1-g1-ev6', 'po1-g1', 'q2', 9, 'goal', 'regular', NULL, 'panthers', 'pan-9', 'pan-11', NULL, false, '2026-11-17T20:34:00Z'),
+('po1-g1-ev7', 'po1-g1', 'q2', 11, 'card', NULL, 'yellow', 'bulls', 'bul-7', NULL, NULL, false, '2026-11-17T20:37:00Z'),
+('po1-g1-ev8', 'po1-g1', 'q3', 5, 'goal', 'regular', NULL, 'panthers', 'pan-12', 'pan-9', NULL, false, '2026-11-17T20:45:00Z'),
+('po1-g1-ev9', 'po1-g1', 'q3', 8, 'goal', 'regular', NULL, 'bulls', 'bul-6', NULL, NULL, false, '2026-11-17T20:50:00Z'),
+('po1-g1-ev10', 'po1-g1', 'q4', 3, 'goal', 'regular', NULL, 'panthers', 'pan-13', NULL, NULL, false, '2026-11-17T21:05:00Z'),
+('po1-g1-ev11', 'po1-g1', 'q4', 7, 'goal', 'regular', NULL, 'bulls', 'bul-2', NULL, NULL, false, '2026-11-17T21:12:00Z'),
+('po1-g1-ev12', 'po1-g1', 'q4', 11, 'goal', 'regular', NULL, 'panthers', 'pan-10', NULL, NULL, false, '2026-11-17T21:18:00Z'),
+('po2-g1-ev1', 'po2-g1', 'q1', 2, 'goal', 'regular', NULL, 'stallions', 'sta-1', NULL, NULL, false, '2026-11-17T18:05:00Z'),
+('po2-g1-ev2', 'po2-g1', 'q1', 5, 'goal', 'regular', NULL, 'grizzlies', 'gri-1', NULL, NULL, false, '2026-11-17T18:10:00Z'),
+('po2-g1-ev3', 'po2-g1', 'q1', 7, 'goal', 'regular', NULL, 'stallions', 'sta-2', NULL, NULL, false, '2026-11-17T18:14:00Z'),
+('po2-g1-ev4', 'po2-g1', 'q1', 9, 'goal', 'regular', NULL, 'stallions', 'sta-3', NULL, NULL, false, '2026-11-17T18:18:00Z'),
+('po2-g1-ev5', 'po2-g1', 'q1', 11, 'goal', 'regular', NULL, 'stallions', 'sta-4', NULL, NULL, false, '2026-11-17T18:22:00Z'),
+('po2-g1-ev6', 'po2-g1', 'q2', 2, 'goal', 'regular', NULL, 'stallions', 'sta-5', NULL, NULL, false, '2026-11-17T18:32:00Z'),
+('po2-g1-ev7', 'po2-g1', 'q2', 5, 'goal', 'regular', NULL, 'stallions', 'sta-6', NULL, NULL, false, '2026-11-17T18:36:00Z'),
+('po2-g1-ev8', 'po2-g1', 'q2', 8, 'goal', 'regular', NULL, 'stallions', 'sta-1', NULL, NULL, false, '2026-11-17T18:40:00Z'),
+('po2-g1-ev9', 'po2-g1', 'q2', 11, 'goal', 'regular', NULL, 'stallions', 'sta-7', NULL, NULL, false, '2026-11-17T18:45:00Z'),
+('po2-g1-ev10', 'po2-g1', 'q3', 3, 'goal', 'regular', NULL, 'stallions', 'sta-8', NULL, NULL, false, '2026-11-17T18:55:00Z'),
+('po2-g1-ev11', 'po2-g1', 'q3', 6, 'goal', 'regular', NULL, 'stallions', 'sta-9', NULL, NULL, false, '2026-11-17T19:00:00Z'),
+('po2-g1-ev12', 'po2-g1', 'q3', 9, 'goal', 'regular', NULL, 'stallions', 'sta-10', NULL, NULL, false, '2026-11-17T19:05:00Z'),
+('po2-g1-ev13', 'po2-g1', 'q3', 11, 'goal', 'regular', NULL, 'grizzlies', 'gri-2', NULL, NULL, false, '2026-11-17T19:08:00Z'),
+('po2-g1-ev14', 'po2-g1', 'q4', 1, 'goal', 'regular', NULL, 'stallions', 'sta-11', NULL, NULL, false, '2026-11-17T19:15:00Z'),
+('po2-g1-ev15', 'po2-g1', 'q4', 4, 'goal', 'regular', NULL, 'stallions', 'sta-12', NULL, NULL, false, '2026-11-17T19:20:00Z'),
+('po2-g1-ev16', 'po2-g1', 'q4', 8, 'goal', 'regular', NULL, 'stallions', 'sta-13', NULL, NULL, false, '2026-11-17T19:25:00Z'),
+('po2-g1-ev17', 'po2-g1', 'q4', 11, 'goal', 'regular', NULL, 'stallions', 'sta-1', NULL, NULL, false, '2026-11-17T19:30:00Z')
 ON CONFLICT (id) DO NOTHING;
