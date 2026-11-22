@@ -23,7 +23,7 @@ export const EventTimeline: React.FC<EventTimelineProps> = ({
       <div className="flex flex-col items-center justify-center py-10 text-neutral-500 text-xs font-medium text-center font-sans">
         <p>No events recorded in this quarter yet.</p>
         {!readOnly && (
-          <p className="text-[10px] text-neutral-500 mt-1">
+          <p className="text-xs text-neutral-500 mt-1">
             Use the dock below to add a goal or card.
           </p>
         )}

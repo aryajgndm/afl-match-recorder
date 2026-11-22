@@ -31,13 +31,19 @@ export const QuarterScoreboard: React.FC<QuarterScoreboardProps> = ({
       {/* Quarter Title & Submit Button Header: height matched to submit button, with space below */}
       {isReadOnly || !onSubmitClick ? (
         <div className="flex items-center justify-center py-1 mb-3.5">
-          <h2 className="font-display text-xl font-extrabold tracking-tight text-white uppercase leading-none">
+          <h2
+            className="font-sans text-xs font-bold tracking-wider text-white uppercase leading-none"
+            style={{ fontFamily: "'Bricolage Grotesque', system-ui, sans-serif" }}
+          >
             {quarterTitle}
           </h2>
         </div>
       ) : (
         <div className="flex items-center justify-between px-1 mb-3.5">
-          <h2 className="font-display text-xl font-extrabold tracking-tight text-white uppercase leading-none flex items-center">
+          <h2
+            className="font-sans text-xs font-bold tracking-wider text-white uppercase leading-none flex items-center"
+            style={{ fontFamily: "'Bricolage Grotesque', system-ui, sans-serif" }}
+          >
             {quarterTitle}
           </h2>
 

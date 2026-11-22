@@ -136,14 +136,23 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({
               SERIES STANDINGS (BEST-OF-5)
             </span>
 
-            {/* View Toggle: Round vs All (Dark buttons matching dark theme) */}
-            <div className="flex items-center bg-[#181818] p-0.5 rounded-full border border-[#333333]">
+            {/* View Toggle: Round vs All with smooth sliding indicator pill */}
+            <div className="relative flex items-center bg-[#181818] p-0.5 rounded-full border border-[#333333] select-none min-w-[130px]">
+              {/* Animated sliding indicator pill */}
+              <div
+                className="absolute top-0.5 bottom-0.5 left-0.5 rounded-full bg-[#333333] border border-[#484848] shadow-sm transition-transform duration-300 ease-out pointer-events-none"
+                style={{
+                  width: 'calc((100% - 4px) / 2)',
+                  transform: `translateX(${standingsView === 'round' ? '0%' : '100%'})`,
+                }}
+              />
+
               <button
                 type="button"
                 onClick={() => setStandingsView('round')}
-                className={`px-2.5 py-0.5 text-[10px] font-bold rounded-full transition-all uppercase ${
+                className={`relative z-10 flex-1 px-2.5 py-0.5 text-center text-[10px] font-bold rounded-full transition-colors duration-200 uppercase ${
                   standingsView === 'round'
-                    ? 'bg-[#333333] text-white border border-[#484848]'
+                    ? 'text-white'
                     : 'text-neutral-400 hover:text-white'
                 }`}
               >
@@ -152,9 +161,9 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({
               <button
                 type="button"
                 onClick={() => setStandingsView('all')}
-                className={`px-2.5 py-0.5 text-[10px] font-bold rounded-full transition-all uppercase ${
+                className={`relative z-10 flex-1 px-2.5 py-0.5 text-center text-[10px] font-bold rounded-full transition-colors duration-200 uppercase ${
                   standingsView === 'all'
-                    ? 'bg-[#333333] text-white border border-[#484848]'
+                    ? 'text-white'
                     : 'text-neutral-400 hover:text-white'
                 }`}
               >
