@@ -259,7 +259,7 @@ export async function handleApiRequest(req, res, next) {
 
     // 9. Reset store (demo / testing)
     if (pathname === '/api/reset' && method === 'POST') {
-      db.resetStore();
+      await db.resetStore();
       const { fixtures, seriesMap } = db.getFixtures();
       return sendJson(res, 200, { success: true, message: 'Store reset to seed data.', fixtures, seriesMap });
     }

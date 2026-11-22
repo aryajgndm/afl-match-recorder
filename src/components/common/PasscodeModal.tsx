@@ -23,7 +23,7 @@ export const PasscodeModal: React.FC<PasscodeModalProps> = ({
   error,
   title,
   buttonText = 'START RECORDING',
-  subtitle = 'Enter the passcode to continue.',
+  subtitle = 'Enter passcode (Default: 123456)',
   buttonColor = 'blue',
 }) => {
   const [digits, setDigits] = useState<string[]>(['', '', '', '', '', '']);
@@ -56,13 +56,30 @@ export const PasscodeModal: React.FC<PasscodeModalProps> = ({
     }
   };
 
+  const handlePaste = (e: React.ClipboardEvent<HTMLInputElement>) => {
+    e.preventDefault();
+    const pasted = e.clipboardData.getData('text').replace(/\D/g, '').slice(0, 6);
+    if (!pasted) return;
+
+    const newDigits = ['', '', '', '', '', ''];
+    for (let i = 0; i < pasted.length; i++) {
+      newDigits[i] = pasted[i];
+    }
+    setDigits(newDigits);
+
+    const nextIndex = Math.min(pasted.length, 5);
+    inputRefs.current[nextIndex]?.focus();
+  };
+
+  const code = digits.join('');
+  const isCodeReady = code.length === 4 || code.length === 6;
+
   const handleKeyDown = (index: number, e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Backspace' && !digits[index] && index > 0) {
       inputRefs.current[index - 1]?.focus();
     }
     if (e.key === 'Enter') {
-      const code = digits.join('');
-      if (code.length === 6) {
+      if (isCodeReady) {
         onSubmit(code);
       }
     }
@@ -70,8 +87,9 @@ export const PasscodeModal: React.FC<PasscodeModalProps> = ({
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    const code = digits.join('');
-    onSubmit(code);
+    if (isCodeReady) {
+      onSubmit(code);
+    }
   };
 
   const seriesNameFormatted = fixture.seriesId.startsWith('po')
@@ -143,6 +161,7 @@ export const PasscodeModal: React.FC<PasscodeModalProps> = ({
                 value={digit}
                 onChange={(e) => handleChange(idx, e.target.value)}
                 onKeyDown={(e) => handleKeyDown(idx, e)}
+                onPaste={handlePaste}
                 className="w-11 h-12 text-center text-xl font-display font-extrabold bg-[#121212] border-2 border-[#383838] focus:border-[#0052cc] rounded-xl text-white focus:outline-none transition-colors"
               />
             ))}
@@ -152,9 +171,9 @@ export const PasscodeModal: React.FC<PasscodeModalProps> = ({
           {buttonColor === 'green' ? (
             <button
               type="submit"
-              disabled={digits.join('').length !== 6}
+              disabled={!isCodeReady}
               className={`w-full py-3.5 rounded-full font-bold text-xs tracking-wider flex items-center justify-center gap-2 transition-all uppercase ${
-                digits.join('').length === 6
+                isCodeReady
                   ? 'bg-emerald-800 hover:bg-emerald-700 text-white border border-emerald-600/40 active:scale-[0.98]'
                   : 'bg-[#282828] text-neutral-500 cursor-not-allowed'
               }`}
@@ -165,9 +184,9 @@ export const PasscodeModal: React.FC<PasscodeModalProps> = ({
           ) : (
             <button
               type="submit"
-              disabled={digits.join('').length !== 6}
+              disabled={!isCodeReady}
               className={`w-full py-3.5 rounded-full font-bold text-xs tracking-wider flex items-center justify-center gap-2 transition-all uppercase ${
-                digits.join('').length === 6
+                isCodeReady
                   ? 'bg-[#0052cc] hover:bg-[#0047b3] text-white border border-blue-500/30 active:scale-[0.98]'
                   : 'bg-[#282828] text-neutral-500 cursor-not-allowed'
               }`}
@@ -177,13 +196,13 @@ export const PasscodeModal: React.FC<PasscodeModalProps> = ({
             </button>
           )}
 
-          {/* Helper Subtitle (in-place error message: changes directly to "Incorrect passcode. Try again." in red) */}
+          {/* Helper Subtitle (in-place error message) */}
           <p
             className={`text-[11px] mt-3 tracking-normal font-sans ${
               error ? 'text-rose-500 font-semibold' : 'text-neutral-400 font-medium'
             }`}
           >
-            {error ? 'Incorrect passcode. Try again.' : subtitle}
+            {error ? error : subtitle}
           </p>
         </form>
       </div>

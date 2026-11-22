@@ -51,16 +51,40 @@ export const SubmitModal: React.FC<SubmitModalProps> = ({
     }
   };
 
+  const handlePaste = (e: React.ClipboardEvent<HTMLInputElement>) => {
+    e.preventDefault();
+    const pasted = e.clipboardData.getData('text').replace(/\D/g, '').slice(0, 6);
+    if (!pasted) return;
+
+    const newDigits = ['', '', '', '', '', ''];
+    for (let i = 0; i < pasted.length; i++) {
+      newDigits[i] = pasted[i];
+    }
+    setDigits(newDigits);
+
+    const nextIndex = Math.min(pasted.length, 5);
+    inputRefs.current[nextIndex]?.focus();
+  };
+
+  const code = digits.join('');
+  const isCodeReady = code.length === 4 || code.length === 6;
+
   const handleKeyDown = (index: number, e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Backspace' && !digits[index] && index > 0) {
       inputRefs.current[index - 1]?.focus();
+    }
+    if (e.key === 'Enter') {
+      if (isCodeReady) {
+        onSubmit(code);
+      }
     }
   };
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    const code = digits.join('');
-    onSubmit(code);
+    if (isCodeReady) {
+      onSubmit(code);
+    }
   };
 
   // Capitalize GAME and PLAYOFF
@@ -97,6 +121,7 @@ export const SubmitModal: React.FC<SubmitModalProps> = ({
                 value={digit}
                 onChange={(e) => handleChange(idx, e.target.value)}
                 onKeyDown={(e) => handleKeyDown(idx, e)}
+                onPaste={handlePaste}
                 className="w-11 h-12 text-center text-xl font-display font-extrabold bg-[#121212] border-2 border-[#383838] focus:border-[#0052cc] rounded-xl text-white focus:outline-none transition-colors"
               />
             ))}
@@ -106,9 +131,9 @@ export const SubmitModal: React.FC<SubmitModalProps> = ({
           <div className="flex items-center justify-center gap-3 w-full">
             <button
               type="submit"
-              disabled={digits.join('').length !== 6}
+              disabled={!isCodeReady}
               className={`flex-1 py-3 rounded-full font-bold text-xs tracking-wider flex items-center justify-center gap-1.5 transition-all uppercase ${
-                digits.join('').length === 6
+                isCodeReady
                   ? 'bg-[#0052cc] hover:bg-[#0047b3] border border-blue-500/30 text-white active:scale-95'
                   : 'bg-[#282828] text-neutral-500 cursor-not-allowed'
               }`}
@@ -133,7 +158,7 @@ export const SubmitModal: React.FC<SubmitModalProps> = ({
               error ? 'text-rose-500 font-semibold' : 'text-neutral-400 font-medium'
             }`}
           >
-            {error ? 'Incorrect passcode. Try again.' : 'Enter the passcode to submit.'}
+            {error ? error : 'Enter passcode to submit (Default: 123456)'}
           </p>
         </form>
       </div>

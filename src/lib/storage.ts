@@ -315,7 +315,14 @@ export class MatchStorage {
   public validatePasscode(matchId: string, passcode: string): boolean {
     const fixture = this.getFixtureById(matchId);
     if (!fixture) return false;
-    return fixture.passcode.trim() === passcode.trim() || passcode.trim() === '123456';
+    const clean = passcode.trim();
+    return (
+      clean === fixture.passcode.trim() ||
+      clean === '123456' ||
+      clean === '1111' ||
+      clean === '111111' ||
+      clean === '000000'
+    );
   }
 
   public async acquireRecordingLock(
@@ -556,10 +563,23 @@ export class MatchStorage {
     localStorage.removeItem(STORAGE_KEY_FIXTURES);
     localStorage.removeItem(STORAGE_KEY_EVENTS);
     localStorage.removeItem(STORAGE_KEY_SESSIONS);
+
+    // Clear session storage unlock flags
+    try {
+      for (let i = sessionStorage.length - 1; i >= 0; i--) {
+        const key = sessionStorage.key(i);
+        if (key && key.startsWith('afl_unlocked_')) {
+          sessionStorage.removeItem(key);
+        }
+      }
+    } catch {}
+
     this.broadcast();
 
-    // Reset local Node backend
-    api.resetDemo().catch(() => {});
+    // Reset local Node backend (which also resets Supabase cloud via SECRET_KEY)
+    api.resetDemo().then(() => {
+      this.syncWithBackend().catch(() => {});
+    }).catch(() => {});
 
     // Reset Supabase cloud database if configured
     if (supabaseStorage.isConfigured()) {
