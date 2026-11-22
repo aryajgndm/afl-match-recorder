@@ -557,7 +557,18 @@ export class MatchStorage {
     localStorage.removeItem(STORAGE_KEY_EVENTS);
     localStorage.removeItem(STORAGE_KEY_SESSIONS);
     this.broadcast();
+
+    // Reset local Node backend
     api.resetDemo().catch(() => {});
+
+    // Reset Supabase cloud database if configured
+    if (supabaseStorage.isConfigured()) {
+      supabaseStorage.resetToDefault().then(() => {
+        this.syncWithBackend().catch(() => {});
+      }).catch((err) => {
+        console.warn('Supabase reset failed:', err);
+      });
+    }
   }
 }
 

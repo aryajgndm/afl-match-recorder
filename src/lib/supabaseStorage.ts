@@ -1,5 +1,6 @@
 import { supabase, isSupabaseConfigured } from './supabaseClient';
 import { Fixture, MatchEvent, MatchResult, SeriesId } from '../types';
+import { INITIAL_FIXTURES } from '../data/fixtures';
 
 export interface DbFixtureRow {
   id: string;
@@ -290,6 +291,38 @@ export const supabaseStorage = {
       return data as { success: boolean; error?: string };
     } catch (err: any) {
       return { success: false, error: err.message };
+    }
+  },
+
+  async resetToDefault(): Promise<boolean> {
+    if (!supabase) return false;
+    try {
+      // 1. Delete all match events
+      await supabase.from('events').delete().neq('id', '___none___');
+
+      // 2. Reset fixtures back to default tournament seed
+      const fixturesPayload = INITIAL_FIXTURES.map((f) => ({
+        id: f.id,
+        series_id: f.seriesId,
+        game_number: f.gameNumber,
+        date: f.date,
+        phase: f.phase,
+        team1_id: f.team1Id,
+        team2_id: f.team2Id,
+        status: f.status,
+        is_conditional: f.isConditional,
+        passcode_hash: '123456',
+        active_session_id: null,
+        lock_heartbeat_at: null,
+        submitted_at: f.submittedAt || null,
+        result: f.result || null,
+      }));
+
+      await supabase.from('fixtures').upsert(fixturesPayload);
+      return true;
+    } catch (err) {
+      console.warn('Supabase reset error:', err);
+      return false;
     }
   },
 };
