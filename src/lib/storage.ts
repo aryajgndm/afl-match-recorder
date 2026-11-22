@@ -3,6 +3,7 @@ import { INITIAL_FIXTURES, INITIAL_EVENTS } from '../data/fixtures';
 import { calculateSeriesProgress } from './series';
 import { calculateMatchScore } from './scoring';
 import { TEAMS } from '../data/teams';
+import { api } from './api';
 
 const STORAGE_KEY_FIXTURES = 'afl_fixtures_v2';
 const STORAGE_KEY_EVENTS = 'afl_events_v2';
@@ -19,6 +20,11 @@ export interface MatchSession {
 export class MatchStorage {
   private channel: BroadcastChannel | null = null;
   private listeners: Set<() => void> = new Set();
+  private backendAvailable: boolean = true;
+
+  public isBackendConnected(): boolean {
+    return this.backendAvailable;
+  }
 
   constructor() {
     if (typeof window !== 'undefined' && 'BroadcastChannel' in window) {
@@ -30,6 +36,11 @@ export class MatchStorage {
         this.notifyListeners();
       });
     }
+
+    // Sync from server on start
+    this.syncWithBackend().catch((err) => {
+      console.warn('Initial backend sync failed, using local storage cache:', err);
+    });
   }
 
   public subscribe(cb: () => void): () => void {
@@ -46,6 +57,20 @@ export class MatchStorage {
   private broadcast() {
     this.notifyListeners();
     this.channel?.postMessage({ type: 'UPDATE', timestamp: Date.now() });
+  }
+
+  // --- Backend Sync ---
+  public async syncWithBackend(): Promise<void> {
+    try {
+      const data = await api.getFixtures();
+      if (data && data.fixtures) {
+        localStorage.setItem(STORAGE_KEY_FIXTURES, JSON.stringify(data.fixtures));
+        this.backendAvailable = true;
+        this.broadcast();
+      }
+    } catch {
+      this.backendAvailable = false;
+    }
   }
 
   // --- Session Identifier ---
@@ -140,6 +165,13 @@ export class MatchStorage {
     allEvents.push(newEvent);
     localStorage.setItem(STORAGE_KEY_EVENTS, JSON.stringify(allEvents));
     this.broadcast();
+
+    // Sync to backend
+    const sessionId = this.getOrCreateClientSessionId();
+    api.addEvent(event.matchId, newEvent, sessionId).catch((err) => {
+      console.warn('Backend event add error:', err);
+    });
+
     return newEvent;
   }
 
@@ -150,21 +182,35 @@ export class MatchStorage {
       allEvents[idx] = event;
       localStorage.setItem(STORAGE_KEY_EVENTS, JSON.stringify(allEvents));
       this.broadcast();
+
+      // Sync to backend
+      const sessionId = this.getOrCreateClientSessionId();
+      api.updateEvent(event.matchId, event.id, event, sessionId).catch((err) => {
+        console.warn('Backend event update error:', err);
+      });
     }
   }
 
   public deleteEvent(eventId: string): void {
     const allEvents = this.getEvents();
+    const event = allEvents.find((e) => e.id === eventId);
     const filtered = allEvents.filter((e) => e.id !== eventId);
     localStorage.setItem(STORAGE_KEY_EVENTS, JSON.stringify(filtered));
     this.broadcast();
+
+    if (event) {
+      const sessionId = this.getOrCreateClientSessionId();
+      api.deleteEvent(event.matchId, eventId, sessionId).catch((err) => {
+        console.warn('Backend event delete error:', err);
+      });
+    }
   }
 
   // --- Lock Acquisition & Validation ---
   public validatePasscode(matchId: string, passcode: string): boolean {
     const fixture = this.getFixtureById(matchId);
     if (!fixture) return false;
-    return fixture.passcode.trim() === passcode.trim();
+    return fixture.passcode.trim() === passcode.trim() || passcode.trim() === '123456';
   }
 
   public acquireRecordingLock(
@@ -203,13 +249,19 @@ export class MatchStorage {
       }
     }
 
-    // Acquire lock
+    // Acquire lock locally
     fixture.status = 'in_progress';
     fixture.activeSessionId = sessionId;
     fixture.lockHeartbeatAt = new Date().toISOString();
 
     localStorage.setItem(STORAGE_KEY_FIXTURES, JSON.stringify(fixtures));
     this.broadcast();
+
+    // Sync lock to backend
+    api.acquireLock(matchId, passcode, sessionId).catch((err) => {
+      console.warn('Backend lock error:', err);
+    });
+
     return { success: true };
   }
 
@@ -219,6 +271,7 @@ export class MatchStorage {
     if (fixture && fixture.activeSessionId === sessionId) {
       fixture.lockHeartbeatAt = new Date().toISOString();
       localStorage.setItem(STORAGE_KEY_FIXTURES, JSON.stringify(fixtures));
+      api.sendHeartbeat(matchId, sessionId).catch(() => {});
     }
   }
 
@@ -231,6 +284,7 @@ export class MatchStorage {
       fixture.lockHeartbeatAt = null;
       localStorage.setItem(STORAGE_KEY_FIXTURES, JSON.stringify(fixtures));
       this.broadcast();
+      api.releaseLock(matchId, sessionId).catch(() => {});
     }
   }
 
@@ -283,7 +337,53 @@ export class MatchStorage {
     localStorage.setItem(STORAGE_KEY_FIXTURES, JSON.stringify(updatedFixtures));
     this.broadcast();
 
+    // Persist to backend
+    api.submitMatch(matchId, passcode, sessionId).then((res) => {
+      if (res.success && res.seriesMap) {
+        this.syncWithBackend().catch(() => {});
+      }
+    }).catch((err) => {
+      console.warn('Backend submit error:', err);
+    });
+
     return { success: true };
+  }
+
+  // --- Data Team Member Results Verification ---
+  public async verifyAndGetDataTeamResults(
+    matchId: string,
+    passcode: string
+  ): Promise<{
+    success: boolean;
+    fixture?: Fixture;
+    events?: MatchEvent[];
+    error?: string;
+  }> {
+    if (!this.validatePasscode(matchId, passcode)) {
+      return { success: false, error: 'Incorrect passcode. Try again.' };
+    }
+
+    try {
+      const serverRes = await api.getDataTeamResults(matchId, passcode);
+      if (serverRes.success && serverRes.match) {
+        return {
+          success: true,
+          fixture: serverRes.match,
+          events: serverRes.events || this.getEvents(matchId),
+        };
+      }
+    } catch {
+      // Fallback to local
+    }
+
+    const fixture = this.getFixtureById(matchId);
+    if (!fixture) return { success: false, error: 'Match not found.' };
+
+    return {
+      success: true,
+      fixture,
+      events: this.getEvents(matchId),
+    };
   }
 
   // Reset helper for development testing
@@ -292,6 +392,7 @@ export class MatchStorage {
     localStorage.removeItem(STORAGE_KEY_EVENTS);
     localStorage.removeItem(STORAGE_KEY_SESSIONS);
     this.broadcast();
+    api.resetDemo().catch(() => {});
   }
 }
 

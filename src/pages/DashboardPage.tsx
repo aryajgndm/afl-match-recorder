@@ -4,7 +4,7 @@ import { matchStorage } from '../lib/storage';
 import { MatchCard } from '../components/dashboard/MatchCard';
 import { PasscodeModal } from '../components/common/PasscodeModal';
 import { TEAMS } from '../data/teams';
-import { Trophy, ShieldCheck, RefreshCw } from 'lucide-react';
+import { RefreshCw } from 'lucide-react';
 
 interface DashboardPageProps {
   onNavigateToRecording: (matchId: string) => void;
@@ -22,6 +22,7 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({
   // Passcode modal state
   const [selectedFixture, setSelectedFixture] = useState<Fixture | null>(null);
   const [isPasscodeModalOpen, setIsPasscodeModalOpen] = useState<boolean>(false);
+  const [passcodeModalMode, setPasscodeModalMode] = useState<'record' | 'results'>('record');
   const [passcodeError, setPasscodeError] = useState<string | null>(null);
 
   const refreshData = () => {
@@ -45,7 +46,15 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({
     }
 
     if (fixture.status === 'completed') {
-      onNavigateToResults(fixture.id);
+      const isUnlocked = sessionStorage.getItem(`afl_unlocked_${fixture.id}`) === 'true';
+      if (isUnlocked) {
+        onNavigateToResults(fixture.id);
+        return;
+      }
+      setSelectedFixture(fixture);
+      setPasscodeModalMode('results');
+      setPasscodeError(null);
+      setIsPasscodeModalOpen(true);
       return;
     }
 
@@ -58,6 +67,7 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({
       }
 
       setSelectedFixture(fixture);
+      setPasscodeModalMode('record');
       setPasscodeError(null);
       setIsPasscodeModalOpen(true);
     }
@@ -65,6 +75,18 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({
 
   const handlePasscodeSubmit = (code: string) => {
     if (!selectedFixture) return;
+
+    if (passcodeModalMode === 'results' || selectedFixture.status === 'completed') {
+      const valid = matchStorage.validatePasscode(selectedFixture.id, code);
+      if (valid) {
+        sessionStorage.setItem(`afl_unlocked_${selectedFixture.id}`, 'true');
+        setIsPasscodeModalOpen(false);
+        onNavigateToResults(selectedFixture.id);
+      } else {
+        setPasscodeError('Incorrect passcode. Try again.');
+      }
+      return;
+    }
 
     const sessionId = matchStorage.getOrCreateClientSessionId();
     const result = matchStorage.acquireRecordingLock(selectedFixture.id, code, sessionId);
@@ -93,45 +115,15 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({
 
   return (
     <div className="min-h-screen bg-[#121212] text-white pb-16 font-sans">
-      {/* Top App Header */}
-      <header className="sticky top-0 z-30 bg-[#121212]/95 backdrop-blur-md border-b border-[#262626] px-4 py-4 shadow-md">
-        <div className="max-w-md mx-auto flex items-center justify-between">
-          <div className="flex items-center gap-2.5">
-            <div className="w-8 h-8 rounded-xl bg-[#BE2041]/15 border border-[#BE2041]/40 flex items-center justify-center text-[#BE2041] font-display font-extrabold text-sm shadow-xs">
-              AFL
-            </div>
-            <div>
-              <h1 className="font-display text-sm font-extrabold tracking-wider uppercase text-white leading-none">
-                MATCH RECORDER
-              </h1>
-              {/* Informational line: Bricolage Grotesque, Title Case */}
-              <p className="text-[10px] text-neutral-400 font-medium tracking-normal mt-0.5 font-sans">
-                Official Postseason Scoresheet
-              </p>
-            </div>
-          </div>
-
-          <div className="flex items-center gap-2">
-            <span className="text-[10px] font-bold px-2.5 py-0.5 rounded-full bg-[#242424] text-neutral-300 border border-[#333333] flex items-center gap-1 shadow-xs font-sans">
-              <ShieldCheck size={12} className="text-emerald-500" />
-              <span>2026</span>
-            </span>
-          </div>
-        </div>
-      </header>
-
-      {/* Main Container */}
-      <main className="max-w-md mx-auto px-4 pt-4">
-        {/* Series Standings Card Summary: Upgraded Best-of-5 Tracker */}
-        <div className="bg-[#242424] border border-[#333333] rounded-3xl p-4 sm:p-5 mb-5 shadow-xl">
-          {/* Header Row: Title and View Switcher */}
+      {/* Main Container - top header removed as requested */}
+      <main className="max-w-md mx-auto px-4 pt-6">
+        {/* Series Standings Card Summary: Best-of-5 Tracker */}
+        <div className="bg-[#242424] border border-[#333333] rounded-3xl p-4 sm:p-5 mb-5">
+          {/* Header Row: Title and View Switcher (trophy icon removed) */}
           <div className="flex items-center justify-between pb-3 border-b border-[#333333] mb-3.5">
-            <div className="flex items-center gap-2">
-              <Trophy size={15} className="text-amber-400" />
-              <span className="text-xs font-bold text-white font-sans tracking-wide uppercase">
-                SERIES STANDINGS (BEST-OF-5)
-              </span>
-            </div>
+            <span className="text-xs font-bold text-white font-sans tracking-wide uppercase">
+              SERIES STANDINGS (BEST-OF-5)
+            </span>
 
             {/* View Toggle: Round vs All */}
             <div className="flex items-center bg-[#181818] p-0.5 rounded-full border border-[#333333]">
@@ -140,7 +132,7 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({
                 onClick={() => setStandingsView('round')}
                 className={`px-2.5 py-0.5 text-[10px] font-bold rounded-full transition-all uppercase ${
                   standingsView === 'round'
-                    ? 'bg-white text-black shadow-xs'
+                    ? 'bg-white text-black'
                     : 'text-neutral-400 hover:text-white'
                 }`}
               >
@@ -151,7 +143,7 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({
                 onClick={() => setStandingsView('all')}
                 className={`px-2.5 py-0.5 text-[10px] font-bold rounded-full transition-all uppercase ${
                   standingsView === 'all'
-                    ? 'bg-white text-black shadow-xs'
+                    ? 'bg-white text-black'
                     : 'text-neutral-400 hover:text-white'
                 }`}
               >
@@ -166,29 +158,29 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({
               const team1 = s.team1Id ? TEAMS[s.team1Id] : null;
               const team2 = s.team2Id ? TEAMS[s.team2Id] : null;
 
-              // Format series status badge: light blue accent and 3-letter abbreviations
+              // Format series status badge: white accent and 3-letter abbreviations (no glow)
               let statusText = '';
-              let statusBadgeClass = 'text-neutral-400 bg-neutral-800/80 border-neutral-700/60';
+              let statusBadgeClass = 'text-neutral-400 bg-neutral-800 border-neutral-700';
 
               if (s.isClinched && s.winnerId) {
                 const winnerShort = TEAMS[s.winnerId]?.shortName || 'WIN';
                 statusText = `${winnerShort} win series ${Math.max(s.team1Wins, s.team2Wins)} – ${Math.min(s.team1Wins, s.team2Wins)} · Clinched`;
-                statusBadgeClass = 'text-emerald-400 bg-emerald-950/60 border-emerald-800/60';
+                statusBadgeClass = 'text-white bg-white/10 border border-white/20';
               } else if (!team1 || !team2) {
                 statusText = s.phase === 'semifinals' ? 'Awaiting PLAYOFF Winners' : 'Awaiting Semi-Final Winners';
-                statusBadgeClass = 'text-neutral-500 bg-[#1a1a1a] border-neutral-800';
+                statusBadgeClass = 'text-neutral-500 bg-[#1a1a1a] border border-neutral-800';
               } else if (s.team1Wins > s.team2Wins) {
                 statusText = `${team1.shortName} lead ${s.team1Wins} – ${s.team2Wins}`;
-                statusBadgeClass = 'text-sky-300 bg-sky-400/15 border-sky-400/40';
+                statusBadgeClass = 'text-white bg-white/10 border border-white/20';
               } else if (s.team2Wins > s.team1Wins) {
                 statusText = `${team2.shortName} lead ${s.team2Wins} – ${s.team1Wins}`;
-                statusBadgeClass = 'text-sky-300 bg-sky-400/15 border-sky-400/40';
+                statusBadgeClass = 'text-white bg-white/10 border border-white/20';
               } else if (s.team1Wins === 0 && s.team2Wins === 0) {
                 statusText = 'Series Tied 0 – 0';
-                statusBadgeClass = 'text-neutral-400 bg-[#1e1e1e] border-neutral-800';
+                statusBadgeClass = 'text-neutral-400 bg-[#1e1e1e] border border-neutral-800';
               } else {
                 statusText = `Series Tied ${s.team1Wins} – ${s.team2Wins}`;
-                statusBadgeClass = 'text-neutral-300 bg-[#282828] border-neutral-700';
+                statusBadgeClass = 'text-neutral-300 bg-[#282828] border border-neutral-700';
               }
 
               return (
@@ -202,7 +194,7 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({
                       {s.name.replace(/playoff/gi, 'PLAYOFF')}
                     </span>
                     <span
-                      className={`text-[10px] font-bold px-2 py-0.5 rounded-full border font-sans ${statusBadgeClass}`}
+                      className={`text-[10px] font-bold px-2 py-0.5 rounded-full font-sans ${statusBadgeClass}`}
                     >
                       {statusText}
                     </span>
@@ -217,7 +209,7 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({
                           <img
                             src={team1.logoUrl}
                             alt={team1.name}
-                            className="w-full h-full object-contain filter drop-shadow-sm"
+                            className="w-full h-full object-contain"
                           />
                         ) : (
                           <div className="w-8 h-8 rounded-full bg-neutral-800 border border-neutral-700 flex items-center justify-center text-[10px] text-neutral-500 font-bold">
@@ -229,14 +221,14 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({
                         <span className="font-display font-extrabold text-xs text-white uppercase truncate">
                           {team1 ? team1.name : (s.id === 'sf1' ? 'FALCONS' : s.id === 'sf2' ? 'RAPTORS' : 'TBD')}
                         </span>
-                        {/* 3 Win Indicator Pips (Light Blue Accent) */}
+                        {/* 3 Win Indicator Pips (White Accent, no glow) */}
                         <div className="flex items-center gap-1.5 mt-1">
                           {[0, 1, 2].map((i) => (
                             <span
                               key={i}
                               className={`w-2 h-2 rounded-full transition-all ${
                                 i < s.team1Wins
-                                  ? 'bg-[#38BDF8] ring-2 ring-[#38BDF8]/40 shadow-xs shadow-[#38BDF8]/30'
+                                  ? 'bg-white'
                                   : 'bg-neutral-800 border border-neutral-700'
                               }`}
                               title={`Win ${i + 1}: ${i < s.team1Wins ? 'Achieved' : 'Needed'}`}
@@ -248,7 +240,7 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({
 
                     {/* Series Score Pill */}
                     <div className="flex flex-col items-center justify-center px-2 flex-shrink-0">
-                      <div className="flex items-center gap-2 bg-[#121212] border border-[#333333] px-3 py-1 rounded-xl shadow-inner">
+                      <div className="flex items-center gap-2 bg-[#121212] border border-[#333333] px-3 py-1 rounded-xl">
                         <span className="font-display font-extrabold text-base text-white">
                           {s.team1Wins}
                         </span>
@@ -268,14 +260,14 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({
                         <span className="font-display font-extrabold text-xs text-white uppercase truncate">
                           {team2 ? team2.name : (s.id === 'sf1' ? 'WINNER PO1' : s.id === 'sf2' ? 'WINNER PO2' : 'TBD')}
                         </span>
-                        {/* 3 Win Indicator Pips (Light Blue Accent) */}
+                        {/* 3 Win Indicator Pips (White Accent, no glow) */}
                         <div className="flex items-center gap-1.5 mt-1 justify-end">
                           {[0, 1, 2].map((i) => (
                             <span
                               key={i}
                               className={`w-2 h-2 rounded-full transition-all ${
                                 i < s.team2Wins
-                                  ? 'bg-[#38BDF8] ring-2 ring-[#38BDF8]/40 shadow-xs shadow-[#38BDF8]/30'
+                                  ? 'bg-white'
                                   : 'bg-neutral-800 border border-neutral-700'
                               }`}
                               title={`Win ${i + 1}: ${i < s.team2Wins ? 'Achieved' : 'Needed'}`}
@@ -288,7 +280,7 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({
                           <img
                             src={team2.logoUrl}
                             alt={team2.name}
-                            className="w-full h-full object-contain filter drop-shadow-sm"
+                            className="w-full h-full object-contain"
                           />
                         ) : (
                           <div className="w-8 h-8 rounded-full bg-neutral-800 border border-neutral-700 flex items-center justify-center text-[10px] text-neutral-500 font-bold">
@@ -359,11 +351,14 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({
         <PasscodeModal
           fixture={selectedFixture}
           isOpen={isPasscodeModalOpen}
-          onClose={() => setIsPasscodeModalOpen(false)}
+          onClose={() => {
+            setIsPasscodeModalOpen(false);
+            setPasscodeError(null);
+          }}
           onSubmit={handlePasscodeSubmit}
           error={passcodeError}
-          buttonColor="blue"
-          buttonText="START RECORDING"
+          buttonColor={passcodeModalMode === 'results' ? 'green' : 'blue'}
+          buttonText={passcodeModalMode === 'results' ? 'VIEW RESULTS' : 'START RECORDING'}
           subtitle="Enter the passcode to continue."
         />
       )}

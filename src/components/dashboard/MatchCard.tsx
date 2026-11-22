@@ -20,7 +20,7 @@ export const MatchCard: React.FC<MatchCardProps> = ({ fixture, onSelect }) => {
     : 'Finals';
 
   return (
-    <div className="w-full bg-[#242424] border border-[#333333] rounded-3xl p-5 shadow-xl transition-all hover:border-[#444444]">
+    <div className="w-full bg-[#242424] border border-[#333333] rounded-3xl p-5 transition-all hover:border-[#444444]">
       {/* Top row: Match Identification and Date (GAME and PLAYOFF capital) */}
       <div className="flex items-center justify-between text-xs text-neutral-400 mb-4 tracking-wide font-sans font-bold">
         <span>
@@ -41,7 +41,7 @@ export const MatchCard: React.FC<MatchCardProps> = ({ fixture, onSelect }) => {
               <img
                 src={team1.logoUrl}
                 alt={team1.name}
-                className="w-full h-full object-contain filter drop-shadow-md"
+                className="w-full h-full object-contain"
               />
             ) : (
               <span className="text-xs text-neutral-500 font-bold">?</span>
@@ -61,7 +61,7 @@ export const MatchCard: React.FC<MatchCardProps> = ({ fixture, onSelect }) => {
               <img
                 src={team2.logoUrl}
                 alt={team2.name}
-                className="w-full h-full object-contain filter drop-shadow-md"
+                className="w-full h-full object-contain"
               />
             ) : (
               <span className="text-xs text-neutral-500 font-bold">?</span>
@@ -76,7 +76,7 @@ export const MatchCard: React.FC<MatchCardProps> = ({ fixture, onSelect }) => {
       {/* Bottom Button Action */}
       <div className="mt-5">
         {fixture.status === 'completed' && fixture.isUnopenable && (
-          <div className="w-full py-3.5 bg-[#1c1c1c] border border-[#2d2d2d] text-neutral-400 rounded-full font-bold text-xs tracking-wider flex items-center justify-center gap-2 uppercase font-sans cursor-default select-none shadow-inner">
+          <div className="w-full py-3.5 bg-[#1c1c1c] border border-[#2d2d2d] text-neutral-400 rounded-full font-bold text-xs tracking-wider flex items-center justify-center gap-2 uppercase font-sans cursor-default select-none">
             <Check size={16} className="text-neutral-500 stroke-[2.5]" />
             <span>COMPLETED</span>
           </div>
@@ -85,7 +85,7 @@ export const MatchCard: React.FC<MatchCardProps> = ({ fixture, onSelect }) => {
         {fixture.status === 'completed' && !fixture.isUnopenable && (
           <button
             onClick={() => onSelect(fixture)}
-            className="w-full py-3.5 bg-emerald-600 hover:bg-emerald-500 active:scale-[0.98] transition-all text-white rounded-full font-bold text-xs tracking-wider flex items-center justify-center gap-2 shadow-md shadow-emerald-950/40 uppercase font-sans"
+            className="w-full py-3.5 bg-emerald-600 hover:bg-emerald-500 active:scale-[0.98] transition-all text-white rounded-full font-bold text-xs tracking-wider flex items-center justify-center gap-2 uppercase font-sans"
           >
             <Check size={16} className="stroke-[3]" />
             <span>VIEW RESULTS</span>
@@ -96,7 +96,7 @@ export const MatchCard: React.FC<MatchCardProps> = ({ fixture, onSelect }) => {
         {fixture.status === 'available' && (
           <button
             onClick={() => onSelect(fixture)}
-            className="w-full py-3.5 bg-[#007AFF] hover:bg-[#0066DD] active:scale-[0.98] transition-all text-white rounded-full font-bold text-xs tracking-wider flex items-center justify-center gap-2 shadow-md shadow-blue-500/25 uppercase font-sans"
+            className="w-full py-3.5 bg-[#007AFF] hover:bg-[#0066DD] active:scale-[0.98] transition-all text-white rounded-full font-bold text-xs tracking-wider flex items-center justify-center gap-2 uppercase font-sans"
           >
             <span>START RECORDING</span>
             <ArrowRight size={16} className="stroke-[3]" />
@@ -106,9 +106,9 @@ export const MatchCard: React.FC<MatchCardProps> = ({ fixture, onSelect }) => {
         {fixture.status === 'in_progress' && (
           <button
             onClick={() => onSelect(fixture)}
-            className="w-full py-3.5 bg-amber-600 hover:bg-amber-500 active:scale-[0.98] transition-all text-white rounded-full font-bold text-xs tracking-wider flex items-center justify-center gap-2 shadow-md shadow-amber-950/40 uppercase font-sans"
+            className="w-full py-3.5 bg-amber-600 hover:bg-amber-500 active:scale-[0.98] transition-all text-white rounded-full font-bold text-xs tracking-wider flex items-center justify-center gap-2 uppercase font-sans"
           >
-            <Radio size={16} className="animate-pulse" />
+            <Radio size={16} />
             <span>RECORDING UNDERWAY</span>
           </button>
         )}

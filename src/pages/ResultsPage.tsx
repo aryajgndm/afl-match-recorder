@@ -6,6 +6,7 @@ import { ResultsTable } from '../components/results/ResultsTable';
 import { QuarterScoreboard } from '../components/recording/QuarterScoreboard';
 import { EventTimeline } from '../components/recording/EventTimeline';
 import { exportMatchScoresheetPdf } from '../lib/pdfExport';
+import { PasscodeModal } from '../components/common/PasscodeModal';
 import { ChevronLeft, FileDown } from 'lucide-react';
 
 interface ResultsPageProps {
@@ -17,6 +18,10 @@ export const ResultsPage: React.FC<ResultsPageProps> = ({ matchId, onNavigateBac
   const [fixture, setFixture] = useState<Fixture | null>(null);
   const [events, setEvents] = useState<MatchEvent[]>([]);
   const [currentQuarter, setCurrentQuarter] = useState<Quarter>('q1');
+  const [isUnlocked, setIsUnlocked] = useState<boolean>(() => {
+    return sessionStorage.getItem(`afl_unlocked_${matchId}`) === 'true';
+  });
+  const [passcodeError, setPasscodeError] = useState<string | null>(null);
 
   useEffect(() => {
     const f = matchStorage.getFixtureById(matchId);
@@ -25,6 +30,16 @@ export const ResultsPage: React.FC<ResultsPageProps> = ({ matchId, onNavigateBac
       setEvents(matchStorage.getEvents(matchId));
     }
   }, [matchId]);
+
+  const handleUnlockSubmit = (code: string) => {
+    if (matchStorage.validatePasscode(matchId, code)) {
+      sessionStorage.setItem(`afl_unlocked_${matchId}`, 'true');
+      setIsUnlocked(true);
+      setPasscodeError(null);
+    } else {
+      setPasscodeError('Incorrect passcode. Try again.');
+    }
+  };
 
   if (!fixture || !fixture.result) {
     return (
@@ -38,6 +53,24 @@ export const ResultsPage: React.FC<ResultsPageProps> = ({ matchId, onNavigateBac
         >
           RETURN TO DASHBOARD
         </button>
+      </div>
+    );
+  }
+
+  // Data Team Passcode Gate
+  if (!isUnlocked) {
+    return (
+      <div className="min-h-screen bg-[#121212] flex items-center justify-center p-4">
+        <PasscodeModal
+          fixture={fixture}
+          isOpen={true}
+          onClose={onNavigateBack}
+          onSubmit={handleUnlockSubmit}
+          error={passcodeError}
+          buttonColor="green"
+          buttonText="VIEW RESULTS"
+          subtitle="Enter the passcode to continue."
+        />
       </div>
     );
   }
@@ -120,7 +153,7 @@ export const ResultsPage: React.FC<ResultsPageProps> = ({ matchId, onNavigateBac
       </main>
 
       {/* Fixed Bottom Quarter Navigation & PDF Export - Colors: #121212 and #242424 */}
-      <div className="fixed bottom-0 left-0 right-0 z-40 bg-[#121212] border-t border-[#262626] rounded-t-3xl shadow-2xl p-4 max-w-md mx-auto">
+      <div className="fixed bottom-0 left-0 right-0 z-40 bg-[#121212] border-t border-[#262626] rounded-t-3xl p-4 max-w-md mx-auto">
         <div className="flex items-center justify-between gap-3">
           {/* Quarter Pills */}
           <div className="flex items-center gap-1.5 bg-[#242424] p-1 rounded-full border border-[#333333]">
@@ -134,7 +167,7 @@ export const ResultsPage: React.FC<ResultsPageProps> = ({ matchId, onNavigateBac
                   onClick={() => setCurrentQuarter(q)}
                   className={`px-3.5 py-1.5 text-xs font-bold tracking-wider rounded-full transition-all uppercase ${
                     isActive
-                      ? 'bg-white text-black shadow-sm'
+                      ? 'bg-white text-black'
                       : 'text-neutral-400 hover:text-white'
                   }`}
                 >
@@ -147,7 +180,7 @@ export const ResultsPage: React.FC<ResultsPageProps> = ({ matchId, onNavigateBac
           {/* Export PDF Button */}
           <button
             onClick={handleExportPdf}
-            className="px-4 py-2 bg-emerald-600 hover:bg-emerald-500 active:scale-95 transition-all text-white rounded-full font-bold text-xs tracking-wider flex items-center gap-2 shadow-lg shadow-emerald-950/40 uppercase whitespace-nowrap font-sans"
+            className="px-4 py-2 bg-emerald-600 hover:bg-emerald-500 active:scale-95 transition-all text-white rounded-full font-bold text-xs tracking-wider flex items-center gap-2 uppercase whitespace-nowrap font-sans"
           >
             <FileDown size={16} />
             <span>EXPORT PDF</span>

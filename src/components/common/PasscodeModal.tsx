@@ -98,7 +98,7 @@ export const PasscodeModal: React.FC<PasscodeModalProps> = ({
 
         {/* Team logos vs */}
         <div className="flex items-center justify-center gap-5 my-5">
-          <div className="w-16 h-16 sm:w-20 sm:h-20 flex items-center justify-center flex-shrink-0 filter drop-shadow-md">
+          <div className="w-16 h-16 sm:w-20 sm:h-20 flex items-center justify-center flex-shrink-0">
             {team1 ? (
               <img
                 src={team1.logoUrl}
@@ -114,7 +114,7 @@ export const PasscodeModal: React.FC<PasscodeModalProps> = ({
             V
           </span>
 
-          <div className="w-16 h-16 sm:w-20 sm:h-20 flex items-center justify-center flex-shrink-0 filter drop-shadow-md">
+          <div className="w-16 h-16 sm:w-20 sm:h-20 flex items-center justify-center flex-shrink-0">
             {team2 ? (
               <img
                 src={team2.logoUrl}
@@ -143,7 +143,7 @@ export const PasscodeModal: React.FC<PasscodeModalProps> = ({
                 value={digit}
                 onChange={(e) => handleChange(idx, e.target.value)}
                 onKeyDown={(e) => handleKeyDown(idx, e)}
-                className="w-11 h-12 text-center text-xl font-display font-extrabold bg-white border-2 border-slate-300 focus:border-[#007AFF] rounded-xl text-slate-900 focus:outline-none transition-colors shadow-sm"
+                className="w-11 h-12 text-center text-xl font-display font-extrabold bg-white border-2 border-slate-300 focus:border-[#007AFF] rounded-xl text-slate-900 focus:outline-none transition-colors"
               />
             ))}
           </div>
@@ -153,9 +153,9 @@ export const PasscodeModal: React.FC<PasscodeModalProps> = ({
             <button
               type="submit"
               disabled={digits.join('').length !== 6}
-              className={`w-full py-3.5 rounded-full font-bold text-xs tracking-wider flex items-center justify-center gap-2 transition-all shadow-md uppercase ${
+              className={`w-full py-3.5 rounded-full font-bold text-xs tracking-wider flex items-center justify-center gap-2 transition-all uppercase ${
                 digits.join('').length === 6
-                  ? 'bg-emerald-600 hover:bg-emerald-500 text-white shadow-emerald-600/30 active:scale-[0.98]'
+                  ? 'bg-emerald-600 hover:bg-emerald-500 text-white active:scale-[0.98]'
                   : 'bg-slate-200 text-slate-400 cursor-not-allowed'
               }`}
             >
@@ -166,9 +166,9 @@ export const PasscodeModal: React.FC<PasscodeModalProps> = ({
             <button
               type="submit"
               disabled={digits.join('').length !== 6}
-              className={`w-full py-3.5 rounded-full font-bold text-xs tracking-wider flex items-center justify-center gap-2 transition-all shadow-md uppercase ${
+              className={`w-full py-3.5 rounded-full font-bold text-xs tracking-wider flex items-center justify-center gap-2 transition-all uppercase ${
                 digits.join('').length === 6
-                  ? 'bg-[#007AFF] hover:bg-[#0066DD] text-white shadow-blue-500/25 active:scale-[0.98]'
+                  ? 'bg-[#007AFF] hover:bg-[#0066DD] text-white active:scale-[0.98]'
                   : 'bg-slate-200 text-slate-400 cursor-not-allowed'
               }`}
             >
@@ -177,17 +177,14 @@ export const PasscodeModal: React.FC<PasscodeModalProps> = ({
             </button>
           )}
 
-          {/* Helper Subtitle (Informational line: Bricolage Grotesque, sentence case) */}
-          <p className="text-[11px] font-medium text-slate-400 mt-3 tracking-normal">
-            {subtitle}
+          {/* Helper Subtitle (in-place error message: changes directly to "Incorrect passcode. Try again." in red) */}
+          <p
+            className={`text-[11px] mt-3 tracking-normal font-sans ${
+              error ? 'text-rose-600 font-semibold' : 'text-slate-400 font-medium'
+            }`}
+          >
+            {error ? 'Incorrect passcode. Try again.' : subtitle}
           </p>
-
-          {/* Error Message */}
-          {error && (
-            <p className="text-xs font-semibold text-rose-600 mt-2 tracking-normal animate-shake">
-              {error}
-            </p>
-          )}
         </form>
       </div>
     </div>

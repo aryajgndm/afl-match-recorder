@@ -46,7 +46,7 @@ export const QuarterScoreboard: React.FC<QuarterScoreboardProps> = ({
             <button
               type="button"
               onClick={onSubmitClick}
-              className="px-4 py-1.5 bg-[#007AFF] hover:bg-[#0066DD] active:scale-95 transition-all text-white rounded-full font-bold text-xs tracking-wider flex items-center gap-1 shadow-md shadow-blue-500/25 uppercase font-sans"
+              className="px-4 py-1.5 bg-[#007AFF] hover:bg-[#0066DD] active:scale-95 transition-all text-white rounded-full font-bold text-xs tracking-wider flex items-center gap-1 uppercase font-sans"
             >
               <span>SUBMIT</span>
               <Plus size={15} className="stroke-[3]" />
@@ -66,10 +66,10 @@ export const QuarterScoreboard: React.FC<QuarterScoreboardProps> = ({
       )}
 
       {/* Mini Scoreboard Black Pill: [logo] PANTHERS 4 3 BULLS [logo] */}
-      <div className="w-full bg-black text-white rounded-2xl py-2 px-4 flex items-center justify-between shadow-md">
+      <div className="w-full bg-black text-white rounded-2xl py-2 px-4 flex items-center justify-between">
         {/* Team 1 */}
         <div className="flex items-center gap-2 flex-1 truncate">
-          <div className="w-8 h-8 flex items-center justify-center flex-shrink-0 filter drop-shadow-sm">
+          <div className="w-8 h-8 flex items-center justify-center flex-shrink-0">
             {team1 && (
               <img
                 src={team1.logoUrl}
@@ -94,7 +94,7 @@ export const QuarterScoreboard: React.FC<QuarterScoreboardProps> = ({
           <span className="font-display font-extrabold text-xs tracking-wider text-white uppercase truncate text-right">
             {team2?.name}
           </span>
-          <div className="w-8 h-8 flex items-center justify-center flex-shrink-0 filter drop-shadow-sm">
+          <div className="w-8 h-8 flex items-center justify-center flex-shrink-0">
             {team2 && (
               <img
                 src={team2.logoUrl}

@@ -207,7 +207,7 @@ export const BottomDock: React.FC<BottomDockProps> = ({
     selectedCardPlayerState?.isDismissed && (!editingEvent || editingEvent.playerId !== cardPlayerId);
 
   return (
-    <div className="fixed bottom-0 left-0 right-0 z-40 bg-[#121212] border-t border-[#262626] rounded-t-3xl shadow-2xl p-4 max-w-md mx-auto font-sans font-normal uppercase">
+    <div className="fixed bottom-0 left-0 right-0 z-40 bg-[#121212] border-t border-[#262626] rounded-t-3xl p-4 max-w-md mx-auto font-sans font-normal uppercase">
       {/* Top Bar: Quarter Switcher & Mode Icons */}
       <div className="flex items-center justify-between pb-3 border-b border-[#262626] mb-3">
         {/* Quarter Pills (Bold text) */}
@@ -338,7 +338,7 @@ export const BottomDock: React.FC<BottomDockProps> = ({
               >
                 <ChevronLeft size={16} className="text-neutral-400" />
                 <div className="flex items-center gap-2 truncate">
-                  <div className="w-6 h-6 flex items-center justify-center filter drop-shadow-sm flex-shrink-0">
+                  <div className="w-6 h-6 flex items-center justify-center flex-shrink-0">
                     {selectedTeam && (
                       <img
                         src={selectedTeam.logoUrl}
@@ -495,7 +495,7 @@ export const BottomDock: React.FC<BottomDockProps> = ({
                 type="button"
                 onClick={handleSaveGoal}
                 disabled={!scorerId}
-                className={`px-5 py-2.5 rounded-full font-bold text-xs tracking-wider uppercase transition-all shadow-md active:scale-95 ${
+                className={`px-5 py-2.5 rounded-full font-bold text-xs tracking-wider uppercase transition-all active:scale-95 ${
                   scorerId
                     ? 'bg-white text-black hover:bg-neutral-200'
                     : 'bg-[#2a2a2a] text-neutral-500 cursor-not-allowed'
@@ -550,7 +550,7 @@ export const BottomDock: React.FC<BottomDockProps> = ({
               >
                 <ChevronLeft size={16} className="text-neutral-400" />
                 <div className="flex items-center gap-2 truncate">
-                  <div className="w-6 h-6 flex items-center justify-center filter drop-shadow-sm flex-shrink-0">
+                  <div className="w-6 h-6 flex items-center justify-center flex-shrink-0">
                     {selectedTeam && (
                       <img
                         src={selectedTeam.logoUrl}
@@ -580,13 +580,13 @@ export const BottomDock: React.FC<BottomDockProps> = ({
                 onClick={() => setCardType('yellow')}
                 className={`flex items-center justify-center gap-2 py-2 px-3 rounded-lg transition-all font-sans font-bold text-xs uppercase ${
                   cardType === 'yellow'
-                    ? 'bg-amber-400/20 text-amber-300 border border-amber-400/60 shadow-xs'
+                    ? 'bg-amber-400/20 text-amber-300 border border-amber-400/60'
                     : 'text-neutral-400 hover:text-white border border-transparent'
                 }`}
               >
                 {/* Yellow Card SVG Icon */}
                 <svg
-                  className="w-3.5 h-[18px] flex-shrink-0 drop-shadow-sm"
+                  className="w-3.5 h-[18px] flex-shrink-0"
                   viewBox="0 0 14 18"
                   fill="none"
                 >
@@ -611,13 +611,13 @@ export const BottomDock: React.FC<BottomDockProps> = ({
                 onClick={() => setCardType('red')}
                 className={`flex items-center justify-center gap-2 py-2 px-3 rounded-lg transition-all font-sans font-bold text-xs uppercase ${
                   cardType === 'red'
-                    ? 'bg-rose-600/25 text-rose-300 border border-rose-500/60 shadow-xs'
+                    ? 'bg-rose-600/25 text-rose-300 border border-rose-500/60'
                     : 'text-neutral-400 hover:text-white border border-transparent'
                 }`}
               >
                 {/* Red Card SVG Icon */}
                 <svg
-                  className="w-3.5 h-[18px] flex-shrink-0 drop-shadow-sm"
+                  className="w-3.5 h-[18px] flex-shrink-0"
                   viewBox="0 0 14 18"
                   fill="none"
                 >
@@ -721,7 +721,7 @@ export const BottomDock: React.FC<BottomDockProps> = ({
               type="button"
               onClick={handleSaveCard}
               disabled={!cardPlayerId || isSelectedPlayerDismissed}
-              className={`px-5 py-2.5 rounded-full font-bold text-xs tracking-wider uppercase transition-all shadow-md active:scale-95 ${
+              className={`px-5 py-2.5 rounded-full font-bold text-xs tracking-wider uppercase transition-all active:scale-95 ${
                 cardPlayerId && !isSelectedPlayerDismissed
                   ? 'bg-white text-black hover:bg-neutral-200'
                   : 'bg-[#2a2a2a] text-neutral-500 cursor-not-allowed'

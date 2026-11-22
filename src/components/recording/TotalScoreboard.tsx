@@ -15,7 +15,7 @@ export const TotalScoreboard: React.FC<TotalScoreboardProps> = ({ team1, team2, 
         <span className="font-display font-black text-base tracking-wider text-slate-900 uppercase">
           {team1?.shortName || 'T1'}
         </span>
-        <div className="w-9 h-9 flex items-center justify-center flex-shrink-0 filter drop-shadow-sm">
+        <div className="w-9 h-9 flex items-center justify-center flex-shrink-0">
           {team1 && (
             <img
               src={team1.logoUrl}
@@ -28,17 +28,17 @@ export const TotalScoreboard: React.FC<TotalScoreboardProps> = ({ team1, team2, 
 
       {/* Score Digits in Clean Rounded Cards */}
       <div className="flex items-center gap-1.5">
-        <div className="w-10 h-10 flex items-center justify-center bg-white border border-slate-300 rounded-xl shadow-sm font-display font-black text-2xl text-slate-900">
+        <div className="w-10 h-10 flex items-center justify-center bg-white border border-slate-300 rounded-xl font-display font-black text-2xl text-slate-900">
           {score.team1Total}
         </div>
-        <div className="w-10 h-10 flex items-center justify-center bg-white border border-slate-300 rounded-xl shadow-sm font-display font-black text-2xl text-slate-900">
+        <div className="w-10 h-10 flex items-center justify-center bg-white border border-slate-300 rounded-xl font-display font-black text-2xl text-slate-900">
           {score.team2Total}
         </div>
       </div>
 
       {/* Team 2: Logo + 3-Letter Abbr */}
       <div className="flex items-center gap-2">
-        <div className="w-9 h-9 flex items-center justify-center flex-shrink-0 filter drop-shadow-sm">
+        <div className="w-9 h-9 flex items-center justify-center flex-shrink-0">
           {team2 && (
             <img
               src={team2.logoUrl}

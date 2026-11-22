@@ -26,12 +26,12 @@ export const QuarterwiseScoresheetTable: React.FC<QuarterwiseScoresheetTableProp
       </div>
 
       {/* Main Table Box: Perfect rounded-xl container with crisp border on all 4 sides */}
-      <div className="border border-slate-300 rounded-xl overflow-hidden bg-white shadow-xs">
+      <div className="border border-slate-300 rounded-xl overflow-hidden bg-white">
         {/* Team 1 Row */}
         <div className="grid grid-cols-[88px_repeat(5,_1fr)_48px] border-b border-slate-300 items-stretch">
           {/* Team 1 Cell: Solid Black with logo + 3-letter abbreviation */}
           <div className="bg-black text-white px-2.5 py-2 flex items-center justify-center gap-1.5 border-r border-slate-300">
-            <div className="w-5 h-5 flex items-center justify-center flex-shrink-0 filter drop-shadow-sm">
+            <div className="w-5 h-5 flex items-center justify-center flex-shrink-0">
               {team1 && (
                 <img
                   src={team1.logoUrl}
@@ -70,7 +70,7 @@ export const QuarterwiseScoresheetTable: React.FC<QuarterwiseScoresheetTableProp
         <div className="grid grid-cols-[88px_repeat(5,_1fr)_48px] items-stretch">
           {/* Team 2 Cell: Solid Black with logo + 3-letter abbreviation */}
           <div className="bg-black text-white px-2.5 py-2 flex items-center justify-center gap-1.5 border-r border-slate-300">
-            <div className="w-5 h-5 flex items-center justify-center flex-shrink-0 filter drop-shadow-sm">
+            <div className="w-5 h-5 flex items-center justify-center flex-shrink-0">
               {team2 && (
                 <img
                   src={team2.logoUrl}

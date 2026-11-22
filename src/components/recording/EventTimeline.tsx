@@ -35,7 +35,7 @@ export const EventTimeline: React.FC<EventTimelineProps> = ({
   const sorted = [...events].sort((a, b) => a.minute - b.minute);
 
   return (
-    <div className="w-full mx-auto flex flex-col rounded-xl overflow-hidden shadow-xs border border-slate-200 font-sans">
+    <div className="w-full mx-auto flex flex-col rounded-xl overflow-hidden border border-slate-200 font-sans">
       {sorted.map((ev, index) => {
         const isTeam1 = ev.teamId === team1?.id;
         const isSelected = selectedEventId === ev.id;
@@ -60,12 +60,12 @@ export const EventTimeline: React.FC<EventTimelineProps> = ({
                 index % 2 === 0 ? 'bg-white' : 'bg-[#f2f4f7]'
               } ${
                 isSelected
-                ? 'bg-blue-50/90 ring-2 ring-[#007AFF] shadow-xs'
+                ? 'bg-blue-50/90 ring-2 ring-[#007AFF]'
                 : 'hover:bg-slate-100'
               }`}
             >
               <span
-                className={`w-3 h-4 rounded-[2px] inline-block shadow-sm ${
+                className={`w-3 h-4 rounded-[2px] inline-block ${
                   isYellow ? 'bg-amber-400' : 'bg-rose-600'
                 }`}
               />
@@ -104,7 +104,7 @@ export const EventTimeline: React.FC<EventTimelineProps> = ({
               index % 2 === 0 ? 'bg-white' : 'bg-[#f2f4f7]'
             } ${
               isSelected
-                ? 'bg-blue-50/90 ring-2 ring-[#007AFF] shadow-xs'
+                ? 'bg-blue-50/90 ring-2 ring-[#007AFF]'
                 : 'hover:bg-slate-100'
             }`}
           >

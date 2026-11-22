@@ -107,9 +107,9 @@ export const SubmitModal: React.FC<SubmitModalProps> = ({
             <button
               type="submit"
               disabled={digits.join('').length !== 6}
-              className={`flex-1 py-3 rounded-full font-bold text-xs tracking-wider flex items-center justify-center gap-1.5 transition-all shadow-md uppercase ${
+              className={`flex-1 py-3 rounded-full font-bold text-xs tracking-wider flex items-center justify-center gap-1.5 transition-all uppercase ${
                 digits.join('').length === 6
-                  ? 'bg-[#007AFF] hover:bg-[#0066DD] text-white shadow-blue-500/25 active:scale-95'
+                  ? 'bg-[#007AFF] hover:bg-[#0066DD] text-white active:scale-95'
                   : 'bg-slate-200 text-slate-400 cursor-not-allowed'
               }`}
             >
@@ -120,24 +120,21 @@ export const SubmitModal: React.FC<SubmitModalProps> = ({
             <button
               type="button"
               onClick={onClose}
-              className="flex-1 py-3 bg-rose-600 hover:bg-rose-500 text-white rounded-full font-bold text-xs tracking-wider flex items-center justify-center gap-1.5 transition-all shadow-md active:scale-95 uppercase"
+              className="flex-1 py-3 bg-rose-600 hover:bg-rose-500 text-white rounded-full font-bold text-xs tracking-wider flex items-center justify-center gap-1.5 transition-all active:scale-95 uppercase"
             >
               <X size={16} className="stroke-[3]" />
               <span>CANCEL</span>
             </button>
           </div>
 
-          {/* Subtitle helper (Informational line: Bricolage Grotesque, sentence case) */}
-          <p className="text-[11px] font-medium text-slate-400 mt-3 tracking-normal">
-            Enter the passcode to submit.
+          {/* Subtitle helper / in-place error message */}
+          <p
+            className={`text-[11px] mt-3 tracking-normal font-sans ${
+              error ? 'text-rose-600 font-semibold' : 'text-slate-400 font-medium'
+            }`}
+          >
+            {error ? 'Incorrect passcode. Try again.' : 'Enter the passcode to submit.'}
           </p>
-
-          {/* Error message */}
-          {error && (
-            <p className="text-xs font-semibold text-rose-600 mt-2 tracking-normal animate-shake">
-              {error}
-            </p>
-          )}
         </form>
       </div>
     </div>
