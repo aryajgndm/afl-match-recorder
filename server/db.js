@@ -5,6 +5,28 @@ import { fileURLToPath } from 'node:url';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
+// Ensure .env is loaded if available
+try {
+  const envPath = path.resolve(__dirname, '..', '.env');
+  if (fs.existsSync(envPath)) {
+    if (typeof process.loadEnvFile === 'function') {
+      process.loadEnvFile(envPath);
+    } else {
+      const content = fs.readFileSync(envPath, 'utf-8');
+      for (const line of content.split('\n')) {
+        const trimmed = line.trim();
+        if (trimmed && !trimmed.startsWith('#') && trimmed.includes('=')) {
+          const [key, ...rest] = trimmed.split('=');
+          const val = rest.join('=').trim().replace(/^["']|["']$/g, '');
+          if (!process.env[key.trim()]) {
+            process.env[key.trim()] = val;
+          }
+        }
+      }
+    }
+  }
+} catch {}
+
 const STORE_PATH = path.join(__dirname, 'data', 'store.json');
 const SEED_PATH = path.join(__dirname, 'data', 'seed.json');
 const LOCK_EXPIRATION_MS = 3 * 60 * 1000; // 3 minutes

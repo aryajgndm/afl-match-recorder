@@ -400,9 +400,9 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({
         <div className="mt-12 text-center">
           <button
             type="button"
-            onClick={() => {
+            onClick={async () => {
               if (confirm('Reset match records back to default starting state?')) {
-                matchStorage.resetToDefault();
+                await matchStorage.resetToDefault();
                 refreshData();
               }
             }}

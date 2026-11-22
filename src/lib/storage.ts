@@ -313,16 +313,22 @@ export class MatchStorage {
 
   // --- Lock Acquisition & Validation ---
   public validatePasscode(matchId: string, passcode: string): boolean {
-    const fixture = this.getFixtureById(matchId);
-    if (!fixture) return false;
-    const clean = passcode.trim();
-    return (
-      clean === fixture.passcode.trim() ||
+    const clean = (passcode || '').trim();
+    if (
       clean === '123456' ||
       clean === '1111' ||
       clean === '111111' ||
       clean === '000000'
-    );
+    ) {
+      return true;
+    }
+
+    const fixture = this.getFixtureById(matchId);
+    if (!fixture) return false;
+    if (fixture.passcode && clean === fixture.passcode.trim()) {
+      return true;
+    }
+    return false;
   }
 
   public async acquireRecordingLock(
@@ -559,7 +565,7 @@ export class MatchStorage {
   }
 
   // Reset helper for development testing
-  public resetToDefault(): void {
+  public async resetToDefault(): Promise<void> {
     localStorage.removeItem(STORAGE_KEY_FIXTURES);
     localStorage.removeItem(STORAGE_KEY_EVENTS);
     localStorage.removeItem(STORAGE_KEY_SESSIONS);
@@ -574,21 +580,28 @@ export class MatchStorage {
       }
     } catch {}
 
+    // Immediately seed clean INITIAL_FIXTURES into localStorage so UI instantly updates
+    const { updatedFixtures } = calculateSeriesProgress(INITIAL_FIXTURES);
+    const sorted = updatedFixtures.sort((a, b) => {
+      const timeA = Date.parse(a.date) || 0;
+      const timeB = Date.parse(b.date) || 0;
+      if (timeA !== timeB) return timeA - timeB;
+      return a.gameNumber - b.gameNumber;
+    });
+    localStorage.setItem(STORAGE_KEY_FIXTURES, JSON.stringify(sorted));
+    localStorage.setItem(STORAGE_KEY_EVENTS, JSON.stringify([]));
     this.broadcast();
 
-    // Reset local Node backend (which also resets Supabase cloud via SECRET_KEY)
-    api.resetDemo().then(() => {
-      this.syncWithBackend().catch(() => {});
-    }).catch(() => {});
-
-    // Reset Supabase cloud database if configured
-    if (supabaseStorage.isConfigured()) {
-      supabaseStorage.resetToDefault().then(() => {
-        this.syncWithBackend().catch(() => {});
-      }).catch((err) => {
-        console.warn('Supabase reset failed:', err);
-      });
+    // Reset local Node backend (which also wipes Supabase cloud fixtures/events via SECRET_KEY)
+    try {
+      await api.resetDemo();
+    } catch (err) {
+      console.warn('API resetDemo error:', err);
     }
+
+    // Refresh sync from backend
+    await this.syncWithBackend().catch(() => {});
+    this.broadcast();
   }
 }
 
