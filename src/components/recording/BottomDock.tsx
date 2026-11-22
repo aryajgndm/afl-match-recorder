@@ -210,8 +210,8 @@ export const BottomDock: React.FC<BottomDockProps> = ({
     <div className="fixed bottom-0 left-0 right-0 z-40 bg-[#121212] border-t border-[#262626] rounded-t-3xl p-4 max-w-md mx-auto font-sans font-normal uppercase">
       {/* Top Bar: Quarter Switcher & Mode Icons */}
       <div className="flex items-center justify-between pb-3 border-b border-[#262626] mb-3">
-        {/* Quarter Pills (Bold text, White when toggled on) */}
-        <div className="flex items-center gap-1.5 bg-[#242424] p-1 rounded-full border border-[#333333]">
+        {/* Quarter Selector: matches size and shape of Goal/Card selector (w-8 h-8, rounded-full) */}
+        <div className="flex items-center gap-1 bg-[#242424] p-1 rounded-full border border-[#333333]">
           {quartersList.map((q) => {
             const isActive = currentQuarter === q;
             const label = q === 'et' ? 'ET' : q.toUpperCase();
@@ -220,7 +220,7 @@ export const BottomDock: React.FC<BottomDockProps> = ({
                 key={q}
                 type="button"
                 onClick={() => onQuarterChange(q)}
-                className={`px-3.5 py-1 text-xs font-bold tracking-wider rounded-full transition-all uppercase ${
+                className={`w-8 h-8 flex items-center justify-center text-xs font-bold rounded-full transition-all uppercase ${
                   isActive
                     ? 'bg-white text-black shadow-sm'
                     : 'text-neutral-400 hover:text-white'
