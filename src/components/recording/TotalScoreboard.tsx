@@ -12,7 +12,7 @@ export const TotalScoreboard: React.FC<TotalScoreboardProps> = ({ team1, team2, 
     <div className="w-full flex items-center justify-center gap-3 py-2 select-none">
       {/* Team 1: 3-Letter Abbr + Logo */}
       <div className="flex items-center gap-2">
-        <span className="font-display font-black text-base tracking-wider text-slate-900 uppercase">
+        <span className="font-display font-black text-base tracking-wider text-white uppercase">
           {team1?.shortName || 'T1'}
         </span>
         <div className="w-9 h-9 flex items-center justify-center flex-shrink-0">
@@ -28,10 +28,10 @@ export const TotalScoreboard: React.FC<TotalScoreboardProps> = ({ team1, team2, 
 
       {/* Score Digits in Clean Rounded Cards */}
       <div className="flex items-center gap-1.5">
-        <div className="w-10 h-10 flex items-center justify-center bg-white border border-slate-300 rounded-xl font-display font-black text-2xl text-slate-900">
+        <div className="w-10 h-10 flex items-center justify-center bg-[#242424] border border-[#383838] rounded-xl font-display font-black text-2xl text-white">
           {score.team1Total}
         </div>
-        <div className="w-10 h-10 flex items-center justify-center bg-white border border-slate-300 rounded-xl font-display font-black text-2xl text-slate-900">
+        <div className="w-10 h-10 flex items-center justify-center bg-[#242424] border border-[#383838] rounded-xl font-display font-black text-2xl text-white">
           {score.team2Total}
         </div>
       </div>
@@ -47,7 +47,7 @@ export const TotalScoreboard: React.FC<TotalScoreboardProps> = ({ team1, team2, 
             />
           )}
         </div>
-        <span className="font-display font-black text-base tracking-wider text-slate-900 uppercase">
+        <span className="font-display font-black text-base tracking-wider text-white uppercase">
           {team2?.shortName || 'T2'}
         </span>
       </div>

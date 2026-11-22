@@ -222,7 +222,7 @@ export const BottomDock: React.FC<BottomDockProps> = ({
                 onClick={() => onQuarterChange(q)}
                 className={`px-3.5 py-1 text-xs font-bold tracking-wider rounded-full transition-all uppercase ${
                   isActive
-                    ? 'bg-white text-black shadow-sm'
+                    ? 'bg-[#383838] text-white shadow-sm'
                     : 'text-neutral-400 hover:text-white'
                 }`}
               >
@@ -240,7 +240,7 @@ export const BottomDock: React.FC<BottomDockProps> = ({
             onClick={() => setMode('goal')}
             className={`w-8 h-8 flex items-center justify-center rounded-full transition-all ${
               mode === 'goal'
-                ? 'bg-white text-black shadow-sm'
+                ? 'bg-[#383838] text-white shadow-sm'
                 : 'text-neutral-400 hover:text-white'
             }`}
             title="GOAL MODE"
@@ -265,7 +265,7 @@ export const BottomDock: React.FC<BottomDockProps> = ({
             onClick={() => setMode('card')}
             className={`w-8 h-8 flex items-center justify-center rounded-full transition-all ${
               mode === 'card'
-                ? 'bg-white text-black shadow-sm'
+                ? 'bg-[#383838] text-white shadow-sm'
                 : 'text-neutral-400 hover:text-white'
             }`}
             title="CARD MODE"
@@ -485,7 +485,7 @@ export const BottomDock: React.FC<BottomDockProps> = ({
                 <button
                   type="button"
                   onClick={() => onDeleteEvent(editingEvent.id)}
-                  className="p-2.5 rounded-full bg-rose-900/60 hover:bg-rose-800 text-rose-300 transition-colors uppercase font-bold"
+                  className="p-2.5 rounded-full bg-rose-950/70 hover:bg-rose-900 text-rose-300 border border-rose-800/50 transition-colors uppercase font-bold"
                   title="DELETE EVENT"
                 >
                   <Trash2 size={16} />
@@ -497,8 +497,8 @@ export const BottomDock: React.FC<BottomDockProps> = ({
                 disabled={!scorerId}
                 className={`px-5 py-2.5 rounded-full font-bold text-xs tracking-wider uppercase transition-all active:scale-95 ${
                   scorerId
-                    ? 'bg-white text-black hover:bg-neutral-200'
-                    : 'bg-[#2a2a2a] text-neutral-500 cursor-not-allowed'
+                    ? 'bg-[#333333] hover:bg-[#3f3f3f] text-white border border-[#4a4a4a]'
+                    : 'bg-[#1e1e1e] text-neutral-600 border border-[#2a2a2a] cursor-not-allowed'
                 }`}
               >
                 {editingEvent ? 'SAVE CHANGES' : '+ ADD GOAL'}
@@ -711,7 +711,7 @@ export const BottomDock: React.FC<BottomDockProps> = ({
               <button
                 type="button"
                 onClick={() => onDeleteEvent(editingEvent.id)}
-                className="p-2.5 rounded-full bg-rose-900/60 hover:bg-rose-800 text-rose-300 transition-colors uppercase font-bold"
+                className="p-2.5 rounded-full bg-rose-950/70 hover:bg-rose-900 text-rose-300 border border-rose-800/50 transition-colors uppercase font-bold"
                 title="DELETE EVENT"
               >
                 <Trash2 size={16} />
@@ -723,8 +723,8 @@ export const BottomDock: React.FC<BottomDockProps> = ({
               disabled={!cardPlayerId || isSelectedPlayerDismissed}
               className={`px-5 py-2.5 rounded-full font-bold text-xs tracking-wider uppercase transition-all active:scale-95 ${
                 cardPlayerId && !isSelectedPlayerDismissed
-                  ? 'bg-white text-black hover:bg-neutral-200'
-                  : 'bg-[#2a2a2a] text-neutral-500 cursor-not-allowed'
+                  ? 'bg-[#333333] hover:bg-[#3f3f3f] text-white border border-[#4a4a4a]'
+                  : 'bg-[#1e1e1e] text-neutral-600 border border-[#2a2a2a] cursor-not-allowed'
               }`}
             >
               {editingEvent ? 'SAVE CHANGES' : '+ RECORD CARD'}

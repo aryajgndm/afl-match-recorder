@@ -20,10 +20,10 @@ export const EventTimeline: React.FC<EventTimelineProps> = ({
 }) => {
   if (events.length === 0) {
     return (
-      <div className="flex flex-col items-center justify-center py-10 text-slate-400 text-xs font-medium text-center font-sans">
+      <div className="flex flex-col items-center justify-center py-10 text-neutral-500 text-xs font-medium text-center font-sans">
         <p>No events recorded in this quarter yet.</p>
         {!readOnly && (
-          <p className="text-[10px] text-slate-400 mt-1">
+          <p className="text-[10px] text-neutral-600 mt-1">
             Use the dock below to add a goal or card.
           </p>
         )}
@@ -35,7 +35,7 @@ export const EventTimeline: React.FC<EventTimelineProps> = ({
   const sorted = [...events].sort((a, b) => a.minute - b.minute);
 
   return (
-    <div className="w-full mx-auto flex flex-col rounded-xl overflow-hidden border border-slate-200 font-sans">
+    <div className="w-full mx-auto flex flex-col rounded-xl overflow-hidden border border-[#2e2e2e] bg-[#181818] font-sans">
       {sorted.map((ev, index) => {
         const isTeam1 = ev.teamId === team1?.id;
         const isSelected = selectedEventId === ev.id;
@@ -57,11 +57,11 @@ export const EventTimeline: React.FC<EventTimelineProps> = ({
               key={ev.id}
               onClick={() => !readOnly && onSelectEvent?.(ev)}
               className={`w-full py-2.5 px-4 flex items-center justify-center gap-2 transition-all cursor-pointer select-none ${
-                index % 2 === 0 ? 'bg-white' : 'bg-[#f2f4f7]'
+                index % 2 === 0 ? 'bg-[#181818]' : 'bg-[#222222]'
               } ${
                 isSelected
-                ? 'bg-blue-50/90 ring-2 ring-[#007AFF]'
-                : 'hover:bg-slate-100'
+                ? 'bg-blue-950/40 ring-2 ring-[#007AFF]'
+                : 'hover:bg-[#282828]'
               }`}
             >
               <span
@@ -69,12 +69,12 @@ export const EventTimeline: React.FC<EventTimelineProps> = ({
                   isYellow ? 'bg-amber-400' : 'bg-rose-600'
                 }`}
               />
-              <span className="text-xs tracking-wide text-slate-900 uppercase">
+              <span className="text-xs tracking-wide text-white uppercase">
                 {/* Minute must be bold, player's name must be medium, bracketed text must be regular weight */}
                 <span className="font-bold">{ev.minute}'</span>{' '}
                 <span className="font-medium">{playerName.toUpperCase()}</span>
                 {ev.isSecondYellowRed && (
-                  <span className="font-normal text-slate-600"> (2ND YELLOW)</span>
+                  <span className="font-normal text-neutral-400"> (2ND YELLOW)</span>
                 )}
               </span>
             </div>
@@ -83,15 +83,15 @@ export const EventTimeline: React.FC<EventTimelineProps> = ({
 
         // Goal Event
         const renderGoalContent = () => (
-          <span className="text-xs tracking-wide text-slate-900 uppercase">
+          <span className="text-xs tracking-wide text-white uppercase">
             {/* Minute must be bold, scorer's name must be medium, bracketed text must be regular weight */}
             <span className="font-bold">{ev.minute}'</span>{' '}
             <span className="font-medium">{playerName.toUpperCase()}</span>
             {assister && (
-              <span className="font-normal text-slate-600"> ({assister.name.toUpperCase()})</span>
+              <span className="font-normal text-neutral-400"> ({assister.name.toUpperCase()})</span>
             )}
             {suffix && (
-              <span className="font-normal text-slate-600"> {suffix}</span>
+              <span className="font-normal text-neutral-400"> {suffix}</span>
             )}
           </span>
         );
@@ -101,11 +101,11 @@ export const EventTimeline: React.FC<EventTimelineProps> = ({
             key={ev.id}
             onClick={() => !readOnly && onSelectEvent?.(ev)}
             className={`w-full py-2.5 px-4 flex items-center justify-between text-xs select-none transition-all cursor-pointer ${
-              index % 2 === 0 ? 'bg-white' : 'bg-[#f2f4f7]'
+              index % 2 === 0 ? 'bg-[#181818]' : 'bg-[#222222]'
             } ${
               isSelected
-                ? 'bg-blue-50/90 ring-2 ring-[#007AFF]'
-                : 'hover:bg-slate-100'
+                ? 'bg-blue-950/40 ring-2 ring-[#007AFF]'
+                : 'hover:bg-[#282828]'
             }`}
           >
             {/* Team 1 event column */}

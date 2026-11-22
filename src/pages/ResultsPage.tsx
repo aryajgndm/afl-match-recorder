@@ -100,25 +100,25 @@ export const ResultsPage: React.FC<ResultsPageProps> = ({ matchId, onNavigateBac
   };
 
   return (
-    <div className="min-h-screen bg-[#f8f9fa] text-slate-900 flex flex-col justify-between pb-28 font-sans">
+    <div className="min-h-screen bg-[#121212] text-white flex flex-col justify-between pb-28 font-sans">
       {/* Top Header */}
-      <header className="sticky top-0 z-40 bg-white/95 backdrop-blur-md border-b border-slate-200 px-4 py-3 shadow-xs">
+      <header className="sticky top-0 z-40 bg-[#121212]/95 backdrop-blur-md border-b border-[#262626] px-4 py-3">
         <div className="max-w-md mx-auto flex items-center justify-between">
           <div className="flex items-center gap-2">
             <button
               onClick={onNavigateBack}
-              className="p-1 -ml-1 text-slate-500 hover:text-black rounded-lg transition-colors"
+              className="p-1 -ml-1 text-neutral-400 hover:text-white rounded-lg transition-colors"
               title="Back to Dashboard"
             >
               <ChevronLeft size={24} />
             </button>
             {/* Informational line: GAME and PLAYOFF capital */}
-            <span className="text-xs font-bold text-slate-500 tracking-wide font-sans">
+            <span className="text-xs font-bold text-neutral-400 tracking-wide font-sans">
               GAME {fixture.gameNumber} · {seriesNameFormatted}
             </span>
           </div>
 
-          <div className="text-xs font-medium text-slate-500 normal-case">
+          <div className="text-xs font-medium text-neutral-400 normal-case">
             {fixture.date}
           </div>
         </div>
@@ -167,7 +167,7 @@ export const ResultsPage: React.FC<ResultsPageProps> = ({ matchId, onNavigateBac
                   onClick={() => setCurrentQuarter(q)}
                   className={`px-3.5 py-1.5 text-xs font-bold tracking-wider rounded-full transition-all uppercase ${
                     isActive
-                      ? 'bg-white text-black'
+                      ? 'bg-[#383838] text-white'
                       : 'text-neutral-400 hover:text-white'
                   }`}
                 >

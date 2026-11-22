@@ -81,18 +81,18 @@ export const PasscodeModal: React.FC<PasscodeModalProps> = ({
     : 'Finals';
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/75 backdrop-blur-sm animate-fadeIn font-sans">
-      <div className="relative w-full max-w-sm bg-white border border-slate-200 rounded-3xl p-6 shadow-2xl flex flex-col items-center text-center">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm animate-fadeIn font-sans">
+      <div className="relative w-full max-w-sm bg-[#1a1a1a] border border-[#2e2e2e] rounded-3xl p-6 flex flex-col items-center text-center">
         <button
           onClick={onClose}
-          className="absolute top-4 right-4 p-2 text-slate-400 hover:text-slate-800 rounded-full hover:bg-slate-100 transition-colors"
+          className="absolute top-4 right-4 p-2 text-neutral-400 hover:text-white rounded-full hover:bg-[#282828] transition-colors"
           aria-label="Close"
         >
           <X size={20} />
         </button>
 
         {/* Header Title: GAME and PLAYOFF capital */}
-        <p className="font-sans font-bold text-xs tracking-wide text-slate-500 mt-1">
+        <p className="font-sans font-bold text-xs tracking-wide text-neutral-400 mt-1">
           {title || `GAME ${fixture.gameNumber} · ${seriesNameFormatted}`}
         </p>
 
@@ -106,11 +106,11 @@ export const PasscodeModal: React.FC<PasscodeModalProps> = ({
                 className="w-full h-full object-contain"
               />
             ) : (
-              <span className="text-sm text-slate-400 font-bold">?</span>
+              <span className="text-sm text-neutral-400 font-bold">?</span>
             )}
           </div>
 
-          <span className="font-display font-extrabold text-lg text-slate-800 select-none">
+          <span className="font-display font-extrabold text-lg text-neutral-500 select-none">
             V
           </span>
 
@@ -122,13 +122,13 @@ export const PasscodeModal: React.FC<PasscodeModalProps> = ({
                 className="w-full h-full object-contain"
               />
             ) : (
-              <span className="text-sm text-slate-400 font-bold">?</span>
+              <span className="text-sm text-neutral-400 font-bold">?</span>
             )}
           </div>
         </div>
 
         {/* Match Date (normal case) */}
-        <p className="text-xs font-medium text-slate-500 mb-5">{fixture.date}</p>
+        <p className="text-xs font-medium text-neutral-400 mb-5">{fixture.date}</p>
 
         {/* 6 Digit Passcode Input */}
         <form onSubmit={handleSubmit} className="w-full flex flex-col items-center">
@@ -143,7 +143,7 @@ export const PasscodeModal: React.FC<PasscodeModalProps> = ({
                 value={digit}
                 onChange={(e) => handleChange(idx, e.target.value)}
                 onKeyDown={(e) => handleKeyDown(idx, e)}
-                className="w-11 h-12 text-center text-xl font-display font-extrabold bg-white border-2 border-slate-300 focus:border-[#007AFF] rounded-xl text-slate-900 focus:outline-none transition-colors"
+                className="w-11 h-12 text-center text-xl font-display font-extrabold bg-[#242424] border-2 border-[#383838] focus:border-[#007AFF] rounded-xl text-white focus:outline-none transition-colors"
               />
             ))}
           </div>
@@ -156,7 +156,7 @@ export const PasscodeModal: React.FC<PasscodeModalProps> = ({
               className={`w-full py-3.5 rounded-full font-bold text-xs tracking-wider flex items-center justify-center gap-2 transition-all uppercase ${
                 digits.join('').length === 6
                   ? 'bg-emerald-600 hover:bg-emerald-500 text-white active:scale-[0.98]'
-                  : 'bg-slate-200 text-slate-400 cursor-not-allowed'
+                  : 'bg-[#282828] text-neutral-500 border border-[#333333] cursor-not-allowed'
               }`}
             >
               <Check size={16} className="stroke-[3]" />
@@ -169,7 +169,7 @@ export const PasscodeModal: React.FC<PasscodeModalProps> = ({
               className={`w-full py-3.5 rounded-full font-bold text-xs tracking-wider flex items-center justify-center gap-2 transition-all uppercase ${
                 digits.join('').length === 6
                   ? 'bg-[#007AFF] hover:bg-[#0066DD] text-white active:scale-[0.98]'
-                  : 'bg-slate-200 text-slate-400 cursor-not-allowed'
+                  : 'bg-[#282828] text-neutral-500 border border-[#333333] cursor-not-allowed'
               }`}
             >
               <span>{buttonText}</span>
@@ -180,7 +180,7 @@ export const PasscodeModal: React.FC<PasscodeModalProps> = ({
           {/* Helper Subtitle (in-place error message: changes directly to "Incorrect passcode. Try again." in red) */}
           <p
             className={`text-[11px] mt-3 tracking-normal font-sans ${
-              error ? 'text-rose-600 font-semibold' : 'text-slate-400 font-medium'
+              error ? 'text-rose-500 font-semibold' : 'text-neutral-400 font-medium'
             }`}
           >
             {error ? 'Incorrect passcode. Try again.' : subtitle}

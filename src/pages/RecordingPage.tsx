@@ -142,7 +142,7 @@ export const RecordingPage: React.FC<RecordingPageProps> = ({
 
   if (!fixture) {
     return (
-      <div className="min-h-screen bg-white flex items-center justify-center text-slate-500 font-sans font-medium text-xs">
+      <div className="min-h-screen bg-[#121212] flex items-center justify-center text-neutral-400 font-sans font-medium text-xs">
         Loading match details...
       </div>
     );
@@ -154,7 +154,7 @@ export const RecordingPage: React.FC<RecordingPageProps> = ({
   const team2QuarterScore = score.team2QuarterScores[currentQuarter] || 0;
 
   return (
-    <div className="min-h-screen bg-white text-slate-900 flex flex-col justify-between pb-64">
+    <div className="min-h-screen bg-[#121212] text-white flex flex-col justify-between pb-64">
       {/* Top Header */}
       <MatchHeader
         fixture={fixture}
@@ -165,7 +165,7 @@ export const RecordingPage: React.FC<RecordingPageProps> = ({
       <main className="flex-1 w-full max-w-md mx-auto px-4">
         {/* Extra time banner if two goal lead achieved */}
         {isExtraTimeActive && etLead.clinched && (
-          <div className="bg-amber-100 border border-amber-400 rounded-2xl p-2.5 mb-2 text-center text-xs font-bold text-amber-900 font-sans">
+          <div className="bg-amber-950/40 border border-amber-500/40 rounded-2xl p-2.5 mb-2 text-center text-xs font-bold text-amber-200 font-sans">
             ★ Two-goal extra time lead reached! Match is ready for final submission.
           </div>
         )}

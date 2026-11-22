@@ -254,9 +254,11 @@
       "phase": "playoffs",
       "team1Id": "panthers",
       "team2Id": "bulls",
-      "status": "available",
+      "status": "in_progress",
       "isConditional": true,
-      "passcode": "123456"
+      "passcode": "123456",
+      "activeSessionId": "sess_rd94c49n4_1795318619187",
+      "lockHeartbeatAt": "2026-11-22T04:00:47.788Z"
     },
     {
       "id": "po2-g5",

@@ -164,7 +164,7 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({
 
               if (s.isClinched && s.winnerId) {
                 const winnerShort = TEAMS[s.winnerId]?.shortName || 'WIN';
-                statusText = `${winnerShort} win series ${Math.max(s.team1Wins, s.team2Wins)} – ${Math.min(s.team1Wins, s.team2Wins)} · Clinched`;
+                statusText = `${winnerShort} win series ${Math.max(s.team1Wins, s.team2Wins)} – ${Math.min(s.team1Wins, s.team2Wins)}`;
                 statusBadgeClass = 'text-white bg-white/10 border border-white/20';
               } else if (!team1 || !team2) {
                 statusText = s.phase === 'semifinals' ? 'Awaiting PLAYOFF Winners' : 'Awaiting Semi-Final Winners';

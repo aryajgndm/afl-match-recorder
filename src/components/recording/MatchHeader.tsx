@@ -22,7 +22,7 @@ export const MatchHeader: React.FC<MatchHeaderProps> = ({
       {/* Back button */}
       <button
         onClick={onBackClick}
-        className="p-1 -ml-1 text-slate-400 hover:text-slate-900 rounded-lg transition-colors"
+        className="p-1 -ml-1 text-neutral-400 hover:text-white rounded-lg transition-colors"
         title="Back to Dashboard"
       >
         <ChevronLeft size={24} />
@@ -30,7 +30,7 @@ export const MatchHeader: React.FC<MatchHeaderProps> = ({
 
       {/* Centered Match ID: GAME and PLAYOFF capital */}
       <div className="flex flex-col items-center">
-        <span className="font-sans font-bold text-xs tracking-wide text-slate-500">
+        <span className="font-sans font-bold text-xs tracking-wide text-neutral-400">
           GAME {fixture.gameNumber} · {seriesNameFormatted}
         </span>
       </div>
