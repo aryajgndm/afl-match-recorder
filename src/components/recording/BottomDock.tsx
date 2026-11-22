@@ -210,8 +210,16 @@ export const BottomDock: React.FC<BottomDockProps> = ({
     <div className="w-full bg-[#121212] border-t border-[#262626] rounded-t-3xl p-4 max-w-md mx-auto font-sans font-normal uppercase">
       {/* Top Bar: Quarter Switcher & Mode Icons */}
       <div className="flex items-center justify-between pb-3 border-b border-[#262626] mb-3">
-        {/* Quarter Selector: wider tabs with slightly larger font */}
-        <div className="flex items-center gap-1 bg-[#242424] p-1 rounded-full border border-[#333333]">
+        {/* Quarter Selector: compact tabs with smooth sliding white pill */}
+        <div className="relative flex items-center bg-[#242424] p-0.5 rounded-full border border-[#333333] select-none">
+          {/* Animated sliding indicator pill */}
+          <div
+            className="absolute top-0.5 bottom-0.5 left-0.5 w-[38px] h-7 rounded-full bg-white shadow-sm transition-transform duration-300 ease-out pointer-events-none"
+            style={{
+              transform: `translateX(${Math.max(0, quartersList.indexOf(currentQuarter)) * 100}%)`,
+            }}
+          />
+
           {quartersList.map((q) => {
             const isActive = currentQuarter === q;
             const label = q === 'et' ? 'ET' : q.toUpperCase();
@@ -220,9 +228,9 @@ export const BottomDock: React.FC<BottomDockProps> = ({
                 key={q}
                 type="button"
                 onClick={() => onQuarterChange(q)}
-                className={`min-w-[46px] px-3.5 h-8 flex items-center justify-center text-sm font-bold rounded-full transition-all uppercase tracking-wider ${
+                className={`relative z-10 w-[38px] h-7 flex items-center justify-center text-xs font-bold rounded-full transition-colors duration-200 uppercase tracking-wider ${
                   isActive
-                    ? 'bg-white text-black shadow-sm'
+                    ? 'text-black'
                     : 'text-neutral-400 hover:text-white'
                 }`}
               >
@@ -232,21 +240,29 @@ export const BottomDock: React.FC<BottomDockProps> = ({
           })}
         </div>
 
-        {/* Mode Toggles: Soccer Ball & Cards (White when toggled on) */}
-        <div className="flex items-center gap-1 bg-[#242424] p-1 rounded-full border border-[#333333]">
+        {/* Mode Toggles: Soccer Ball & Cards with smooth sliding white pill */}
+        <div className="relative flex items-center bg-[#242424] p-0.5 rounded-full border border-[#333333] select-none">
+          {/* Animated sliding indicator pill */}
+          <div
+            className="absolute top-0.5 bottom-0.5 left-0.5 w-7 h-7 rounded-full bg-white shadow-sm transition-transform duration-300 ease-out pointer-events-none"
+            style={{
+              transform: `translateX(${mode === 'goal' ? '0%' : '100%'})`,
+            }}
+          />
+
           {/* Goal Mode: Classical Soccer / Football Ball */}
           <button
             type="button"
             onClick={() => setMode('goal')}
-            className={`w-8 h-8 flex items-center justify-center rounded-full transition-all ${
+            className={`relative z-10 w-7 h-7 flex items-center justify-center rounded-full transition-colors duration-200 ${
               mode === 'goal'
-                ? 'bg-white text-black shadow-sm'
+                ? 'text-black'
                 : 'text-neutral-400 hover:text-white'
             }`}
             title="GOAL MODE"
           >
             <svg
-              className="w-4 h-4 fill-current"
+              className="w-3.5 h-3.5 fill-current"
               viewBox="0 0 24 24"
             >
               <circle cx="12" cy="12" r="9.5" fill="none" stroke="currentColor" strokeWidth="1.6" />
@@ -263,15 +279,15 @@ export const BottomDock: React.FC<BottomDockProps> = ({
           <button
             type="button"
             onClick={() => setMode('card')}
-            className={`w-8 h-8 flex items-center justify-center rounded-full transition-all ${
+            className={`relative z-10 w-7 h-7 flex items-center justify-center rounded-full transition-colors duration-200 ${
               mode === 'card'
-                ? 'bg-white text-black shadow-sm'
+                ? 'text-black'
                 : 'text-neutral-400 hover:text-white'
             }`}
             title="CARD MODE"
           >
             <svg
-              className="w-4 h-4 fill-current"
+              className="w-3.5 h-3.5 fill-current"
               viewBox="0 0 24 24"
             >
               <rect x="7" y="3.5" width="10" height="17" rx="2" fill="currentColor" />
