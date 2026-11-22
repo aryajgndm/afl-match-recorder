@@ -22,6 +22,7 @@ export class MatchStorage {
   private channel: BroadcastChannel | null = null;
   private listeners: Set<() => void> = new Set();
   private backendAvailable: boolean = true;
+  private realtimeSubscribed: boolean = false;
 
   public isBackendConnected(): boolean {
     return this.backendAvailable;
@@ -38,10 +39,43 @@ export class MatchStorage {
       });
     }
 
+    // Subscribe to Supabase Realtime once
+    this.initRealtimeSubscription();
+
     // Sync from server on start
     this.syncWithBackend().catch((err) => {
       console.warn('Initial backend sync failed, using local storage cache:', err);
     });
+  }
+
+  private initRealtimeSubscription() {
+    if (this.realtimeSubscribed || !supabaseStorage.isConfigured()) return;
+    this.realtimeSubscribed = true;
+
+    supabaseStorage.subscribeRealtime(
+      async () => {
+        const updated = await supabaseStorage.fetchFixtures();
+        if (updated && updated.length > 0) {
+          const current = localStorage.getItem(STORAGE_KEY_FIXTURES);
+          const serialized = JSON.stringify(updated);
+          if (current !== serialized) {
+            localStorage.setItem(STORAGE_KEY_FIXTURES, serialized);
+            this.broadcast();
+          }
+        }
+      },
+      async () => {
+        const updated = await supabaseStorage.fetchEvents();
+        if (updated) {
+          const current = localStorage.getItem(STORAGE_KEY_EVENTS);
+          const serialized = JSON.stringify(updated);
+          if (current !== serialized) {
+            localStorage.setItem(STORAGE_KEY_EVENTS, serialized);
+            this.broadcast();
+          }
+        }
+      }
+    );
   }
 
   public subscribe(cb: () => void): () => void {
@@ -62,36 +96,37 @@ export class MatchStorage {
 
   // --- Backend Sync ---
   public async syncWithBackend(): Promise<void> {
-    // 1. Supabase Cloud Sync & Realtime Subscription
+    this.initRealtimeSubscription();
+
+    // 1. Supabase Cloud Sync
     if (supabaseStorage.isConfigured()) {
       try {
+        let hasChanges = false;
         const fixtures = await supabaseStorage.fetchFixtures();
         if (fixtures && fixtures.length > 0) {
-          localStorage.setItem(STORAGE_KEY_FIXTURES, JSON.stringify(fixtures));
+          const current = localStorage.getItem(STORAGE_KEY_FIXTURES);
+          const serialized = JSON.stringify(fixtures);
+          if (current !== serialized) {
+            localStorage.setItem(STORAGE_KEY_FIXTURES, serialized);
+            hasChanges = true;
+          }
           this.backendAvailable = true;
         }
+
         const events = await supabaseStorage.fetchEvents();
         if (events) {
-          localStorage.setItem(STORAGE_KEY_EVENTS, JSON.stringify(events));
-        }
-        this.broadcast();
-
-        supabaseStorage.subscribeRealtime(
-          async () => {
-            const updated = await supabaseStorage.fetchFixtures();
-            if (updated) {
-              localStorage.setItem(STORAGE_KEY_FIXTURES, JSON.stringify(updated));
-              this.broadcast();
-            }
-          },
-          async () => {
-            const updated = await supabaseStorage.fetchEvents();
-            if (updated) {
-              localStorage.setItem(STORAGE_KEY_EVENTS, JSON.stringify(updated));
-              this.broadcast();
-            }
+          const currentEvents = localStorage.getItem(STORAGE_KEY_EVENTS);
+          const serializedEvents = JSON.stringify(events);
+          if (currentEvents !== serializedEvents) {
+            localStorage.setItem(STORAGE_KEY_EVENTS, serializedEvents);
+            hasChanges = true;
           }
-        );
+        }
+
+        // Only broadcast if data actually changed
+        if (hasChanges) {
+          this.broadcast();
+        }
         return;
       } catch (err) {
         console.warn('Supabase sync error, falling back to local backend:', err);
@@ -102,9 +137,13 @@ export class MatchStorage {
     try {
       const data = await api.getFixtures();
       if (data && data.fixtures) {
-        localStorage.setItem(STORAGE_KEY_FIXTURES, JSON.stringify(data.fixtures));
+        const current = localStorage.getItem(STORAGE_KEY_FIXTURES);
+        const serialized = JSON.stringify(data.fixtures);
+        if (current !== serialized) {
+          localStorage.setItem(STORAGE_KEY_FIXTURES, serialized);
+          this.broadcast();
+        }
         this.backendAvailable = true;
-        this.broadcast();
       }
     } catch {
       this.backendAvailable = false;

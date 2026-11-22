@@ -28,9 +28,14 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({
   useEffect(() => {
     const target = standingsView === 'round' ? roundButtonRef.current : allButtonRef.current;
     if (target) {
-      setStandingsIndicator({
-        left: target.offsetLeft,
-        width: target.offsetWidth,
+      setStandingsIndicator((prev) => {
+        if (prev.left === target.offsetLeft && prev.width === target.offsetWidth) {
+          return prev;
+        }
+        return {
+          left: target.offsetLeft,
+          width: target.offsetWidth,
+        };
       });
     }
   }, [standingsView, activeTab]);
@@ -48,9 +53,12 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({
   useEffect(() => {
     refreshData();
     matchStorage.syncWithBackend().catch(() => {});
+
+    // Gentle fallback poll every 30 seconds (Supabase Realtime handles instant updates via WebSocket)
     const interval = setInterval(() => {
       matchStorage.syncWithBackend().catch(() => {});
-    }, 3000);
+    }, 30000);
+
     const unsubscribe = matchStorage.subscribe(() => {
       refreshData();
     });
