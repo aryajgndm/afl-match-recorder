@@ -722,7 +722,10 @@ export const BottomDock: React.FC<BottomDockProps> = ({
 
             {/* Disciplinary Notice / Warning */}
             {(() => {
-              if (selectedCardPlayerState?.yellowCount === 1 && cardType === 'yellow') {
+              const isEditingYellowCard = Boolean(
+                editingEvent && editingEvent.type === 'card' && editingEvent.cardType === 'yellow'
+              );
+              if (!isEditingYellowCard && selectedCardPlayerState?.yellowCount === 1 && cardType === 'yellow') {
                 return (
                   <div className="flex items-center gap-1.5 text-[10px] text-amber-400 font-sans font-medium mt-1">
                     <span>⚠️</span>
