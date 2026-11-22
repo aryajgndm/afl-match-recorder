@@ -197,7 +197,7 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({
               return (
                 <div
                   key={s.id}
-                  className="bg-[#181818] border border-[#2e2e2e] rounded-2xl p-3 sm:p-3.5 transition-all hover:border-[#3e3e3e]"
+                  className="bg-[#181818] border border-[#2e2e2e] rounded-2xl p-3 sm:p-3.5"
                 >
                   {/* Item Top: Series Title & Status Badge */}
                   <div className="flex items-center justify-between mb-2.5">
@@ -307,8 +307,19 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({
           </div>
         </div>
 
-        {/* Phase Tabs: Section selector in dashboard is solid BLACK */}
-        <div className="flex items-center bg-[#1a1a1a] p-1 rounded-2xl border border-[#2e2e2e] mb-5">
+        {/* Phase Tabs: Section selector with smooth sliding indicator pill */}
+        <div className="relative flex items-center bg-[#1a1a1a] p-1 rounded-2xl border border-[#2e2e2e] mb-5 select-none">
+          {/* Animated sliding indicator pill */}
+          <div
+            className="absolute top-1 bottom-1 rounded-xl bg-black border border-[#3e3e3e] shadow-sm transition-transform duration-300 ease-out pointer-events-none"
+            style={{
+              width: 'calc((100% - 8px) / 3)',
+              transform: `translateX(${
+                activeTab === 'playoffs' ? '0%' : activeTab === 'semifinals' ? '100%' : '200%'
+              })`,
+            }}
+          />
+
           {(['playoffs', 'semifinals', 'finals'] as PostseasonPhase[]).map((phase) => {
             const isActive = activeTab === phase;
             return (
@@ -316,9 +327,9 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({
                 key={phase}
                 type="button"
                 onClick={() => setActiveTab(phase)}
-                className={`flex-1 py-2 text-xs font-bold tracking-wider rounded-xl transition-all uppercase font-sans ${
+                className={`relative z-10 flex-1 py-2 text-xs font-bold tracking-wider rounded-xl transition-colors duration-200 uppercase font-sans ${
                   isActive
-                    ? 'bg-black text-white shadow-sm border border-[#3e3e3e]'
+                    ? 'text-white'
                     : 'text-neutral-400 hover:text-white'
                 }`}
               >

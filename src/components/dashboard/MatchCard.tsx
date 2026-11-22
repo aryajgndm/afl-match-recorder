@@ -27,7 +27,7 @@ export const MatchCard: React.FC<MatchCardProps> = ({
     : 'Finals';
 
   return (
-    <div className="w-full bg-[#242424] border border-[#333333] rounded-3xl p-5 transition-all hover:border-[#444444]">
+    <div className="w-full bg-[#242424] border border-[#333333] rounded-3xl p-5">
       {/* Top row: Match Identification and Date (GAME and PLAYOFF capital) */}
       <div className="flex items-center justify-between text-xs text-neutral-400 mb-4 tracking-wide font-sans font-bold">
         <span>

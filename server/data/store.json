@@ -258,7 +258,7 @@
       "isConditional": true,
       "passcode": "123456",
       "activeSessionId": "sess_rd94c49n4_1795318619187",
-      "lockHeartbeatAt": "2026-11-22T04:45:08.644Z"
+      "lockHeartbeatAt": "2026-11-22T05:21:19.141Z"
     },
     {
       "id": "po2-g5",
@@ -304,9 +304,11 @@
       "phase": "semifinals",
       "team1Id": "raptors",
       "team2Id": null,
-      "status": "locked",
+      "status": "available",
       "isConditional": false,
-      "passcode": "123456"
+      "passcode": "123456",
+      "activeSessionId": null,
+      "lockHeartbeatAt": null
     },
     {
       "id": "sf1-g2",
@@ -796,10 +798,98 @@
       "minute": 1,
       "type": "goal",
       "teamId": "panthers",
-      "playerId": "pan-1",
+      "playerId": "pan-11",
       "goalType": "regular",
-      "id": "ev_jdbkt16e_1795321694257",
-      "createdAt": "2026-11-22T04:28:14.257Z"
+      "id": "ev_hj5oglz7_1795323057641",
+      "createdAt": "2026-11-22T04:50:57.641Z"
+    },
+    {
+      "matchId": "po1-g4",
+      "quarter": "q1",
+      "minute": 1,
+      "type": "goal",
+      "teamId": "panthers",
+      "playerId": "pan-9",
+      "goalType": "regular",
+      "id": "ev_4u7pkhx6_1795323059489",
+      "createdAt": "2026-11-22T04:50:59.489Z"
+    },
+    {
+      "matchId": "po1-g4",
+      "quarter": "q1",
+      "minute": 1,
+      "type": "goal",
+      "teamId": "panthers",
+      "playerId": "pan-9",
+      "goalType": "regular",
+      "id": "ev_zldovlq0_1795323061273",
+      "createdAt": "2026-11-22T04:51:01.273Z"
+    },
+    {
+      "matchId": "po1-g4",
+      "quarter": "q1",
+      "minute": 1,
+      "type": "goal",
+      "teamId": "panthers",
+      "playerId": "pan-10",
+      "goalType": "regular",
+      "id": "ev_9wzblwgl_1795323062974",
+      "createdAt": "2026-11-22T04:51:02.974Z"
+    },
+    {
+      "matchId": "po1-g4",
+      "quarter": "q1",
+      "minute": 1,
+      "type": "goal",
+      "teamId": "panthers",
+      "playerId": "pan-6",
+      "goalType": "regular",
+      "id": "ev_90o64f1s_1795323066706",
+      "createdAt": "2026-11-22T04:51:06.706Z"
+    },
+    {
+      "matchId": "po1-g4",
+      "quarter": "q1",
+      "minute": 1,
+      "type": "goal",
+      "teamId": "panthers",
+      "playerId": "pan-9",
+      "goalType": "regular",
+      "id": "ev_54kgyiw8_1795323068574",
+      "createdAt": "2026-11-22T04:51:08.574Z"
+    },
+    {
+      "matchId": "po1-g4",
+      "quarter": "q1",
+      "minute": 1,
+      "type": "goal",
+      "teamId": "panthers",
+      "playerId": "pan-8",
+      "goalType": "regular",
+      "id": "ev_ns6q4z69_1795323073207",
+      "createdAt": "2026-11-22T04:51:13.207Z"
+    },
+    {
+      "matchId": "po1-g4",
+      "quarter": "q1",
+      "minute": 1,
+      "type": "goal",
+      "teamId": "panthers",
+      "playerId": "pan-11",
+      "goalType": "regular",
+      "id": "ev_q1a4hyua_1795323080006",
+      "createdAt": "2026-11-22T04:51:20.006Z"
+    },
+    {
+      "matchId": "po1-g4",
+      "quarter": "q1",
+      "minute": 1,
+      "type": "goal",
+      "teamId": "panthers",
+      "playerId": "pan-10",
+      "goalType": "regular",
+      "id": "ev_6vz79kgc_1795323083007",
+      "createdAt": "2026-11-22T04:51:23.007Z"
     }
   ],
   "activeSessions": {},

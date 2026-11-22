@@ -75,6 +75,30 @@
   }
 }
 
+/* Completely remove native/default OS dropdown arrows so only designed SVG chevron renders */
+select,
+.select-no-native-arrow,
+select.appearance-none {
+  -webkit-appearance: none !important;
+  -moz-appearance: none !important;
+  appearance: none !important;
+  background-image: none !important;
+}
+select::-ms-expand {
+  display: none !important;
+}
+select::picker-icon,
+select::-webkit-calendar-picker-indicator,
+select::-webkit-inner-spin-button,
+select::-webkit-clear-button {
+  display: none !important;
+  content: "" !important;
+  width: 0 !important;
+  height: 0 !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
+}
+
 /* Every MuseoModerno element must be extrabold (weight 800) */
 .font-display,
 h1, h2, h3, h4,

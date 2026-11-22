@@ -363,12 +363,19 @@ export const BottomDock: React.FC<BottomDockProps> = ({
             </span>
             <div className="relative">
               <select
+                ref={(node) => {
+                  if (node) {
+                    node.style.setProperty('-webkit-appearance', 'none', 'important');
+                    node.style.setProperty('appearance', 'none', 'important');
+                  }
+                }}
                 value={scorerId}
                 onChange={(e) => setScorerId(e.target.value)}
-                className="w-full appearance-none bg-[#242424] border border-[#383838] rounded-xl pl-3 pr-9 py-2 text-xs font-normal text-white focus:outline-none focus:border-blue-500 uppercase cursor-pointer"
+                style={{ WebkitAppearance: 'none', MozAppearance: 'none', appearance: 'none', backgroundImage: 'none' }}
+                className="w-full appearance-none select-no-native-arrow bg-[#242424] border border-[#383838] rounded-xl pl-3 pr-9 py-2 text-xs font-normal text-white focus:outline-none focus:border-blue-500 uppercase cursor-pointer"
               >
                 <option value="" className="bg-[#242424] text-neutral-400 uppercase py-1">
-                  SELECT SCORER...
+                  SELECT SCORER
                 </option>
                 {scorerPlayers.map((p) => (
                   <option key={p.id} value={p.id} className="bg-[#242424] text-white uppercase py-1">
@@ -391,9 +398,16 @@ export const BottomDock: React.FC<BottomDockProps> = ({
               </span>
               <div className="relative">
                 <select
+                  ref={(node) => {
+                    if (node) {
+                      node.style.setProperty('-webkit-appearance', 'none', 'important');
+                      node.style.setProperty('appearance', 'none', 'important');
+                    }
+                  }}
                   value={assisterId}
                   onChange={(e) => setAssisterId(e.target.value)}
-                  className="w-full appearance-none bg-[#242424] border border-[#383838] rounded-xl pl-3 pr-9 py-2 text-xs font-normal text-white focus:outline-none focus:border-blue-500 uppercase cursor-pointer"
+                  style={{ WebkitAppearance: 'none', MozAppearance: 'none', appearance: 'none', backgroundImage: 'none' }}
+                  className="w-full appearance-none select-no-native-arrow bg-[#242424] border border-[#383838] rounded-xl pl-3 pr-9 py-2 text-xs font-normal text-white focus:outline-none focus:border-blue-500 uppercase cursor-pointer"
                 >
                   <option value="" className="bg-[#242424] text-neutral-400 uppercase py-1">
                     NONE (UNASSISTED)
@@ -645,12 +659,19 @@ export const BottomDock: React.FC<BottomDockProps> = ({
             </span>
             <div className="relative">
               <select
+                ref={(node) => {
+                  if (node) {
+                    node.style.setProperty('-webkit-appearance', 'none', 'important');
+                    node.style.setProperty('appearance', 'none', 'important');
+                  }
+                }}
                 value={cardPlayerId}
                 onChange={(e) => setCardPlayerId(e.target.value)}
-                className="w-full appearance-none bg-[#242424] border border-[#383838] rounded-xl pl-3 pr-9 py-2 text-xs font-normal text-white focus:outline-none focus:border-blue-500 uppercase cursor-pointer"
+                style={{ WebkitAppearance: 'none', MozAppearance: 'none', appearance: 'none', backgroundImage: 'none' }}
+                className="w-full appearance-none select-no-native-arrow bg-[#242424] border border-[#383838] rounded-xl pl-3 pr-9 py-2 text-xs font-normal text-white focus:outline-none focus:border-blue-500 uppercase cursor-pointer"
               >
                 <option value="" className="bg-[#242424] text-neutral-400 uppercase py-1">
-                  SELECT PLAYER...
+                  SELECT PLAYER
                 </option>
                 {cardPlayers.map((p) => {
                   const pState = disciplinaryMap.get(p.id);
