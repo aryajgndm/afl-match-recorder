@@ -47,7 +47,7 @@ function mapDbFixtureToFixture(row: DbFixtureRow): Fixture {
     status: row.status as any,
     isConditional: row.is_conditional,
     isUnopenable: isHistoricalPlayoff,
-    passcode: '1111', // Fixed league default passcode
+    passcode: '123456', // Fixed league default 6-digit passcode
     activeSessionId: row.active_session_id,
     lockHeartbeatAt: row.lock_heartbeat_at,
     submittedAt: row.submitted_at,

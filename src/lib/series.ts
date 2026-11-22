@@ -153,6 +153,21 @@ export function calculateSeriesProgress(fixtures: Fixture[]): {
       return copy;
     }
 
+    // Phase Progression Guard:
+    // Semifinals can only become available once ALL playoff series are clinched
+    const playoffsCompleted = seriesMap.po1.isClinched && seriesMap.po2.isClinched;
+    if (copy.phase === 'semifinals' && !playoffsCompleted) {
+      copy.status = 'locked';
+      return copy;
+    }
+
+    // Finals can only become available once ALL semifinal series are clinched
+    const semifinalsCompleted = seriesMap.sf1.isClinched && seriesMap.sf2.isClinched;
+    if (copy.phase === 'finals' && !semifinalsCompleted) {
+      copy.status = 'locked';
+      return copy;
+    }
+
     // If series is already clinched
     if (s.isClinched) {
       if (copy.gameNumber > (s.team1Wins + s.team2Wins)) {

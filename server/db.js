@@ -235,12 +235,16 @@ export class Database {
         }
       }
 
-      if (f.seriesId.startsWith('sf') && (!updated.team1Id || !updated.team2Id)) {
+      // Semifinals can only unlock once both playoff series have clinched
+      const playoffsCompleted = seriesMap.po1.isClinched && seriesMap.po2.isClinched;
+      if (f.seriesId.startsWith('sf') && (!playoffsCompleted || !updated.team1Id || !updated.team2Id)) {
         updated.status = 'locked';
         return updated;
       }
 
-      if (f.seriesId === 'finals' && (!updated.team1Id || !updated.team2Id)) {
+      // Finals can only unlock once both semifinal series have clinched
+      const semifinalsCompleted = seriesMap.sf1.isClinched && seriesMap.sf2.isClinched;
+      if (f.seriesId === 'finals' && (!semifinalsCompleted || !updated.team1Id || !updated.team2Id)) {
         updated.status = 'locked';
         return updated;
       }
