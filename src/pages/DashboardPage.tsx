@@ -4,7 +4,6 @@ import { matchStorage } from '../lib/storage';
 import { MatchCard } from '../components/dashboard/MatchCard';
 import { PasscodeModal } from '../components/common/PasscodeModal';
 import { TEAMS } from '../data/teams';
-import { RefreshCw } from 'lucide-react';
 
 interface DashboardPageProps {
   onNavigateToRecording: (matchId: string) => void;
@@ -372,23 +371,6 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({
               currentSessionId={sessionId}
             />
           ))}
-        </div>
-
-        {/* Footer Reset Tool for testing */}
-        <div className="mt-12 text-center">
-          <button
-            type="button"
-            onClick={async () => {
-              if (confirm('Reset match records back to default starting state?')) {
-                await matchStorage.resetToDefault();
-                refreshData();
-              }
-            }}
-            className="inline-flex items-center gap-1.5 text-[11px] font-bold text-neutral-400 hover:text-white transition-colors py-2 px-3 rounded-lg border border-[#333333] bg-[#242424] shadow-xs uppercase font-sans"
-          >
-            <RefreshCw size={12} />
-            <span>Reset Demo State</span>
-          </button>
         </div>
       </main>
 
