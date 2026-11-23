@@ -23,7 +23,7 @@ export const PasscodeModal: React.FC<PasscodeModalProps> = ({
   error,
   title,
   buttonText = 'START RECORDING',
-  subtitle = 'Enter match passcode or Emergency Master (911911)',
+  subtitle = 'Please enter the passcode to continue.',
   buttonColor = 'blue',
 }) => {
   const [digits, setDigits] = useState<string[]>(['', '', '', '', '', '']);
@@ -72,7 +72,7 @@ export const PasscodeModal: React.FC<PasscodeModalProps> = ({
   };
 
   const code = digits.join('');
-  const isCodeReady = code.length === 4 || code.length === 6;
+  const isCodeReady = code.length === 6;
 
   const handleKeyDown = (index: number, e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Backspace' && !digits[index] && index > 0) {

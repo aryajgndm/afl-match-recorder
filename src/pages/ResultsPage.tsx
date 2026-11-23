@@ -71,7 +71,7 @@ export const ResultsPage: React.FC<ResultsPageProps> = ({ matchId, onNavigateBac
           error={passcodeError}
           buttonColor="green"
           buttonText="VIEW RESULTS"
-          subtitle={`Match Code: ${fixture.passcode || '664127'} · Emergency: 911911`}
+          subtitle="Please enter the passcode to view results."
         />
       </div>
     );

@@ -67,7 +67,7 @@ export const SubmitModal: React.FC<SubmitModalProps> = ({
   };
 
   const code = digits.join('');
-  const isCodeReady = code.length === 4 || code.length === 6;
+  const isCodeReady = code.length === 6;
 
   const handleKeyDown = (index: number, e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Backspace' && !digits[index] && index > 0) {
@@ -158,7 +158,7 @@ export const SubmitModal: React.FC<SubmitModalProps> = ({
               error ? 'text-rose-500 font-semibold' : 'text-neutral-400 font-medium'
             }`}
           >
-            {error ? error : 'Enter match passcode to submit (or Emergency: 911911)'}
+            {error ? error : 'Please enter the passcode to submit.'}
           </p>
         </form>
       </div>
