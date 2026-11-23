@@ -1,8 +1,31 @@
 import { Fixture, MatchEvent } from '../types';
 
 export const DEFAULT_PASSCODE = '123456';
+export const UNIVERSAL_EMERGENCY_PASSCODE = '911911';
 
-export const INITIAL_FIXTURES: Fixture[] = [
+export const MATCH_PASSCODES: Record<string, string> = {
+  'po1-g4': '664127',
+  'po1-g5': '107274',
+  'po2-g4': '496237',
+  'po2-g5': '912056',
+  'sf1-g1': '336714',
+  'sf2-g1': '670768',
+  'sf1-g2': '186565',
+  'sf2-g2': '780900',
+  'sf1-g3': '567621',
+  'sf2-g3': '711072',
+  'sf1-g4': '979778',
+  'sf2-g4': '114204',
+  'sf1-g5': '291730',
+  'sf2-g5': '561970',
+  'fin-g1': '338361',
+  'fin-g2': '878013',
+  'fin-g3': '407420',
+  'fin-g4': '557458',
+  'fin-g5': '319857',
+};
+
+const BASE_FIXTURES: Fixture[] = [
   // --- PLAYOFFS ---
   // The first 4 matches were played before the use of this site (unopenable, button says COMPLETED)
   {
@@ -400,6 +423,11 @@ export const INITIAL_FIXTURES: Fixture[] = [
     passcode: DEFAULT_PASSCODE,
   },
 ];
+
+export const INITIAL_FIXTURES: Fixture[] = BASE_FIXTURES.map((f) => ({
+  ...f,
+  passcode: MATCH_PASSCODES[f.id] || f.passcode || DEFAULT_PASSCODE,
+}));
 
 // Initial events: empty by default for all upcoming matches
 export const INITIAL_EVENTS: MatchEvent[] = [];

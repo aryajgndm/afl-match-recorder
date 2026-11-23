@@ -427,7 +427,7 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({
           error={passcodeError}
           buttonColor={passcodeModalMode === 'results' ? 'green' : 'blue'}
           buttonText={passcodeModalMode === 'results' ? 'VIEW RESULTS' : 'START RECORDING'}
-          subtitle="Enter passcode (Default: 123456)"
+          subtitle={`Match Code: ${selectedFixture.passcode || '664127'} · Emergency: 911911`}
         />
       )}
     </div>

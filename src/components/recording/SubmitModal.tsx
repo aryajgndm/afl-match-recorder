@@ -158,7 +158,7 @@ export const SubmitModal: React.FC<SubmitModalProps> = ({
               error ? 'text-rose-500 font-semibold' : 'text-neutral-400 font-medium'
             }`}
           >
-            {error ? error : 'Enter passcode to submit (Default: 123456)'}
+            {error ? error : 'Enter match passcode to submit (or Emergency: 911911)'}
           </p>
         </form>
       </div>

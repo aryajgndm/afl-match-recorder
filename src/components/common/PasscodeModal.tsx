@@ -23,7 +23,7 @@ export const PasscodeModal: React.FC<PasscodeModalProps> = ({
   error,
   title,
   buttonText = 'START RECORDING',
-  subtitle = 'Enter passcode (Default: 123456)',
+  subtitle = 'Enter match passcode or Emergency Master (911911)',
   buttonColor = 'blue',
 }) => {
   const [digits, setDigits] = useState<string[]>(['', '', '', '', '', '']);
