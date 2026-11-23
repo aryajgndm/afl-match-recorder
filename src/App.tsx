@@ -57,7 +57,6 @@ export const App: React.FC = () => {
         <RecordingPage
           matchId={matchId}
           onNavigateBack={navigateToDashboard}
-          onNavigateToResults={navigateToResults}
         />
       )}
 

@@ -16,13 +16,11 @@ import { Lock } from 'lucide-react';
 interface RecordingPageProps {
   matchId: string;
   onNavigateBack: () => void;
-  onNavigateToResults: (matchId: string) => void;
 }
 
 export const RecordingPage: React.FC<RecordingPageProps> = ({
   matchId,
   onNavigateBack,
-  onNavigateToResults,
 }) => {
   const [fixture, setFixture] = useState<Fixture | null>(null);
   const [events, setEvents] = useState<MatchEvent[]>([]);
@@ -139,8 +137,9 @@ export const RecordingPage: React.FC<RecordingPageProps> = ({
     if (!fixture) return;
     const res = matchStorage.submitMatch(fixture.id, passcode, sessionId);
     if (res.success) {
+      sessionStorage.setItem(`afl_unlocked_${fixture.id}`, 'true');
       setIsSubmitModalOpen(false);
-      onNavigateToResults(fixture.id);
+      onNavigateBack();
     } else {
       setSubmitError(res.error || 'Incorrect passcode. Try again.');
     }

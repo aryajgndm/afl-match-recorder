@@ -12,7 +12,7 @@ export const QuarterwiseScoresheetTable: React.FC<QuarterwiseScoresheetTableProp
   score,
   team1,
   team2,
-  theme = 'light',
+  theme = 'dark',
 }) => {
   const isDark = theme === 'dark';
 
