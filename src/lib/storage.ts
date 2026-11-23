@@ -597,14 +597,23 @@ export class MatchStorage {
     localStorage.setItem(STORAGE_KEY_EVENTS, JSON.stringify([]));
     this.broadcast();
 
-    // Reset local Node backend (which also wipes Supabase cloud fixtures/events via SECRET_KEY)
+    // 1. Reset Supabase Cloud Database directly (wipes events & resets fixtures)
+    if (supabaseStorage.isConfigured()) {
+      try {
+        await supabaseStorage.resetToDefault();
+      } catch (err) {
+        console.warn('Supabase resetToDefault error:', err);
+      }
+    }
+
+    // 2. Reset local Node backend if running
     try {
       await api.resetDemo();
     } catch (err) {
-      console.warn('API resetDemo error:', err);
+      // Expected when hosted statically on GitHub Pages
     }
 
-    // Refresh sync from backend
+    // 3. Refresh sync from backend and broadcast final state
     await this.syncWithBackend().catch(() => {});
     this.broadcast();
   }

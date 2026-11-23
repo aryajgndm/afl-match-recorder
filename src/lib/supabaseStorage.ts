@@ -1,4 +1,4 @@
-import { supabase, isSupabaseConfigured } from './supabaseClient';
+import { supabase, supabaseAdmin, isSupabaseConfigured } from './supabaseClient';
 import { Fixture, MatchEvent, MatchResult, SeriesId } from '../types';
 import { INITIAL_FIXTURES, MATCH_PASSCODES } from '../data/fixtures';
 
@@ -313,30 +313,28 @@ export const supabaseStorage = {
   },
 
   async resetToDefault(): Promise<boolean> {
-    if (!supabase) return false;
+    const client = supabaseAdmin || supabase;
+    if (!client) return false;
     try {
       // 1. Delete all match events
-      await supabase.from('events').delete().neq('id', '___none___');
+      await client.from('events').delete().neq('id', '___none___');
 
       // 2. Reset fixtures back to default tournament seed
-      const fixturesPayload = INITIAL_FIXTURES.map((f) => ({
-        id: f.id,
-        series_id: f.seriesId,
-        game_number: f.gameNumber,
-        date: f.date,
-        phase: f.phase,
-        team1_id: f.team1Id,
-        team2_id: f.team2Id,
-        status: f.status,
-        is_conditional: f.isConditional,
-        passcode_hash: '123456',
-        active_session_id: null,
-        lock_heartbeat_at: null,
-        submitted_at: f.submittedAt || null,
-        result: f.result || null,
-      }));
-
-      await supabase.from('fixtures').upsert(fixturesPayload);
+      for (const f of INITIAL_FIXTURES) {
+        await client
+          .from('fixtures')
+          .update({
+            status: f.status,
+            team1_id: f.team1Id,
+            team2_id: f.team2Id,
+            passcode_hash: MATCH_PASSCODES[f.id] || f.passcode || '123456',
+            active_session_id: null,
+            lock_heartbeat_at: null,
+            submitted_at: f.submittedAt || null,
+            result: f.result || null,
+          })
+          .eq('id', f.id);
+      }
       return true;
     } catch (err) {
       console.warn('Supabase reset error:', err);
