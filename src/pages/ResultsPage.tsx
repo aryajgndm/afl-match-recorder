@@ -5,9 +5,7 @@ import { TEAMS } from '../data/teams';
 import { ResultsTable } from '../components/results/ResultsTable';
 import { QuarterScoreboard } from '../components/recording/QuarterScoreboard';
 import { EventTimeline } from '../components/recording/EventTimeline';
-import { exportMatchScoresheetPdf } from '../lib/pdfExport';
-import { PasscodeModal } from '../components/common/PasscodeModal';
-import { ChevronLeft, FileDown, Loader2 } from 'lucide-react';
+import { ChevronLeft } from 'lucide-react';
 
 interface ResultsPageProps {
   matchId: string;
@@ -18,11 +16,6 @@ export const ResultsPage: React.FC<ResultsPageProps> = ({ matchId, onNavigateBac
   const [fixture, setFixture] = useState<Fixture | null>(null);
   const [events, setEvents] = useState<MatchEvent[]>([]);
   const [currentQuarter, setCurrentQuarter] = useState<Quarter>('q1');
-  const [isUnlocked, setIsUnlocked] = useState<boolean>(() => {
-    return sessionStorage.getItem(`afl_unlocked_${matchId}`) === 'true';
-  });
-  const [passcodeError, setPasscodeError] = useState<string | null>(null);
-  const [isExporting, setIsExporting] = useState<boolean>(false);
 
   useEffect(() => {
     const f = matchStorage.getFixtureById(matchId);
@@ -31,16 +24,6 @@ export const ResultsPage: React.FC<ResultsPageProps> = ({ matchId, onNavigateBac
       setEvents(matchStorage.getEvents(matchId));
     }
   }, [matchId]);
-
-  const handleUnlockSubmit = (code: string) => {
-    if (matchStorage.validatePasscode(matchId, code)) {
-      sessionStorage.setItem(`afl_unlocked_${matchId}`, 'true');
-      setIsUnlocked(true);
-      setPasscodeError(null);
-    } else {
-      setPasscodeError('Incorrect passcode. Try again.');
-    }
-  };
 
   const isHistoricalPlayoff = ['po1-g1', 'po1-g2', 'po1-g3', 'po2-g1', 'po2-g2', 'po2-g3'].includes(matchId);
   if (!fixture || !fixture.result || fixture.isUnopenable || isHistoricalPlayoff) {
@@ -55,24 +38,6 @@ export const ResultsPage: React.FC<ResultsPageProps> = ({ matchId, onNavigateBac
         >
           RETURN TO DASHBOARD
         </button>
-      </div>
-    );
-  }
-
-  // Data Team Passcode Gate
-  if (!isUnlocked) {
-    return (
-      <div className="min-h-screen bg-[#121212] flex items-center justify-center p-4">
-        <PasscodeModal
-          fixture={fixture}
-          isOpen={true}
-          onClose={onNavigateBack}
-          onSubmit={handleUnlockSubmit}
-          error={passcodeError}
-          buttonColor="green"
-          buttonText="VIEW RESULTS"
-          subtitle="Please enter the passcode to view results."
-        />
       </div>
     );
   }
@@ -96,34 +61,6 @@ export const ResultsPage: React.FC<ResultsPageProps> = ({ matchId, onNavigateBac
   if (score.isExtraTime) {
     quartersList.push('et');
   }
-
-  const handleExportPdf = async () => {
-    if (!fixture || isExporting) return;
-    setIsExporting(true);
-    try {
-      // 1. Attempt server-side PDF generation endpoint
-      const res = await fetch(`/api/results/${fixture.id}/pdf`);
-      if (res.ok) {
-        const blob = await res.blob();
-        const url = window.URL.createObjectURL(blob);
-        const a = document.createElement('a');
-        a.href = url;
-        a.download = `AFL_Scoresheet_${fixture.id}.pdf`;
-        document.body.appendChild(a);
-        a.click();
-        a.remove();
-        window.URL.revokeObjectURL(url);
-        return;
-      }
-      throw new Error(`Server returned ${res.status}`);
-    } catch (err) {
-      console.warn('Server PDF generation failed or offline, falling back to client-side vector generator:', err);
-      // 2. Seamless client-side vector PDF generation fallback
-      exportMatchScoresheetPdf(fixture, events, team1, team2);
-    } finally {
-      setIsExporting(false);
-    }
-  };
 
   return (
     <div className="min-h-screen bg-[#121212] text-white flex flex-col justify-between pb-28 font-sans">
@@ -178,40 +115,27 @@ export const ResultsPage: React.FC<ResultsPageProps> = ({ matchId, onNavigateBac
         </div>
       </main>
 
-      {/* Fixed Bottom Quarter Navigation & PDF Export - Colors: #121212 and #242424 */}
+      {/* Fixed Bottom Quarter Navigation - Fills width of the screen at the bottom */}
       <div className="fixed bottom-0 left-0 right-0 z-40 bg-[#121212] border-t border-[#262626] rounded-t-3xl p-4 max-w-md mx-auto">
-        <div className="flex items-center justify-between gap-3">
-          {/* Quarter Pills */}
-          <div className="flex items-center gap-1.5 bg-[#242424] p-1 rounded-full border border-[#333333]">
-            {quartersList.map((q) => {
-              const isActive = currentQuarter === q;
-              const label = q === 'et' ? 'ET' : q.toUpperCase();
-              return (
-                <button
-                  key={q}
-                  type="button"
-                  onClick={() => setCurrentQuarter(q)}
-                  className={`px-3.5 py-1.5 text-xs font-bold tracking-wider rounded-full transition-all uppercase ${
-                    isActive
-                      ? 'bg-[#383838] text-white'
-                      : 'text-neutral-400 hover:text-white'
-                  }`}
-                >
-                  {label}
-                </button>
-              );
-            })}
-          </div>
-
-          {/* Export PDF Button */}
-          <button
-            onClick={handleExportPdf}
-            disabled={isExporting}
-            className="px-4 py-2 bg-emerald-600 hover:bg-emerald-500 active:scale-95 transition-all text-white rounded-full font-bold text-xs tracking-wider flex items-center gap-2 uppercase whitespace-nowrap font-sans disabled:opacity-75 disabled:pointer-events-none"
-          >
-            {isExporting ? <Loader2 size={16} className="animate-spin" /> : <FileDown size={16} />}
-            <span>{isExporting ? 'GENERATING...' : 'EXPORT PDF'}</span>
-          </button>
+        <div className="w-full flex items-center justify-between bg-[#242424] p-1 rounded-full border border-[#333333]">
+          {quartersList.map((q) => {
+            const isActive = currentQuarter === q;
+            const label = q === 'et' ? 'ET' : q.toUpperCase();
+            return (
+              <button
+                key={q}
+                type="button"
+                onClick={() => setCurrentQuarter(q)}
+                className={`flex-1 py-2 text-xs font-bold tracking-wider rounded-full transition-all uppercase text-center ${
+                  isActive
+                    ? 'bg-[#383838] text-white shadow-sm'
+                    : 'text-neutral-400 hover:text-white'
+                }`}
+              >
+                {label}
+              </button>
+            );
+          })}
         </div>
       </div>
     </div>

@@ -43,7 +43,6 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({
   // Passcode modal state
   const [selectedFixture, setSelectedFixture] = useState<Fixture | null>(null);
   const [isPasscodeModalOpen, setIsPasscodeModalOpen] = useState<boolean>(false);
-  const [passcodeModalMode, setPasscodeModalMode] = useState<'record' | 'results'>('record');
   const [passcodeError, setPasscodeError] = useState<string | null>(null);
 
   const refreshData = () => {
@@ -81,15 +80,7 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({
     }
 
     if (fixture.status === 'completed') {
-      const isUnlocked = sessionStorage.getItem(`afl_unlocked_${fixture.id}`) === 'true';
-      if (isUnlocked) {
-        onNavigateToResults(fixture.id);
-        return;
-      }
-      setSelectedFixture(fixture);
-      setPasscodeModalMode('results');
-      setPasscodeError(null);
-      setIsPasscodeModalOpen(true);
+      onNavigateToResults(fixture.id);
       return;
     }
 
@@ -106,7 +97,6 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({
       }
 
       setSelectedFixture(fixture);
-      setPasscodeModalMode('record');
       setPasscodeError(null);
       setIsPasscodeModalOpen(true);
     }
@@ -114,18 +104,6 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({
 
   const handlePasscodeSubmit = async (code: string) => {
     if (!selectedFixture) return;
-
-    if (passcodeModalMode === 'results' || selectedFixture.status === 'completed') {
-      const valid = matchStorage.validatePasscode(selectedFixture.id, code);
-      if (valid) {
-        sessionStorage.setItem(`afl_unlocked_${selectedFixture.id}`, 'true');
-        setIsPasscodeModalOpen(false);
-        onNavigateToResults(selectedFixture.id);
-      } else {
-        setPasscodeError('Incorrect passcode. Try again.');
-      }
-      return;
-    }
 
     const result = await matchStorage.acquireRecordingLock(selectedFixture.id, code, sessionId);
 
@@ -425,13 +403,9 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({
           }}
           onSubmit={handlePasscodeSubmit}
           error={passcodeError}
-          buttonColor={passcodeModalMode === 'results' ? 'green' : 'blue'}
-          buttonText={passcodeModalMode === 'results' ? 'VIEW RESULTS' : 'START RECORDING'}
-          subtitle={
-            passcodeModalMode === 'results'
-              ? 'Please enter the passcode to view results.'
-              : 'Please enter the passcode to continue.'
-          }
+          buttonColor="blue"
+          buttonText="START RECORDING"
+          subtitle="Please enter the passcode to continue."
         />
       )}
     </div>
