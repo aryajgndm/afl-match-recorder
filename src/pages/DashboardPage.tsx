@@ -200,7 +200,7 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({
                 statusText = `${winnerShort} win series ${Math.max(s.team1Wins, s.team2Wins)} – ${Math.min(s.team1Wins, s.team2Wins)}`;
                 statusBadgeClass = 'text-white bg-white/10 border border-white/20';
               } else if (!team1 || !team2) {
-                statusText = s.phase === 'semifinals' ? 'Awaiting Playoff Winners' : 'Awaiting Semi-Final Winners';
+                statusText = s.phase === 'semifinals' ? 'Awaiting Playoff Winners' : 'Awaiting Semifinal Winners';
                 statusBadgeClass = 'text-neutral-500 bg-[#1a1a1a] border border-neutral-800';
               } else if (s.team1Wins > s.team2Wins) {
                 statusText = `${team1.shortName} lead ${s.team1Wins} – ${s.team2Wins}`;

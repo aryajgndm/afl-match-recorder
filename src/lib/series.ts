@@ -8,7 +8,7 @@ export function formatSeriesLabel(seriesId: SeriesId | string): string {
     return `PLAYOFF ${seriesId.replace('po', '')}`;
   }
   if (seriesId.startsWith('sf')) {
-    return `SEMI-FINAL ${seriesId.replace('sf', '')}`;
+    return `SEMIFINAL ${seriesId.replace('sf', '')}`;
   }
   return 'FINALS';
 }
@@ -48,7 +48,7 @@ export function calculateSeriesProgress(fixtures: Fixture[]): {
     sf1: {
       id: 'sf1',
       phase: 'semifinals',
-      name: 'SEMI-FINAL 1',
+      name: 'SEMIFINAL 1',
       team1Id: 'falcons',
       team2Id: null, // Winner PO1
       bestOf: 5,
@@ -61,7 +61,7 @@ export function calculateSeriesProgress(fixtures: Fixture[]): {
     sf2: {
       id: 'sf2',
       phase: 'semifinals',
-      name: 'SEMI-FINAL 2',
+      name: 'SEMIFINAL 2',
       team1Id: 'raptors',
       team2Id: null, // Winner PO2
       bestOf: 5,
@@ -230,5 +230,28 @@ export function calculateSeriesProgress(fixtures: Fixture[]): {
     return copy;
   });
 
-  return { seriesMap, updatedFixtures };
+  // 7. Only allow the single next chronological match to be recorded
+  const hasInProgress = updatedFixtures.some((f) => f.status === 'in_progress');
+  const availableChronological = updatedFixtures
+    .filter((f) => f.status === 'available')
+    .sort((a, b) => {
+      const timeA = Date.parse(a.date) || 0;
+      const timeB = Date.parse(b.date) || 0;
+      if (timeA !== timeB) return timeA - timeB;
+      return a.gameNumber - b.gameNumber;
+    });
+
+  const nextAvailableId =
+    !hasInProgress && availableChronological.length > 0
+      ? availableChronological[0].id
+      : null;
+
+  const finalFixtures = updatedFixtures.map((f) => {
+    if (f.status === 'available' && f.id !== nextAvailableId) {
+      return { ...f, status: 'locked' as const };
+    }
+    return f;
+  });
+
+  return { seriesMap, updatedFixtures: finalFixtures };
 }
