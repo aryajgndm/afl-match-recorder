@@ -99,3 +99,19 @@ export function checkExtraTimeTwoGoalLead(
   }
   return { clinched: false, winnerLead: diff };
 }
+
+/**
+ * Chronological event comparator: orders by minute ascending, breaking
+ * same-minute ties by entry creation time (createdAt) ascending, then id.
+ */
+export function compareMatchEvents(a: MatchEvent, b: MatchEvent): number {
+  if (a.minute !== b.minute) {
+    return a.minute - b.minute;
+  }
+  const timeA = a.createdAt ? Date.parse(a.createdAt) || 0 : 0;
+  const timeB = b.createdAt ? Date.parse(b.createdAt) || 0 : 0;
+  if (timeA !== timeB) {
+    return timeA - timeB;
+  }
+  return a.id.localeCompare(b.id);
+}

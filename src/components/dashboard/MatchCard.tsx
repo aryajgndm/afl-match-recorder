@@ -1,6 +1,7 @@
 import React from 'react';
 import { Fixture } from '../../types';
 import { TEAMS } from '../../data/teams';
+import { formatSeriesLabel } from '../../lib/series';
 import { Check, ArrowRight, Lock, Radio } from 'lucide-react';
 
 interface MatchCardProps {
@@ -22,12 +23,7 @@ export const MatchCard: React.FC<MatchCardProps> = ({
     fixture.isUnopenable ||
     ['po1-g1', 'po1-g2', 'po1-g3', 'po2-g1', 'po2-g2', 'po2-g3'].includes(fixture.id);
 
-  // Capitalize GAME and PLAYOFF
-  const seriesNameFormatted = fixture.seriesId.startsWith('po')
-    ? `PLAYOFF ${fixture.seriesId.replace('po', '')}`
-    : fixture.seriesId.startsWith('sf')
-    ? `Semi-Final ${fixture.seriesId.replace('sf', '')}`
-    : 'Finals';
+  const seriesNameFormatted = formatSeriesLabel(fixture.seriesId);
 
   return (
     <div className="w-full bg-[#242424] border border-[#333333] rounded-3xl p-5">

@@ -1,5 +1,6 @@
 import React from 'react';
 import { Fixture } from '../../types';
+import { formatSeriesLabel } from '../../lib/series';
 import { ChevronLeft } from 'lucide-react';
 
 interface MatchHeaderProps {
@@ -11,11 +12,7 @@ export const MatchHeader: React.FC<MatchHeaderProps> = ({
   fixture,
   onBackClick,
 }) => {
-  const seriesNameFormatted = fixture.seriesId.startsWith('po')
-    ? `PLAYOFF ${fixture.seriesId.replace('po', '')}`
-    : fixture.seriesId.startsWith('sf')
-    ? `Semi-Final ${fixture.seriesId.replace('sf', '')}`
-    : 'Finals';
+  const seriesNameFormatted = formatSeriesLabel(fixture.seriesId);
 
   return (
     <header className="w-full max-w-md mx-auto pt-3 pb-1 px-4 flex items-center justify-between font-sans">

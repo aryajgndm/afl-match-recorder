@@ -3,7 +3,7 @@ import { INITIAL_FIXTURES, INITIAL_EVENTS, UNIVERSAL_EMERGENCY_PASSCODE } from '
 import { calculateSeriesProgress } from './series';
 
 export { UNIVERSAL_EMERGENCY_PASSCODE } from '../data/fixtures';
-import { calculateMatchScore } from './scoring';
+import { calculateMatchScore, compareMatchEvents } from './scoring';
 import { TEAMS } from '../data/teams';
 import { api } from './api';
 import { supabaseStorage } from './supabaseStorage';
@@ -25,6 +25,20 @@ export class MatchStorage {
   private listeners: Set<() => void> = new Set();
   private backendAvailable: boolean = true;
   private realtimeSubscribed: boolean = false;
+  private cloudWriteQueue: Promise<void> = Promise.resolve();
+  private pendingCloudWrites: number = 0;
+
+  private enqueueCloudWrite(task: () => Promise<void>): void {
+    this.pendingCloudWrites += 1;
+    this.cloudWriteQueue = this.cloudWriteQueue
+      .then(task)
+      .catch((err) => {
+        console.warn('Cloud sync task error:', err);
+      })
+      .finally(() => {
+        this.pendingCloudWrites = Math.max(0, this.pendingCloudWrites - 1);
+      });
+  }
 
   public isBackendConnected(): boolean {
     return this.backendAvailable;
@@ -67,8 +81,9 @@ export class MatchStorage {
         }
       },
       async () => {
+        if (this.pendingCloudWrites > 0) return;
         const updated = await supabaseStorage.fetchEvents();
-        if (updated) {
+        if (updated && this.pendingCloudWrites === 0) {
           const current = localStorage.getItem(STORAGE_KEY_EVENTS);
           const serialized = JSON.stringify(updated);
           if (current !== serialized) {
@@ -115,13 +130,15 @@ export class MatchStorage {
           this.backendAvailable = true;
         }
 
-        const events = await supabaseStorage.fetchEvents();
-        if (events) {
-          const currentEvents = localStorage.getItem(STORAGE_KEY_EVENTS);
-          const serializedEvents = JSON.stringify(events);
-          if (currentEvents !== serializedEvents) {
-            localStorage.setItem(STORAGE_KEY_EVENTS, serializedEvents);
-            hasChanges = true;
+        if (this.pendingCloudWrites === 0) {
+          const events = await supabaseStorage.fetchEvents();
+          if (events && this.pendingCloudWrites === 0) {
+            const currentEvents = localStorage.getItem(STORAGE_KEY_EVENTS);
+            const serializedEvents = JSON.stringify(events);
+            if (currentEvents !== serializedEvents) {
+              localStorage.setItem(STORAGE_KEY_EVENTS, serializedEvents);
+              hasChanges = true;
+            }
           }
         }
 
@@ -245,27 +262,35 @@ export class MatchStorage {
     if (matchId) {
       return uniqueEvents
         .filter((e) => e.matchId === matchId)
-        .sort((a, b) => a.minute - b.minute);
+        .sort(compareMatchEvents);
     }
     return uniqueEvents;
   }
 
   public addEvent(event: Omit<MatchEvent, 'id' | 'createdAt'>): MatchEvent {
     const allEvents = this.getEvents();
+    const maxCreatedMs = allEvents.reduce((max, ev) => {
+      const t = ev.createdAt ? Date.parse(ev.createdAt) || 0 : 0;
+      return t > max ? t : max;
+    }, 0);
+    const createdAtMs = Math.max(Date.now(), maxCreatedMs + 1);
     const newEvent: MatchEvent = {
       ...event,
       id: 'ev_' + Math.random().toString(36).substring(2, 10) + '_' + Date.now(),
-      createdAt: new Date().toISOString(),
+      createdAt: new Date(createdAtMs).toISOString(),
     };
     allEvents.push(newEvent);
     localStorage.setItem(STORAGE_KEY_EVENTS, JSON.stringify(allEvents));
     this.broadcast();
 
-    // Sync to backend / Supabase
+    // Sync to backend / Supabase sequentially
     const sessionId = this.getOrCreateClientSessionId();
     if (supabaseStorage.isConfigured()) {
-      supabaseStorage.addEvent(event.matchId, newEvent, sessionId).catch((err) => {
-        console.warn('Supabase event add error:', err);
+      this.enqueueCloudWrite(async () => {
+        const res = await supabaseStorage.addEvent(event.matchId, newEvent, sessionId);
+        if (!res.success) {
+          console.warn('Supabase event add error:', res.error);
+        }
       });
     } else {
       api.addEvent(event.matchId, newEvent, sessionId).catch((err) => {
@@ -284,11 +309,20 @@ export class MatchStorage {
       localStorage.setItem(STORAGE_KEY_EVENTS, JSON.stringify(allEvents));
       this.broadcast();
 
-      // Sync to backend
+      // Sync to backend / Supabase sequentially
       const sessionId = this.getOrCreateClientSessionId();
-      api.updateEvent(event.matchId, event.id, event, sessionId).catch((err) => {
-        console.warn('Backend event update error:', err);
-      });
+      if (supabaseStorage.isConfigured()) {
+        this.enqueueCloudWrite(async () => {
+          const res = await supabaseStorage.updateEvent(event.matchId, event, sessionId);
+          if (!res.success) {
+            console.warn('Supabase event update error:', res.error);
+          }
+        });
+      } else {
+        api.updateEvent(event.matchId, event.id, event, sessionId).catch((err) => {
+          console.warn('Backend event update error:', err);
+        });
+      }
     }
   }
 
@@ -302,8 +336,11 @@ export class MatchStorage {
     if (event) {
       const sessionId = this.getOrCreateClientSessionId();
       if (supabaseStorage.isConfigured()) {
-        supabaseStorage.deleteEvent(event.matchId, eventId, sessionId).catch((err) => {
-          console.warn('Supabase event delete error:', err);
+        this.enqueueCloudWrite(async () => {
+          const res = await supabaseStorage.deleteEvent(event.matchId, eventId, sessionId);
+          if (!res.success) {
+            console.warn('Supabase event delete error:', res.error);
+          }
         });
       } else {
         api.deleteEvent(event.matchId, eventId, sessionId).catch((err) => {
@@ -510,10 +547,9 @@ export class MatchStorage {
 
     // Persist to Supabase / backend
     if (supabaseStorage.isConfigured()) {
-      supabaseStorage.submitMatch(matchId, passcode, sessionId, result).then(() => {
-        this.syncWithBackend().catch(() => {});
-      }).catch((err) => {
-        console.warn('Supabase submit error:', err);
+      this.enqueueCloudWrite(async () => {
+        await supabaseStorage.submitMatch(matchId, passcode, sessionId, result);
+        await this.syncWithBackend().catch(() => {});
       });
     } else {
       api.submitMatch(matchId, passcode, sessionId).then((res) => {

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Fixture, MatchEvent, Quarter, Team } from '../types';
 import { matchStorage } from '../lib/storage';
+import { formatSeriesLabel } from '../lib/series';
 import { TEAMS } from '../data/teams';
 import { ResultsTable } from '../components/results/ResultsTable';
 import { QuarterScoreboard } from '../components/recording/QuarterScoreboard';
@@ -18,11 +19,15 @@ export const ResultsPage: React.FC<ResultsPageProps> = ({ matchId, onNavigateBac
   const [currentQuarter, setCurrentQuarter] = useState<Quarter>('q1');
 
   useEffect(() => {
-    const f = matchStorage.getFixtureById(matchId);
-    if (f) {
-      setFixture(f);
-      setEvents(matchStorage.getEvents(matchId));
-    }
+    const load = () => {
+      const f = matchStorage.getFixtureById(matchId);
+      if (f) {
+        setFixture(f);
+        setEvents(matchStorage.getEvents(matchId));
+      }
+    };
+    load();
+    return matchStorage.subscribe(load);
   }, [matchId]);
 
   const isHistoricalPlayoff = ['po1-g1', 'po1-g2', 'po1-g3', 'po2-g1', 'po2-g2', 'po2-g3'].includes(matchId);
@@ -46,12 +51,7 @@ export const ResultsPage: React.FC<ResultsPageProps> = ({ matchId, onNavigateBac
   const team2: Team | null = fixture.team2Id ? TEAMS[fixture.team2Id] : null;
   const score = fixture.result.score;
 
-  // Informational line: Title Case
-  const seriesNameFormatted = fixture.seriesId.startsWith('po')
-    ? `PLAYOFF ${fixture.seriesId.replace('po', '')}`
-    : fixture.seriesId.startsWith('sf')
-    ? `Semi-Final ${fixture.seriesId.replace('sf', '')}`
-    : 'Finals';
+  const seriesNameFormatted = formatSeriesLabel(fixture.seriesId);
 
   const quarterEvents = events.filter((e) => e.quarter === currentQuarter);
   const team1QuarterScore = score.team1QuarterScores[currentQuarter] || 0;

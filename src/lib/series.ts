@@ -1,5 +1,18 @@
 import { Fixture, Series, SeriesId } from '../types';
 
+/**
+ * Formats a series ID into its standardized uppercase display label.
+ */
+export function formatSeriesLabel(seriesId: SeriesId | string): string {
+  if (seriesId.startsWith('po')) {
+    return `PLAYOFF ${seriesId.replace('po', '')}`;
+  }
+  if (seriesId.startsWith('sf')) {
+    return `SEMI-FINAL ${seriesId.replace('sf', '')}`;
+  }
+  return 'FINALS';
+}
+
 export function calculateSeriesProgress(fixtures: Fixture[]): {
   seriesMap: Record<SeriesId, Series>;
   updatedFixtures: Fixture[];
@@ -35,7 +48,7 @@ export function calculateSeriesProgress(fixtures: Fixture[]): {
     sf1: {
       id: 'sf1',
       phase: 'semifinals',
-      name: 'Semi-Final 1',
+      name: 'SEMI-FINAL 1',
       team1Id: 'falcons',
       team2Id: null, // Winner PO1
       bestOf: 5,
@@ -48,7 +61,7 @@ export function calculateSeriesProgress(fixtures: Fixture[]): {
     sf2: {
       id: 'sf2',
       phase: 'semifinals',
-      name: 'Semi-Final 2',
+      name: 'SEMI-FINAL 2',
       team1Id: 'raptors',
       team2Id: null, // Winner PO2
       bestOf: 5,
@@ -61,7 +74,7 @@ export function calculateSeriesProgress(fixtures: Fixture[]): {
     finals: {
       id: 'finals',
       phase: 'finals',
-      name: 'Finals',
+      name: 'FINALS',
       team1Id: null, // Winner SF1
       team2Id: null, // Winner SF2
       bestOf: 5,

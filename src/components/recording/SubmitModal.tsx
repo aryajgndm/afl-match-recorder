@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Fixture, MatchScore, Team } from '../../types';
+import { formatSeriesLabel } from '../../lib/series';
 import { QuarterwiseScoresheetTable } from '../common/QuarterwiseScoresheetTable';
 import { Check, X } from 'lucide-react';
 
@@ -87,12 +88,7 @@ export const SubmitModal: React.FC<SubmitModalProps> = ({
     }
   };
 
-  // Capitalize GAME and PLAYOFF
-  const seriesNameFormatted = fixture.seriesId.startsWith('po')
-    ? `PLAYOFF ${fixture.seriesId.replace('po', '')}`
-    : fixture.seriesId.startsWith('sf')
-    ? `Semi-Final ${fixture.seriesId.replace('sf', '')}`
-    : 'Finals';
+  const seriesNameFormatted = formatSeriesLabel(fixture.seriesId);
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm animate-fadeIn font-sans">

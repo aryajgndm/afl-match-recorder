@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Fixture } from '../../types';
 import { TEAMS } from '../../data/teams';
+import { formatSeriesLabel } from '../../lib/series';
 import { ArrowRight, Check, X } from 'lucide-react';
 
 interface PasscodeModalProps {
@@ -92,11 +93,7 @@ export const PasscodeModal: React.FC<PasscodeModalProps> = ({
     }
   };
 
-  const seriesNameFormatted = fixture.seriesId.startsWith('po')
-    ? `PLAYOFF ${fixture.seriesId.replace('po', '')}`
-    : fixture.seriesId.startsWith('sf')
-    ? `Semi-Final ${fixture.seriesId.replace('sf', '')}`
-    : 'Finals';
+  const seriesNameFormatted = formatSeriesLabel(fixture.seriesId);
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm animate-fadeIn font-sans">

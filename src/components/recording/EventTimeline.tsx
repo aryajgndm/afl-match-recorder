@@ -1,6 +1,7 @@
 import React from 'react';
 import { MatchEvent, Team } from '../../types';
 import { getPlayerById } from '../../data/players';
+import { compareMatchEvents } from '../../lib/scoring';
 
 interface EventTimelineProps {
   events: MatchEvent[];
@@ -31,8 +32,8 @@ export const EventTimeline: React.FC<EventTimelineProps> = ({
     );
   }
 
-  // Chronologically sorted events
-  const sorted = [...events].sort((a, b) => a.minute - b.minute);
+  // Chronologically sorted events (minute asc, then creation time asc)
+  const sorted = [...events].sort(compareMatchEvents);
 
   return (
     <div className="w-full mx-auto flex flex-col rounded-xl overflow-hidden border border-[#2d2d2d] bg-[#181818] font-sans">

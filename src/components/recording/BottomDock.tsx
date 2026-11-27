@@ -134,6 +134,7 @@ export const BottomDock: React.FC<BottomDockProps> = ({
 
     const creditedTeamId = selectedTeamId;
     const finalAssisterId = isPenalty || isOwnGoal ? undefined : assisterId || undefined;
+    const finalConcedingTeamId = isOwnGoal ? (opposingTeamId || undefined) : undefined;
 
     if (editingEvent) {
       onUpdateEvent({
@@ -143,6 +144,7 @@ export const BottomDock: React.FC<BottomDockProps> = ({
         teamId: creditedTeamId,
         playerId: scorerId,
         assisterId: finalAssisterId,
+        concedingTeamId: finalConcedingTeamId,
         goalType,
       });
       onCancelEdit();
@@ -155,6 +157,7 @@ export const BottomDock: React.FC<BottomDockProps> = ({
         teamId: creditedTeamId,
         playerId: scorerId,
         assisterId: finalAssisterId,
+        concedingTeamId: finalConcedingTeamId,
         goalType,
       });
       // Reset inputs for next entry
@@ -253,7 +256,10 @@ export const BottomDock: React.FC<BottomDockProps> = ({
           {/* Goal Mode: Classical Soccer / Football Ball */}
           <button
             type="button"
-            onClick={() => setMode('goal')}
+            onClick={() => {
+              if (editingEvent && editingEvent.type !== 'goal') onCancelEdit();
+              setMode('goal');
+            }}
             className={`relative z-10 w-7 h-7 flex items-center justify-center rounded-full transition-colors duration-200 ${
               mode === 'goal'
                 ? 'text-black'
@@ -278,7 +284,10 @@ export const BottomDock: React.FC<BottomDockProps> = ({
           {/* Card Mode: Centered card icon */}
           <button
             type="button"
-            onClick={() => setMode('card')}
+            onClick={() => {
+              if (editingEvent && editingEvent.type !== 'card') onCancelEdit();
+              setMode('card');
+            }}
             className={`relative z-10 w-7 h-7 flex items-center justify-center rounded-full transition-colors duration-200 ${
               mode === 'card'
                 ? 'text-black'

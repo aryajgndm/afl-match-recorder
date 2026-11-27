@@ -127,7 +127,12 @@ export const supabaseStorage = {
   async fetchEvents(matchId?: string): Promise<MatchEvent[] | null> {
     if (!supabase) return null;
     try {
-      let query = supabase.from('events').select('*').order('minute', { ascending: true });
+      let query = supabase
+        .from('events')
+        .select('*')
+        .order('minute', { ascending: true })
+        .order('created_at', { ascending: true })
+        .order('id', { ascending: true });
       if (matchId) {
         query = query.eq('match_id', matchId);
       }
@@ -236,6 +241,56 @@ export const supabaseStorage = {
         return { success: false, error: error.message };
       }
       return data as { success: boolean; error?: string };
+    } catch (err: any) {
+      return { success: false, error: err.message };
+    }
+  },
+
+  async updateEvent(
+    matchId: string,
+    event: MatchEvent,
+    sessionId: string
+  ): Promise<{ success: boolean; error?: string }> {
+    const client = supabaseAdmin || supabase;
+    if (!client) return { success: false, error: 'Supabase not configured' };
+    try {
+      const { data: fx, error: fxErr } = await client
+        .from('fixtures')
+        .select('status, active_session_id')
+        .eq('id', matchId)
+        .single();
+
+      if (fxErr || !fx) {
+        return { success: false, error: fxErr?.message || 'Match not found' };
+      }
+      if (fx.status === 'completed') {
+        return { success: false, error: 'Cannot modify events of a completed match' };
+      }
+      if (fx.active_session_id && fx.active_session_id !== sessionId) {
+        return { success: false, error: 'Session does not hold active recording lock' };
+      }
+
+      const { error } = await client
+        .from('events')
+        .update({
+          quarter: event.quarter,
+          minute: event.minute,
+          type: event.type,
+          goal_type: event.type === 'goal' ? (event.goalType || 'regular') : null,
+          card_type: event.type === 'card' ? (event.cardType || 'yellow') : null,
+          team_id: event.teamId,
+          player_id: event.playerId,
+          assister_id: event.type === 'goal' ? (event.assisterId || null) : null,
+          conceding_team_id: event.type === 'goal' ? (event.concedingTeamId || null) : null,
+          is_second_yellow_red: event.type === 'card' ? Boolean(event.isSecondYellowRed) : false,
+        })
+        .eq('id', event.id)
+        .eq('match_id', matchId);
+
+      if (error) {
+        return { success: false, error: error.message };
+      }
+      return { success: true };
     } catch (err: any) {
       return { success: false, error: err.message };
     }

@@ -1,4 +1,5 @@
 import { MatchEvent } from '../types';
+import { compareMatchEvents } from './scoring';
 
 export interface PlayerDisciplinaryState {
   playerId: string;
@@ -15,10 +16,10 @@ export function calculateDisciplinaryState(
 ): Map<string, PlayerDisciplinaryState> {
   const map = new Map<string, PlayerDisciplinaryState>();
 
-  // Filter only card events and sort chronologically by minute
+  // Filter only card events and sort chronologically
   const cardEvents = events
     .filter((e) => e.type === 'card')
-    .sort((a, b) => a.minute - b.minute);
+    .sort(compareMatchEvents);
 
   for (const ev of cardEvents) {
     let state = map.get(ev.playerId);
@@ -58,7 +59,7 @@ export function resolveNewCard(
 ): { cardType: 'yellow' | 'red'; isSecondYellowRed: boolean } {
   const existingCards = events
     .filter((e) => e.type === 'card' && e.playerId === playerId)
-    .sort((a, b) => a.minute - b.minute);
+    .sort(compareMatchEvents);
 
   const existingYellows = existingCards.filter(
     (e) => e.cardType === 'yellow' && !e.isSecondYellowRed
